@@ -1,11 +1,24 @@
-import styled from "@emotion/styled";
+import React, { useState } from "react";
 
-const Wrapper = styled.div`
-  height: 550px;
-  width: 200px;
-  background-color: lightgreen;
-`;
+import { Layout, Menu } from "antd";
+const { Sider } = Layout;
 
-export default function LayoutNavigation() {
-  return <Wrapper>여기는 내비게이션이라구~AAAAA</Wrapper>;
+export default function LayoutNavigation(props) {
+  const [collapsed, setCollapsed] = useState(false);
+  return (
+    <Sider
+      collapsible
+      collapsed={collapsed}
+      onCollapse={(value) => setCollapsed(value)}
+    >
+      <div className="demo-logo-vertical" />
+      <Menu
+        theme="dark"
+        defaultSelectedKeys={["/wms/member"]}
+        mode="inline"
+        items={props.items}
+        onClick={props.onClickNav}
+      />
+    </Sider>
+  );
 }

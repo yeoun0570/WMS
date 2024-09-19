@@ -1,10 +1,15 @@
-import styled from "@emotion/styled";
-
-const Wrapper = styled.div`
-  height: 50px;
-  background-color: gray;
-`;
+import React from "react";
+import { Layout } from "antd";
+const { Footer } = Layout;
 
 export default function LayoutFooter() {
-  return <Wrapper>여기는 footer라구~</Wrapper>;
+  return (
+    <Footer
+      style={{
+        textAlign: "center",
+      }}
+    >
+      Warehouse Management System ©{new Date().getFullYear()} Created by LCWMS
+    </Footer>
+  );
 }
