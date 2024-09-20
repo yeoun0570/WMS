@@ -1,7 +1,7 @@
 import { Layout, theme } from "antd";
 const { Header } = Layout;
 import styled from "@emotion/styled";
-import { UserOutlined } from "@ant-design/icons";
+import { UserOutlined, BellOutlined } from "@ant-design/icons";
 const Wrapper = styled.div`
   font-weight: bold;
   display: flex;
@@ -13,7 +13,12 @@ const Wrapper = styled.div`
 const Item = styled.div`
   padding-left: 30px;
 `;
-export default function LayoutHeader() {
+export default function LayoutHeader(props) {
+  const onClickMyPage = () => {
+    props.setPage(props.pageMap["/wms/mypage"][0]);
+    props.setDetail(props.pageMap["/wms/mypage"][1]);
+    props.router.push("/wms/mypage");
+  };
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
@@ -29,7 +34,10 @@ export default function LayoutHeader() {
       <Wrapper>
         <Item>WMS</Item>
         <Item>
-          <UserOutlined />
+          <UserOutlined onClick={onClickMyPage} />
+        </Item>
+        <Item>
+          <BellOutlined onClick={props.showLoading} />
         </Item>
       </Wrapper>
     </Header>

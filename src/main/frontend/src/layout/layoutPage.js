@@ -1,8 +1,9 @@
+import axios from "axios";
 import { useRouter } from "next/router";
 import LayoutHeader from "./header/header";
 import LayoutNavigation from "./navigation/navigation";
 import LayoutFooter from "./footer/footer";
-import { Breadcrumb, Layout, theme } from "antd";
+import { Breadcrumb, Layout, theme, Button, Drawer } from "antd";
 import {
   DesktopOutlined,
   FileOutlined,
@@ -11,18 +12,23 @@ import {
   UserOutlined,
 } from "@ant-design/icons";
 import { useState } from "react";
+import Notice from "../notice/notice.container";
 const { Content } = Layout;
 const LOGIN_PAGE = [
   "/login",
   "/",
+  "/login/new",
   //여기다가 로그인 페이지만 넣고 네비 안뜨게 설정하자구~
 ];
 export default function LayoutPage(props) {
   const router = useRouter();
   const isLoginPage = LOGIN_PAGE.includes(router.asPath);
+  const [notices, setNotices] = useState([]);
 
-  const [page, setPage] = useState("welcome");
-  const [detail, setDetail] = useState("detail");
+  const [page, setPage] = useState("회원관리");
+  const [detail, setDetail] = useState("회원조회");
+  const [drawOpen, setDrawOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
   //////////////////////////////나중에 다른파일로 바꿔서 import합시다.
   const pageMap = {
     "/wms/member": ["회원관리", "회원조회"],
@@ -38,6 +44,7 @@ export default function LayoutPage(props) {
     "/wms/inventory": ["재고관리", "재고현황"],
     "/wms/inventory/1": ["재고관리", "음..."],
     "/wms/inventory/2": ["재고관리", "기타등등"],
+    "/wms/mypage": ["WMS", "내정보"],
   };
   const getItem = (label, key, icon, children) => {
     return {
@@ -73,7 +80,7 @@ export default function LayoutPage(props) {
       getItem("기타등등", "/wms/inventory/2"),
     ]),
   ];
-  /////////////////////////////여기 위에 지저분한거 나중에 다른파일로 뺍시다.
+  /////////////////////////////여기 위에 지저분한거 나중에 다른파일로 뺍시다.리팩토링필요
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
@@ -82,43 +89,96 @@ export default function LayoutPage(props) {
     setDetail(pageMap[key][1]);
     router.push(key);
   };
+
+  const showLoading = async () => {
+    setDrawOpen(true);
+    setLoading(true);
+
+    try {
+      const response = await axios.get("http://localhost:8080/api/jw");
+      setNotices(response.data); // notices 상태 업데이트
+    } catch (error) {
+      setNotices([
+        { date: "2022", title: "통지", content: "내용", checked: false },
+        { date: "2023", title: "통지", content: "내용", checked: true },
+        { date: "2024", title: "통지", content: "내용", checked: true },
+        { date: "2021", title: "통지", content: "내용", checked: false },
+        { date: "2022", title: "통지", content: "내용", checked: false },
+      ]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
-    <Layout
-      style={{
-        minHeight: "100vh",
-      }}
-    >
-      {!isLoginPage && (
-        <LayoutNavigation onClickNav={onClickNav} items={items} />
-      )}
-      <Layout>
-        <LayoutHeader />
-        <Content
-          style={{
-            margin: "0 16px",
-          }}
-        >
-          <Breadcrumb
+    <>
+      <Layout
+        style={{
+          minHeight: "100vh",
+        }}
+      >
+        {!isLoginPage && (
+          <LayoutNavigation onClickNav={onClickNav} items={items} />
+        )}
+        <Layout>
+          <LayoutHeader
+            router={router}
+            setPage={setPage}
+            setDetail={setDetail}
+            showLoading={showLoading}
+            pageMap={pageMap}
+          />
+          <Content
             style={{
-              margin: "16px 0",
+              margin: "0 16px",
             }}
           >
-            {!isLoginPage && <Breadcrumb.Item>{page}</Breadcrumb.Item>}
-            {!isLoginPage && <Breadcrumb.Item>{detail}</Breadcrumb.Item>}
-          </Breadcrumb>
-          <div
-            style={{
-              padding: 24,
-              minHeight: 500,
-              background: colorBgContainer,
-              borderRadius: borderRadiusLG,
-            }}
-          >
-            {props.children}
-          </div>
-        </Content>
-        <LayoutFooter />
+            <Breadcrumb
+              style={{
+                margin: "16px 0",
+              }}
+            >
+              {!isLoginPage && <Breadcrumb.Item>{page}</Breadcrumb.Item>}
+              {!isLoginPage && <Breadcrumb.Item>{detail}</Breadcrumb.Item>}
+            </Breadcrumb>
+            <div
+              style={{
+                padding: 24,
+                minHeight: 500,
+                background: colorBgContainer,
+                borderRadius: borderRadiusLG,
+              }}
+            >
+              {props.children}
+            </div>
+          </Content>
+          <LayoutFooter />
+        </Layout>
       </Layout>
-    </Layout>
+      <Drawer
+        closable
+        destroyOnClose
+        title={<p>notice</p>}
+        placement="right"
+        open={drawOpen}
+        loading={loading}
+        onClose={() => {
+          setDrawOpen(false);
+        }}
+      >
+        <Button
+          type="primary"
+          style={{
+            marginBottom: 16,
+          }}
+          onClick={showLoading}
+        >
+          추가작업
+        </Button>
+        {notices.map((el) => (
+          <Notice id={el.id} el={el} router={router} />
+        ))}
+      </Drawer>
+    </>
   );
 }
