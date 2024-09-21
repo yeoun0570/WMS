@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class ReleaseDTO {
+public class OutboundDTO {
     private Long releaseId;          // 엔티티에서 자동 생성되므로 읽기 전용으로 사용
     private Long userId;             // 사용자 ID
     private Long productId;          // 제품 ID
