@@ -1,11 +1,11 @@
 import styled from "@emotion/styled";
 export const Wrapper = styled.div`
-  width: 600px;
+  width: 1200px;
   /* height: 1847px; */
   border: 1px solid black;
-  margin: 20px 400px;
-  padding-top: 40px;
-  padding-bottom: 40px;
+  margin: 100px;
+  padding-top: 80px;
+  padding-bottom: 100px;
   padding-left: 102px;
   padding-right: 102px;
   display: flex;
@@ -38,6 +38,42 @@ export const Title = styled.div`
   }
 `;
 
+export const NameWrapper = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding-top: 40px;
+  @media screen and (max-width: 767px) {
+    /*모바일 */
+    padding-top: 20px;
+  }
+`;
+
+export const Name = styled.input`
+  width: 486px;
+  height: 52px;
+  padding-left: 16px;
+  border: 1px solid #bdbdbd;
+  @media screen and (max-width: 767px) {
+    /*모바일 */
+    width: 230px;
+    height: 30px;
+  }
+`;
+
+export const Password = styled.input`
+  width: 996px;
+  height: 52px;
+  padding-left: 16px;
+  border: 1px solid #bdbdbd;
+  @media screen and (max-width: 767px) {
+    /*모바일 */
+    width: 230px;
+    height: 30px;
+  }
+`;
+
 export const Label = styled.div`
   padding-bottom: 16px;
   font-size: 16px;
@@ -57,8 +93,8 @@ export const InputWrapper = styled.div`
 `;
 
 export const Input = styled.input`
-  width: 500px;
-  height: 30px;
+  width: 996px;
+  height: 52px;
   padding-left: 16px;
   border: 1px solid #bdbdbd;
   @media screen and (max-width: 767px) {
