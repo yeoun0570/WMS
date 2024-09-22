@@ -3,7 +3,7 @@ import * as S from "./joinMembership.styles";
 export default function JoinMembershipUI(props) {
   return (
     <S.Wrapper>
-      <S.Title>회원승인요청</S.Title>
+      <S.Title>회원가입</S.Title>
       <S.NameWrapper>
         <S.InputWrapper>
           <S.Label>성</S.Label>
