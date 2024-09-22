@@ -31,14 +31,14 @@ public interface OutboundRepository extends JpaRepository<Outbound, Long> {
             "ORDER BY o.outboundPK.outboundId DESC")
     Page<OutboundDTO> findOutboundNotDone(Pageable pageable);
 
-      //출고목록(처리) 전체 조회(검색엔진 위와같은 이유로 보류)
-      @Query("SELECT new lcw.lcw2_back.dto.OutboundDTO(o.outboundPK.outboundId, p.productName, s_from.storageName, o.requestQuantity, o.completeDate, o.status,  s_to.storageName) " +
-              "FROM Outbound o " +
-              "JOIN o.userId u " +
-              "JOIN u.storageId s_from " +
-              "JOIN o.receivingStorageId s_to " +
-              "JOIN Product p ON o.outboundPK.productId = p.productId " +
-              "WHERE o.status in('NOT APPROVED', 'APPROVED') " +
-              "ORDER BY o.outboundPK.outboundId DESC")
-    Page<Outbound> findOutboundDone(Pageable pageable);
+    //출고목록(처리) 전체 조회(검색엔진 위와같은 이유로 보류)
+    @Query("SELECT new lcw.lcw2_back.dto.OutboundDTO(o.outboundPK.outboundId, p.productName, s_from.storageName, o.requestQuantity, o.completeDate, o.status,  s_to.storageName) " +
+            "FROM Outbound o " +
+            "JOIN o.userId u " +
+            "JOIN u.storageId s_from " +
+            "JOIN o.receivingStorageId s_to " +
+            "JOIN Product p ON o.outboundPK.productId = p.productId " +
+            "WHERE o.status in('DONE', 'APPROVED') " +
+            "ORDER BY o.outboundPK.outboundId DESC")
+    Page<OutboundDTO> findOutboundDone(Pageable pageable);
 }

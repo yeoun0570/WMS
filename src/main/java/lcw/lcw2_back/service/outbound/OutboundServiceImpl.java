@@ -1,21 +1,17 @@
 package lcw.lcw2_back.service.outbound;
 
 import jakarta.transaction.Transactional;
-import lcw.lcw2_back.domain.outbound.Outbound;
 import lcw.lcw2_back.dto.OutboundDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import lcw.lcw2_back.dto.Page.PageResponseDTO;
 import lcw.lcw2_back.repository.OutboundRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
+
 
 @Service
 @RequiredArgsConstructor
@@ -36,5 +32,13 @@ public class OutboundServiceImpl implements OutboundService {
     public Page<OutboundDTO> getOutboundNotDoneList(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         return outboundRepository.findOutboundNotDone(pageable);
+    }
+
+
+    //출고목록(처리) 전체 조회(검색엔진 위와같은 이유로 보류)
+    @Override
+    public Page<OutboundDTO> getOutboundDoneList(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return outboundRepository.findOutboundDone(pageable);
     }
 }

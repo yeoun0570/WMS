@@ -34,9 +34,19 @@ public class OutboundRepositoryTests {
     }
 
     @Test
-    public void findByStatusNotTest() {
+    public void findOutboundNotDoneTest() {
         OutboundServiceImpl outboundService = new OutboundServiceImpl(modelMapper, outboundRepository);
         Page<OutboundDTO> result = outboundService.getOutboundNotDoneList(0,5);
+
+        result.forEach(outboundDTO -> {
+            System.out.println(outboundDTO); // DTO 객체를 콘솔에 출력
+        });
+    }
+
+    @Test
+    public void findByStatusDoneTest() {
+        OutboundServiceImpl outboundService = new OutboundServiceImpl(modelMapper, outboundRepository);
+        Page<OutboundDTO> result = outboundService.getOutboundDoneList(0,5);
 
         result.forEach(outboundDTO -> {
             System.out.println(outboundDTO); // DTO 객체를 콘솔에 출력

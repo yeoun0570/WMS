@@ -25,7 +25,7 @@ public class OutboundController {
     }
 
     //출고요청서 조회(미승인, 승인 조건 만들어야 하는데 검색엔진으로 커버 가능한지 모르겠으니 일단 보류)
-    @GetMapping("/api/outbound/list")
+    @GetMapping("/api/outbound/request_list")
     public Page<OutboundDTO> getOutboundNotDone(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "15") int size) {
@@ -38,4 +38,21 @@ public class OutboundController {
 
         return result;
     }
+
+    @GetMapping("/api/outbound/request_done_list")
+    public Page<OutboundDTO> getOutboundDone(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "15") int size) {
+
+        Page<OutboundDTO> result = outboundService.getOutboundNotDoneList(page, size);
+
+        int total = result.getTotalPages();
+        boolean next = result.hasNext();
+        boolean prev = result.hasPrevious();
+
+        return result;
+    }
+
+
+
 }
