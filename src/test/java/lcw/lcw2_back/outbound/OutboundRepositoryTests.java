@@ -1,7 +1,8 @@
 package lcw.lcw2_back.outbound;
 
+import lcw.lcw2_back.domain.outbound.Item;
 import lcw.lcw2_back.domain.outbound.Outbound;
-import lcw.lcw2_back.domain.outbound.OutboundPK;
+// import lcw.lcw2_back.domain.outbound.OutboundPK;
 import lcw.lcw2_back.domain.storage.Storage;
 import lcw.lcw2_back.domain.user.User;
 import lcw.lcw2_back.dto.OutboundDTO;
@@ -30,11 +31,11 @@ public class OutboundRepositoryTests {
         OutboundServiceImpl outboundService = new OutboundServiceImpl(modelMapper, outboundRepository);
 
         List<Long> outboundIds = new ArrayList<>();
-        outboundIds.add(0,1L);
-        outboundIds.add(1,2L);
-        outboundIds.add(2,3L);
-        outboundIds.add(3,4L);
-        outboundIds.add(4,5L);
+        outboundIds.add(0, 1L);
+        outboundIds.add(1, 2L);
+        outboundIds.add(2, 3L);
+        outboundIds.add(3, 4L);
+        outboundIds.add(4, 5L);
 
         outboundService.approveOutboundRequests(outboundIds);
     }
@@ -42,7 +43,7 @@ public class OutboundRepositoryTests {
     @Test
     public void findOutboundNotDoneTest() {
         OutboundServiceImpl outboundService = new OutboundServiceImpl(modelMapper, outboundRepository);
-        Page<OutboundDTO> result = outboundService.getOutboundNotDoneList(0,5);
+        Page<OutboundDTO> result = outboundService.getOutboundNotDoneList(0, 15);
 
         result.forEach(outboundDTO -> {
             System.out.println(outboundDTO); // DTO 객체를 콘솔에 출력
@@ -52,7 +53,7 @@ public class OutboundRepositoryTests {
     @Test
     public void findByStatusDoneTest() {
         OutboundServiceImpl outboundService = new OutboundServiceImpl(modelMapper, outboundRepository);
-        Page<OutboundDTO> result = outboundService.getOutboundDoneList(0,5);
+        Page<OutboundDTO> result = outboundService.getOutboundDoneList(0, 5);
 
         result.forEach(outboundDTO -> {
             System.out.println(outboundDTO); // DTO 객체를 콘솔에 출력
@@ -61,11 +62,6 @@ public class OutboundRepositoryTests {
 
     @Test
     public void insertTest() {
-        OutboundPK outboundPK = OutboundPK.builder()
-                .outboundId(21L)
-                .productId(2L)
-                .build();
-
         User user = User.builder()
                 .userId("user1")
                 .build();
@@ -74,10 +70,18 @@ public class OutboundRepositoryTests {
                 .storageId(2L)
                 .build();
 
+        List<Item> itemList = new ArrayList<>();
+
+        for (int i = 0; i < 2; i++) {
+            Item item = Item.builder()
+                    .quantity(100L)
+                    .build();
+            itemList.add(item);
+        }
+
         Outbound outbound = Outbound.builder()
-                .outboundPK(outboundPK)
                 .userId(user)
-                .requestQuantity(100L)
+                .items(itemList)
                 .status("NOT APPROVED")
                 .requestDate(LocalDateTime.now())
                 .receivingStorageId(storage)
