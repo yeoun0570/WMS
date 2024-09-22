@@ -30,4 +30,10 @@ public class OutboundRepositoryTests {
 
         outboundService.approveOutboundRequests(outboundIds);
     }
+
+    @Test
+    public void findByStatusNotTest() {
+        OutboundServiceImpl outboundService = new OutboundServiceImpl(modelMapper, outboundRepository);
+        outboundService.getOutboundNotDoneList(0,10);
+    }
 }
