@@ -1,8 +1,10 @@
 package lcw.lcw2_back.domain.outbound;
 
 import jakarta.persistence.*;
+import lcw.lcw2_back.domain.storage.Storage;
 import lcw.lcw2_back.domain.user.User;
 import lombok.*;
+import org.apache.ibatis.annotations.Many;
 
 import java.time.LocalDateTime;
 
@@ -36,8 +38,9 @@ public class Outbound {
     @Column(name = "COMPLETE_DATE")
     private LocalDateTime completeDate;
 
-    @Column(name = "RECEIVING_STORAGE_ID")
-    private Long receivingStorageId;
+    @ManyToOne
+    @JoinColumn(name = "RECEIVING_STORAGE_ID")
+    private Storage receivingStorageId;
 
     @Column(name = "OUTBOUND_MART")
     private boolean outboundMart;

@@ -1,5 +1,6 @@
 package lcw.lcw2_back.service.outbound;
 
+import jakarta.transaction.Transactional;
 import lcw.lcw2_back.domain.outbound.Outbound;
 import lcw.lcw2_back.dto.OutboundDTO;
 import org.springframework.data.domain.Page;
@@ -25,6 +26,7 @@ public class OutboundServiceImpl implements OutboundService {
 
     //체크박스에서 체크한 요청 승인 serviceImpl
     @Override
+    @Transactional
     public void approveOutboundRequests(List<Long> outboundIds) {
         outboundRepository.updateStatusForOutboundIds(outboundIds);
     }

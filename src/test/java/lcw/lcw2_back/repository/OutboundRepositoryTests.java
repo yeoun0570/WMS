@@ -1,10 +1,12 @@
 package lcw.lcw2_back.repository;
 
+import lcw.lcw2_back.dto.OutboundDTO;
 import lcw.lcw2_back.service.outbound.OutboundServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +36,10 @@ public class OutboundRepositoryTests {
     @Test
     public void findByStatusNotTest() {
         OutboundServiceImpl outboundService = new OutboundServiceImpl(modelMapper, outboundRepository);
-        outboundService.getOutboundNotDoneList(0,10);
+        Page<OutboundDTO> result = outboundService.getOutboundNotDoneList(0,5);
+
+        result.forEach(outboundDTO -> {
+            System.out.println(outboundDTO); // DTO 객체를 콘솔에 출력
+        });
     }
 }
