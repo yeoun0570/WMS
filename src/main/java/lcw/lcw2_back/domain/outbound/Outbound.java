@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lcw.lcw2_back.domain.storage.Storage;
 import lcw.lcw2_back.domain.user.User;
 import lombok.*;
-import org.apache.ibatis.annotations.Many;
 
 import java.time.LocalDateTime;
 

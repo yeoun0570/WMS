@@ -1,6 +1,11 @@
-package lcw.lcw2_back.repository;
+package lcw.lcw2_back.outbound;
 
+import lcw.lcw2_back.domain.outbound.Outbound;
+import lcw.lcw2_back.domain.outbound.OutboundPK;
+import lcw.lcw2_back.domain.storage.Storage;
+import lcw.lcw2_back.domain.user.User;
 import lcw.lcw2_back.dto.OutboundDTO;
+import lcw.lcw2_back.repository.OutboundRepository;
 import lcw.lcw2_back.service.outbound.OutboundServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.modelmapper.ModelMapper;
@@ -8,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,5 +57,33 @@ public class OutboundRepositoryTests {
         result.forEach(outboundDTO -> {
             System.out.println(outboundDTO); // DTO 객체를 콘솔에 출력
         });
+    }
+
+    @Test
+    public void insertTest() {
+        OutboundPK outboundPK = OutboundPK.builder()
+                .outboundId(21L)
+                .productId(2L)
+                .build();
+
+        User user = User.builder()
+                .userId("user1")
+                .build();
+
+        Storage storage = Storage.builder()
+                .storageId(2L)
+                .build();
+
+        Outbound outbound = Outbound.builder()
+                .outboundPK(outboundPK)
+                .userId(user)
+                .requestQuantity(100L)
+                .status("NOT APPROVED")
+                .requestDate(LocalDateTime.now())
+                .receivingStorageId(storage)
+                .outboundMart(false)
+                .build();
+
+        outboundRepository.save(outbound);
     }
 }

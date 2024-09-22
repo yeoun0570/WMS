@@ -2,6 +2,8 @@ package lcw.lcw2_back.repository;
 
 import jakarta.transaction.Transactional;
 import lcw.lcw2_back.domain.outbound.Outbound;
+import lcw.lcw2_back.domain.storage.Storage;
+import lcw.lcw2_back.domain.user.User;
 import lcw.lcw2_back.dto.OutboundDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -32,7 +34,7 @@ public interface OutboundRepository extends JpaRepository<Outbound, Long> {
     Page<OutboundDTO> findOutboundNotDone(Pageable pageable);
 
     //출고목록(처리) 전체 조회(검색엔진 위와같은 이유로 보류)
-    @Query("SELECT new lcw.lcw2_back.dto.OutboundDTO(o.outboundPK.outboundId, p.productName, s_from.storageName, o.requestQuantity, o.completeDate, o.status,  s_to.storageName) " +
+    @Query("SELECT new lcw.lcw2_back.dto.OutboundDTO(o.outboundPK.outboundId, p.productName, s_from.storageName, o.requestQuantity, o.completeDate, o.status, s_to.storageName) " +
             "FROM Outbound o " +
             "JOIN o.userId u " +
             "JOIN u.storageId s_from " +
@@ -41,4 +43,8 @@ public interface OutboundRepository extends JpaRepository<Outbound, Long> {
             "WHERE o.status in('DONE', 'APPROVED') " +
             "ORDER BY o.outboundPK.outboundId DESC")
     Page<OutboundDTO> findOutboundDone(Pageable pageable);
+
+    //출고요청서 작성
+
+
 }

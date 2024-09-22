@@ -39,6 +39,7 @@ public class OutboundController {
         return result;
     }
 
+    //출고목록(처리) 전체 조회(검색엔진 위와같은 이유로 보류)
     @GetMapping("/api/outbound/request_done_list")
     public Page<OutboundDTO> getOutboundDone(
             @RequestParam(defaultValue = "0") int page,
