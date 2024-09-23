@@ -9,11 +9,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Repository
 public class MemoryNotificationRepository implements NotificationRepository {
 
-    private static final Map<String,Notification> storage = new HashMap<>();
+    private static final Map<String,Notification> storage = new ConcurrentHashMap<>();
     @Override
     public Notification save(Notification notification) {
         storage.put(notification.getNotification_id(),notification);
@@ -34,6 +35,14 @@ public class MemoryNotificationRepository implements NotificationRepository {
     @Override
     public void deleteById(String notification_id) {
         storage.remove(notification_id);
+    }
+
+    @Override
+    public void deleteAllByUserId(int user_id) {
+        for (Map.Entry<String, Notification> entry : storage.entrySet()) {
+            if(entry.getValue().getUser_id()!=user_id) continue;
+            storage.remove(entry.getKey());
+        }
     }
 
     @Override

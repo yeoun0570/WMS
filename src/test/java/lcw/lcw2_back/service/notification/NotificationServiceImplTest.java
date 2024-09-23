@@ -3,6 +3,7 @@ package lcw.lcw2_back.service.notification;
 import lcw.lcw2_back.domain.notification.NotificationType;
 import lcw.lcw2_back.repository.emitter.MemoryEmitterRepository;
 import lcw.lcw2_back.repository.notification.MemoryNotificationRepository;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -31,6 +32,30 @@ class NotificationServiceImplTest {
     }
 
     @Test
+    @DisplayName("통지를 보냈을 때 상대방이 존재할 때")
     void send() {
+        //given
+        int userId = 1;
+        notificationService.connectSSE(userId);
+
+        int userId2 = 2;
+        notificationService.connectSSE(userId2);
+
+        //when,then
+        notificationService.send(2, NotificationType.INBOUND,"test");
+        notificationService.send(2, NotificationType.INBOUND,"test2");
+
+
+    }
+
+    void updateNotificationCache(){
+
+
+    }
+    void deleteNotificationCache(){
+
+    }
+    void deleteAllNotificationCache(){
+
     }
 }

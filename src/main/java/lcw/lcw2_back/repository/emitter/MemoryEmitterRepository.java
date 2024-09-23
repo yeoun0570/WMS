@@ -51,6 +51,10 @@ public class MemoryEmitterRepository implements EmitterRepository{
     }
 
     @Override
+    public void deleteEventCacheByNotificationId(String notification_id){
+        eventCache.remove(notification_id);
+    }
+    @Override
     public void deleteAllEventCacheByUserId(String userId) {
         for (Map.Entry<String, Object> entry : eventCache.entrySet()) {
             if(!entry.getKey().endsWith("@"+userId)) continue;

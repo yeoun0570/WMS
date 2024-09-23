@@ -6,10 +6,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/user/notice")
+@RequestMapping("/api/notice")
 @AllArgsConstructor
 public class NotificationController {
 
     private final NotificationService notificationService;
+
+
 
 }

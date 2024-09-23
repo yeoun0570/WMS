@@ -8,5 +8,6 @@ public interface NotificationRepository {
     Notification save(Notification notification);//알림 저장
     List<Notification> findByUserId(int user_id);
     void deleteById(String notification_id);
+    void deleteAllByUserId(int user_id);
     void updateById(String notification_id);
 }

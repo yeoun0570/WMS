@@ -15,6 +15,7 @@ public interface EmitterRepository {
     //emitter 제거
     void deleteById(String emitterId);
     void deleteAllEmitter();
+    void deleteEventCacheByNotificationId(String notification_id);
     void deleteAllEventCacheByUserId(String userId);
 
     //eventCache update

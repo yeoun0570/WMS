@@ -14,7 +14,6 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-@Transactional
 @AllArgsConstructor
 public class NotificationServiceImpl implements NotificationService{
     private final NotificationRepository notificationRepository;
@@ -25,8 +24,7 @@ public class NotificationServiceImpl implements NotificationService{
     public SseEmitter connectSSE(int userId) {
         String emitterId = String.valueOf(userId);
         SseEmitter emitter = emitterRepository.save(emitterId,new SseEmitter(timeout));
-        //emitter설정 여기서 notification통지를 eventCache에 저장해야 하는지 고민중. //
-        //아니면 시스템이 시작될때 통지db에서 가져와서 넣어줘야되나..
+
         emitter.onCompletion(()->{
             emitterRepository.deleteById(emitterId);
             updateNotificationTableByUserId(userId);
@@ -37,6 +35,7 @@ public class NotificationServiceImpl implements NotificationService{
             updateNotificationTableByUserId(userId);
         });
         updateEventCacheFromNotificationDB(userId);
+        //연결시 통지들 cache에 들고온다.
 
         //503 error 방지=> 더미 이벤트 전송해주기
         String eventId = System.currentTimeMillis()+"@"+userId;
@@ -63,8 +62,6 @@ public class NotificationServiceImpl implements NotificationService{
         for (Notification notification : ret) {
             emitterRepository.saveEventCache(notification.getNotification_id(),notification);
         }
-
-
     }
     @Override
     public void send(int receivedUserId, NotificationType notificationType, String content) {
@@ -78,6 +75,7 @@ public class NotificationServiceImpl implements NotificationService{
             System.out.println("상대방이 로그아웃인 상태이거나 받을 수 없습니다.");
             return;
         }
+        System.out.println("상대방에게 통지를 보냈습니다.");
         sendNotification(emitter,eventId,String.valueOf(receivedUserId),notification);
     }
 
@@ -93,12 +91,14 @@ public class NotificationServiceImpl implements NotificationService{
     }
 
     @Override
-    public void deleteNotification(String notificationId) {
-
+    public void deleteNotificationCache(String notificationId) {
+        emitterRepository.deleteEventCacheByNotificationId(notificationId);
+        notificationRepository.deleteById(notificationId);
     }
 
     @Override
-    public void deleteAllNotification(int userId) {
-
+    public void deleteAllNotificationCache(int userId) {
+        emitterRepository.deleteAllEventCacheByUserId(String.valueOf(userId));
+        notificationRepository.deleteAllByUserId(userId);
     }
 }
