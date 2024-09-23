@@ -13,12 +13,11 @@ import java.util.Map;
 @Repository
 public class MemoryNotificationRepository implements NotificationRepository {
 
-    private static Map<Integer,Notification> storage = new HashMap<>();
-    private static int seq = 0;
+    private static final Map<String,Notification> storage = new HashMap<>();
     @Override
-    public void save(Notification notification) {
-        notification.setNotification_id(++seq);
+    public Notification save(Notification notification) {
         storage.put(notification.getNotification_id(),notification);
+        return notification;
     }
 
     @Override
@@ -33,12 +32,14 @@ public class MemoryNotificationRepository implements NotificationRepository {
     }
 
     @Override
-    public void deleteById(int notification_id) {
+    public void deleteById(String notification_id) {
         storage.remove(notification_id);
     }
 
     @Override
-    public void updateById(int notification_id, Notification notification) {
+    public void updateById(String notification_id) {
+        Notification notification = storage.get(notification_id);
+        notification.setChecked(true);
         storage.replace(notification_id,notification);
     }
 }

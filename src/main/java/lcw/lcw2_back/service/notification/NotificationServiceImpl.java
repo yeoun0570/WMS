@@ -1,16 +1,104 @@
 package lcw.lcw2_back.service.notification;
 
+import lcw.lcw2_back.domain.notification.Notification;
+import lcw.lcw2_back.domain.notification.NotificationType;
+import lcw.lcw2_back.repository.emitter.EmitterRepository;
 import lcw.lcw2_back.repository.notification.NotificationRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
+
+import java.io.IOException;
+import java.util.List;
+import java.util.Map;
 
 @Service
 @Transactional
 @AllArgsConstructor
 public class NotificationServiceImpl implements NotificationService{
     private final NotificationRepository notificationRepository;
+    private final EmitterRepository emitterRepository;
+    private final Long timeout = 360000L;
 
-    
+    @Override
+    public SseEmitter connectSSE(int userId) {
+        String emitterId = String.valueOf(userId);
+        SseEmitter emitter = emitterRepository.save(emitterId,new SseEmitter(timeout));
+        //emitter설정 여기서 notification통지를 eventCache에 저장해야 하는지 고민중. //
+        //아니면 시스템이 시작될때 통지db에서 가져와서 넣어줘야되나..
+        emitter.onCompletion(()->{
+            emitterRepository.deleteById(emitterId);
+            updateNotificationTableByUserId(userId);
+            //로그아웃이나 타임아웃시에 디비접근해서 한꺼번에 읽음 처리
+        });
+        emitter.onTimeout(()->{
+            emitterRepository.deleteById(emitterId);
+            updateNotificationTableByUserId(userId);
+        });
+        updateEventCacheFromNotificationDB(userId);
 
+        //503 error 방지=> 더미 이벤트 전송해주기
+        String eventId = System.currentTimeMillis()+"@"+userId;
+        sendNotification(emitter,eventId,emitterId,"[create SSE Connection] userId : "+userId);
+        return emitter;
+    }
+
+    private void sendNotification(SseEmitter emitter,String eventId,String emitterId,Object data){
+        try {
+            SseEmitter.SseEventBuilder sseEventBuilder = SseEmitter.event();
+            sseEventBuilder.id(eventId);
+            sseEventBuilder.data(data);
+            emitter.send(sseEventBuilder);
+        } catch (IOException e) {
+            emitterRepository.deleteById(emitterId);
+            System.err.println("sendNotification 에서 오류가 발생함 :"+e.getMessage());
+        }
+    }
+
+    private void updateEventCacheFromNotificationDB(int userId){
+        List<Notification> ret = notificationRepository.findByUserId(userId);
+
+        //notification 테이블에서 notification 저장하기.
+        for (Notification notification : ret) {
+            emitterRepository.saveEventCache(notification.getNotification_id(),notification);
+        }
+
+
+    }
+    @Override
+    public void send(int receivedUserId, NotificationType notificationType, String content) {
+        String eventId = System.currentTimeMillis() + "@" +receivedUserId;
+        Notification notification= notificationRepository.save(new Notification(eventId,receivedUserId, notificationType.name(), content,notificationType));
+
+
+        SseEmitter emitter = emitterRepository.findEmitterByUserId(String.valueOf(receivedUserId));
+        emitterRepository.saveEventCache(eventId,notification);
+        if(emitter == null){
+            System.out.println("상대방이 로그아웃인 상태이거나 받을 수 없습니다.");
+            return;
+        }
+        sendNotification(emitter,eventId,String.valueOf(receivedUserId),notification);
+    }
+
+    @Override
+    public void updateNotificationCache(String notificationId) {
+        emitterRepository.updateEventCacheByNotificationId(notificationId);
+    }
+    private void updateNotificationTableByUserId(int userId){
+        Map<String,Object> cache = emitterRepository.findAllEventCacheByUserId(String.valueOf(userId));
+        for (String s : cache.keySet()) {
+            notificationRepository.updateById(s);
+        }
+    }
+
+    @Override
+    public void deleteNotification(String notificationId) {
+
+    }
+
+    @Override
+    public void deleteAllNotification(int userId) {
+
+    }
 }

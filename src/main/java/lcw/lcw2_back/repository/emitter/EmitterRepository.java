@@ -10,10 +10,13 @@ public interface EmitterRepository {
     //이벤트 저장
     void saveEventCache(String eventCacheId,Object event);
     //해당 유저의 모든 emitter,event
-    Map<String,SseEmitter> findAllEmitterByUserId(String userId);
+    SseEmitter findEmitterByUserId(String userId);
     Map<String,Object> findAllEventCacheByUserId(String userId);
     //emitter 제거
     void deleteById(String emitterId);
-    void deleteAllEmitterByUserId(String userId);
+    void deleteAllEmitter();
     void deleteAllEventCacheByUserId(String userId);
+
+    //eventCache update
+    void updateEventCacheByNotificationId(String notification_id);
 }
