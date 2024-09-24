@@ -3,7 +3,6 @@ package lcw.lcw2_back.dto.page;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
-import lcw.lcw2_back.dto.Page.PageRequestDTO;
 
 import java.util.List;
 
