@@ -1,11 +1,13 @@
 package lcw.lcw2_back.dto;
 
+import lcw.lcw2_back.domain.user.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -23,24 +25,5 @@ public class OutboundDTO {
     private String productName;
     private String storageFromName;  // 출고 창고명
     private String storageToName;    // 입고 창고명
-
-    public OutboundDTO(Long outboundId, String productName, String storageFromName, Long quantity, String status, LocalDateTime requestDate, String storageToName) {
-        this.outboundId = outboundId;
-        this.productName = productName;
-        this.storageFromName = storageFromName;
-        this.quantity = quantity;
-        this.status = status;
-        this.requestDate = requestDate;
-        this.storageToName = storageToName;
-    }
-
-    public OutboundDTO(Long outboundId, String productName, String storageFromName, Long quantity, LocalDateTime completeDate, String status, String storageToName) {
-        this.outboundId = outboundId;
-        this.productName = productName;
-        this.storageFromName = storageFromName;
-        this.quantity = quantity;
-        this.completeDate = completeDate;
-        this.status = status;
-        this.storageToName = storageToName;
-    }
+    private List<Long> outboundIds;
 }
