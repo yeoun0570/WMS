@@ -23,8 +23,9 @@ public class SecurityConfig {
 //                        .requestMatchers("/", "/login").permitAll()
 //                        .requestMatchers("/api/**", "/wms/**").authenticated() //api 하위 경로는 로그인한 사용자만 가능
 //                        .requestMatchers("/api/admin/**", "wms/admin/**").hasRole("ADMIN") //어드민인 경우만 사용 가능
-                        .requestMatchers("/api/auth/**").permitAll() // 인증 관련 API는 누구나 접근 가능
-                        .anyRequest().authenticated() //그 외 위에서 못 잡은 것들
+//                        .requestMatchers("/api/auth/**").permitAll() // 인증 관련 API는 누구나 접근 가능
+//                        .anyRequest().authenticated() //그 외 위에서 못 잡은 것들
+                        .requestMatchers("/**").permitAll() //모든 요청 허용(개발시)
                 );
         http
                 .csrf(csrf -> csrf.disable()) // CSRF 비활성화 (사이트 변조 방지 서비스 : 원래 CSRF 토큰도 함께 보내줘야 시큐리티 작동함)
