@@ -17,7 +17,7 @@ public class DatasetVO {
   private String label;
   private Double data;
 
-  @JsonFormat(pattern = "yyyy-MM-DD")
+  @JsonFormat(pattern = "yyyy-MM-dd")
   private LocalDate dateTime;
 
 }

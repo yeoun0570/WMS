@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Doughnut } from "react-chartjs-2";
+import axios from "axios";
 import {
   Chart as ChartJS,
   ArcElement,
@@ -11,17 +12,39 @@ import {
 ChartJS.register(ArcElement, Tooltip, Legend, Title);
 
 export default function UsageChart(props) {
-  const { usageDataset, storageAreaData } = props;
-  const labelsArray = Object.values(usageDataset).map(item => item.label);
-  const dataArray = Object.values(usageDataset).map(item => item.data);
+  const [labelsArray, setLabelsArray] = useState([]);
+  const [dataArray, setDataArray] = useState([]);
+  let percentage;
   
-  let total = 0;
-  dataArray.map(item => {
-    total += item;
-  })
+  // 창고 사용률 그래프 데이터셋 초기화
+  const fetchUsageDataset = async () => {
+    try {
+      const response = await axios.get("http://localhost:8080/api/usageData");
 
-  labelsArray.push("남는 공간");
-  dataArray.push(storageAreaData - total);
+      const fetchedData = response.data.products;
+      const maxCapacity = response.data.storageArea;
+
+      const labels = fetchedData.map((item) => item.label);
+      const data = fetchedData.map((item) => item.data);
+      const totalUsage = data.reduce((acc, item) => acc + item, 0);
+
+      labels.push("남는 공간");
+      data.push(maxCapacity - totalUsage);
+
+      percentage = ((totalUsage / maxCapacity) * 100).toFixed(2);
+      
+      setLabelsArray(labels);
+      setDataArray(data);
+
+    } catch (error) {
+      ////////////////////////////////////////////// 예외 처리 해줘야하는데...
+      console.log('창고 사용률 에러');
+    }
+  }
+
+  useEffect(() => {
+    fetchUsageDataset();
+  }, []);
 
   const data = {
     labels: labelsArray,
@@ -52,10 +75,11 @@ export default function UsageChart(props) {
 
   const options = {
     responsive: true,
+    maintainAspectRatio: false,
     plugins: {
       legend: {
-        display: false,
-        position: "top",
+        display: true,
+        position: "bottom",
       },
       title: {
         display: false,
@@ -71,17 +95,23 @@ export default function UsageChart(props) {
     afterDatasetsDraw(chart, args, options) {
       const { ctx, chartArea: { width, height } } = chart;
       ctx.save();
-      const text = "창고 사용률";
-      ctx.font = '20px Arial';
+
+      const text = "창고 사용";
+      ctx.font = '18px Arial';
       ctx.fillStyle = 'black';
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
-      ctx.fillText(text, width / 2, height / 2); // 차트 중앙에 텍스트 삽입
+      ctx.fillText(text, width / 2, height / 2.3);
+
+      const percentageText = percentage + "%";
+      ctx.font = '24px Arial';
+      ctx.fillStyle = "rgba(128, 128, 128, 1)";
+      ctx.fillText(percentageText, width / 2, height / 1.7);
     }
   };
 
   return (
-    <div style={{width: "100%"}}>
+    <div style={{width: "100%", height:"100%"}}>
       <Doughnut data={data} options={options} plugins={[centerTextPlugin]} />
     </div>
   );

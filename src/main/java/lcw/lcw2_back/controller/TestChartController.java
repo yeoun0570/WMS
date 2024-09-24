@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import lcw.lcw2_back.domain.DatasetVO;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,11 +18,11 @@ public class TestChartController {
   @GetMapping("/api/lossData")
   public List<DatasetVO> test() {
     List<DatasetVO> list = new ArrayList<>();
-    for (int i = 0; i < 31; i++) {
+    for (int i = 1; i <= 31; i++) {
       DatasetVO datasetVO = DatasetVO.builder()
-          .label((i + 1) + "일")
+          .label(i + "일")
           .data(Math.pow(-1, i) * i)
-          .dateTime(LocalDate.of(2024, 8, i + 1))
+          .dateTime(LocalDate.of(2024, 8, i))
           .build();
       list.add(datasetVO);
     }
@@ -55,6 +56,35 @@ public class TestChartController {
 
     return map;
   }
+
+  @GetMapping("/api/outboundForWeekData")
+  public Map<String, Long> outboundForWeek() {
+    Map<String, Long> map = new HashMap<>();
+
+    map.put("req", 82L);
+    map.put("comp", 45L);
+
+    return map;
+  }
+
+  @GetMapping("/api/invInTrend")
+  public List<Map> invInTrend() {
+    List<Map> list = new ArrayList<>();
+    Map<String, String>
+  }
+
+  @GetMapping("/api/invOutTrend")
+  public List<Map> invOutTrend() {
+    List<Map> list = new ArrayList<>();
+    Map<String, String>
+  }
+
+  @GetMapping("/api/invTotalTrend")
+  public List<Map> invTotalTrend() {
+    List<Map> list = new ArrayList<>();
+    Map<String, String>
+  }
+
 }
 //  loss
 //      usage
