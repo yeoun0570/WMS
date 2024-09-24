@@ -23,11 +23,11 @@ class NotificationServiceImplTest {
     @DisplayName("통지를 보냈을 때 상대방이 로그인하지 않은 상태일때")
     void connectSSE() {
         //given
-        int userId = 1;
+        String userId = "1";
         notificationService.connectSSE(userId);
 
         //when, then
-        notificationService.send(2, NotificationType.INBOUND,"test");
+        notificationService.send("2", NotificationType.INBOUND,"test");
 
     }
 
@@ -35,15 +35,15 @@ class NotificationServiceImplTest {
     @DisplayName("통지를 보냈을 때 상대방이 존재할 때")
     void send() {
         //given
-        int userId = 1;
+        String userId = "1";
         notificationService.connectSSE(userId);
 
-        int userId2 = 2;
+        String userId2 = "2";
         notificationService.connectSSE(userId2);
 
         //when,then
-        notificationService.send(2, NotificationType.INBOUND,"test");
-        notificationService.send(2, NotificationType.INBOUND,"test2");
+        notificationService.send(userId2, NotificationType.INBOUND,"test");
+        notificationService.send(userId2, NotificationType.INBOUND,"test2");
 
 
     }

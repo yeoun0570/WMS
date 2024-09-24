@@ -32,6 +32,6 @@ public class TestHelloWorldController {
     @GetMapping(value = "/api/test/notice", produces = "text/event-stream")
     @ResponseStatus(HttpStatus.OK)
     public SseEmitter sseConnect(@RequestParam(value = "userId" , defaultValue = "0")String userId){
-        return notificationService.connectSSE(Integer.parseInt(userId));
+        return notificationService.connectSSE(userId);
     }
 }

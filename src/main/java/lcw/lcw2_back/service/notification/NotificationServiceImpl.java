@@ -21,8 +21,8 @@ public class NotificationServiceImpl implements NotificationService{
     private final Long timeout = 360000L;
 
     @Override
-    public SseEmitter connectSSE(int userId) {
-        String emitterId = String.valueOf(userId);
+    public SseEmitter connectSSE(String userId) {
+        String emitterId = userId;
         SseEmitter emitter = emitterRepository.save(emitterId,new SseEmitter(timeout));
 
         emitter.onCompletion(()->{
@@ -55,7 +55,7 @@ public class NotificationServiceImpl implements NotificationService{
         }
     }
 
-    private void updateEventCacheFromNotificationDB(int userId){
+    private void updateEventCacheFromNotificationDB(String userId){
         List<Notification> ret = notificationRepository.findByUserId(userId);
 
         //notification 테이블에서 notification 저장하기.
@@ -64,7 +64,7 @@ public class NotificationServiceImpl implements NotificationService{
         }
     }
     @Override
-    public void send(int receivedUserId, NotificationType notificationType, String content) {
+    public void send(String receivedUserId, NotificationType notificationType, String content) {
         String eventId = System.currentTimeMillis() + "@" +receivedUserId;
         Notification notification= notificationRepository.save(new Notification(eventId,receivedUserId, notificationType.name(), content,notificationType));
 
@@ -83,8 +83,8 @@ public class NotificationServiceImpl implements NotificationService{
     public void updateNotificationCache(String notificationId) {
         emitterRepository.updateEventCacheByNotificationId(notificationId);
     }
-    private void updateNotificationTableByUserId(int userId){
-        Map<String,Object> cache = emitterRepository.findAllEventCacheByUserId(String.valueOf(userId));
+    private void updateNotificationTableByUserId(String userId){
+        Map<String,Object> cache = emitterRepository.findAllEventCacheByUserId(userId);
         for (String s : cache.keySet()) {
             notificationRepository.updateById(s);
         }
@@ -97,8 +97,8 @@ public class NotificationServiceImpl implements NotificationService{
     }
 
     @Override
-    public void deleteAllNotificationCache(int userId) {
-        emitterRepository.deleteAllEventCacheByUserId(String.valueOf(userId));
+    public void deleteAllNotificationCache(String userId) {
+        emitterRepository.deleteAllEventCacheByUserId(userId);
         notificationRepository.deleteAllByUserId(userId);
     }
 }

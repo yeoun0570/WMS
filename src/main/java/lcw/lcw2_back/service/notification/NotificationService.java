@@ -5,13 +5,13 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 public interface NotificationService {
     //로그인시 sse 연결
-    public SseEmitter connectSSE(int userId);
+    public SseEmitter connectSSE(String userId);
     //통지보내기
-    public void send(int receivedUserId, NotificationType notificationType,String content);
+    public void send(String receivedUserId, NotificationType notificationType,String content);
     //받은 통지 읽음 표시
     public void updateNotificationCache(String notificationId);
     //통지 삭제
     public void deleteNotificationCache(String notificationId);
     //모든 통지 삭제
-    public void deleteAllNotificationCache(int userId);
+    public void deleteAllNotificationCache(String userId);
 }

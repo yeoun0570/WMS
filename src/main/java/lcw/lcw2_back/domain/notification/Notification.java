@@ -12,14 +12,14 @@ import java.util.Date;
 public class Notification {
 
     String notification_id;
-    int user_id;
+    String user_id;
     Date created_time;
     String notification_title;
     String notification_content;
     boolean checked;
     NotificationType type;
 
-    public Notification(String notification_id,int user_id,String notification_title,String notification_content,NotificationType type){
+    public Notification(String notification_id,String user_id,String notification_title,String notification_content,NotificationType type){
         this.notification_id = notification_id;
         this.user_id = user_id;
         this.created_time = new Date();

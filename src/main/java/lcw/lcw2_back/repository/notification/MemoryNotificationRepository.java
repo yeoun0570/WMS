@@ -22,11 +22,11 @@ public class MemoryNotificationRepository implements NotificationRepository {
     }
 
     @Override
-    public List<Notification> findByUserId(int user_id) {
+    public List<Notification> findByUserId(String user_id) {
 
         List<Notification> ret = new ArrayList<>();
         for (Notification notification : storage.values()) {
-            if(user_id != notification.getUser_id()) continue;
+            if(!user_id.equals(notification.getUser_id())) continue;
             ret.add(notification);
         }
         return ret;
@@ -38,9 +38,9 @@ public class MemoryNotificationRepository implements NotificationRepository {
     }
 
     @Override
-    public void deleteAllByUserId(int user_id) {
+    public void deleteAllByUserId(String user_id) {
         for (Map.Entry<String, Notification> entry : storage.entrySet()) {
-            if(entry.getValue().getUser_id()!=user_id) continue;
+            if(!entry.getValue().getUser_id().equals(user_id)) continue;
             storage.remove(entry.getKey());
         }
     }

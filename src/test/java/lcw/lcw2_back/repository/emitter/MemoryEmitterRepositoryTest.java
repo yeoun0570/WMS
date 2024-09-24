@@ -38,7 +38,7 @@ class MemoryEmitterRepositoryTest {
     public void saveEventCache() throws Exception{
         //given
         int notification_id=1;
-        int userId = 1;
+        String userId = "1";
         String eventCacheId = System.currentTimeMillis()+"@"+userId;
         Notification notification = new Notification(eventCacheId,userId,"통지","내용", NotificationType.MYINFO);
         //when, then
@@ -62,7 +62,7 @@ class MemoryEmitterRepositoryTest {
     @DisplayName("회원ID로 받은 이벤트 찾기")
     public void findAllEventCacheByUserId()throws Exception{
         //given
-        int userId = 1;
+        String userId = "1";
         String eventCacheId1 = System.currentTimeMillis()+"@"+userId;
         Notification notification1 = new Notification(eventCacheId1,userId,"통지","내용", NotificationType.MYINFO);
         emitterRepository.saveEventCache(eventCacheId1,notification1);
@@ -108,7 +108,7 @@ class MemoryEmitterRepositoryTest {
     @DisplayName("모든 이벤트 삭제")
     public void deleteAllEventCacheByUserId() throws Exception {
         //given
-        int userId = 1;
+        String userId = "1";
         String eventCacheId1 =  System.currentTimeMillis()+"@"+userId;
         Notification notification1 = new Notification(eventCacheId1,userId, "통지","내용", NotificationType.MYINFO);
         emitterRepository.saveEventCache(eventCacheId1,notification1);
