@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import lcw.lcw2_back.domain.DatasetVO;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -14,14 +15,15 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class TestChartController {
+
   @GetMapping("/api/lossData")
   public List<DatasetVO> test() {
     List<DatasetVO> list = new ArrayList<>();
-    for (int i = 0; i < 31; i++) {
+    for (int i = 1; i <= 31; i++) {
       DatasetVO datasetVO = DatasetVO.builder()
-          .label((i + 1) + "일")
+          .label(i + "일")
           .data(Math.pow(-1, i) * i)
-          .dateTime(LocalDate.of(2024, 8, i + 1))
+          .dateTime(LocalDate.of(2024, 8, i))
           .build();
       list.add(datasetVO);
     }
@@ -55,6 +57,46 @@ public class TestChartController {
 
     return map;
   }
+
+  @GetMapping("/api/outboundForWeekData")
+  public Map<String, Long> outboundForWeek() {
+    Map<String, Long> map = new HashMap<>();
+
+    map.put("req", 82L);
+    map.put("comp", 45L);
+
+    return map;
+  }
+
+  @GetMapping("/api/invInTrend")
+  public Map<String, List<Long>> invInTrend() {
+    Map<String, List<Long>> map = new HashMap<>();
+    for (int i = 1; i <= 10; i++) {
+      List<Long> list = new ArrayList<>();
+      for (int j = 1; j <= 12; j++) {
+        long x = (long) Math.max(0, 1000.0 + (Math.random() * 1000 - 500));
+        list.add(x);
+      }
+      map.put("상품" + i, list);
+    }
+
+    System.out.println(map);
+
+    return map;
+  }
+
+//  @GetMapping("/api/invOutTrend")
+//  public List<Map> invOutTrend() {
+//    List<Map> list = new ArrayList<>();
+//    Map<String, String>
+//  }
+//
+//  @GetMapping("/api/invTotalTrend")
+//  public List<Map> invTotalTrend() {
+//    List<Map> list = new ArrayList<>();
+//    Map<String, String>
+//  }
+
 }
 //  loss
 //      usage

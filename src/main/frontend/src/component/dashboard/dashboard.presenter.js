@@ -6,19 +6,18 @@ import UsageChart from "./Charts/UsageChart";
 import BoundChart from "./Charts/BoundChart";
 
 export default function DashboardUI(props) {
-  console.log(props);
   return (
     <div>
-      <div style={{ display: "flex", justifyContent: "space-between", border: "solid 1px grey" }}>
-        <div style={{ width: "40%", border: "solid 1px grey", margin: "10px" }}>공지사항</div>
-        <div style={{ width: "40%", border: "solid 1px grey", margin: "10px" }}><LossChart lossDataset={props.lossDataset} /></div>
-        <div style={{ width: "20%", border: "solid 1px grey", margin: "10px" }}><UsageChart usageDataset={props.usageDataset} storageAreaData={props.storageAreaData} /></div>
+      <div style={{ display: "flex", height: "20vh", justifyContent: "space-between", border: "solid 1px grey" }}>
+        <div style={{ width: "25%", border: "solid 1px grey", margin: "10px" }}>공지사항</div>
+        <div style={{ width: "25%", border: "solid 1px grey", margin: "10px" }}>대기 중인 입출고 요청 수</div>
+        <div style={{ width: "50%", border: "solid 1px grey", margin: "10px" }}><LossChart /></div>
       </div>
 
 
-      <div style={{ display: "flex", justifyContent: "space-between", border: "solid 1px grey" }}>
+      <div style={{ display: "flex", height: "50vh", justifyContent: "space-between", border: "solid 1px grey" }}>
         <div style={{ width: "50%", display: "flex", justifyContent: "space-between", border: "solid 1px grey", margin: "10px" }}>
-          <div style={{ width: "50%", border: "solid 1px grey", margin: "10px" }}>
+          <div style={{ display: "flex", flexDirection: "column", width: "50%", border: "solid 1px grey", margin: "10px" }}>
             <div style={{ display: "flex", border: "solid 1px grey" }}>
               <div style={{ border: "solid 1px grey" }}>입고 아이콘</div>
               <div>
@@ -26,7 +25,7 @@ export default function DashboardUI(props) {
                 <div style={{ border: "solid 1px grey" }}>최근 7일 기준</div>
               </div>
             </div>
-            <BoundChart type="inboundChart" weekReqData={props.weekReqData} weekCompData={props.weekCompData} />
+            <BoundChart type="inboundChart" />
           </div>
           <div style={{ width: "50%", border: "solid 1px grey", margin: "10px" }}>
             <div>
@@ -56,7 +55,7 @@ export default function DashboardUI(props) {
 
 
         <div style={{ width: "50%", display: "flex", justifyContent: "space-between", border: "solid 1px grey", margin: "10px" }}>
-          <div style={{ width: "50%", border: "solid 1px grey", margin: "10px" }}>
+          <div style={{ display: "flex", flexDirection: "column", width: "50%", border: "solid 1px grey", margin: "10px" }}>
             <div style={{ display: "flex", border: "solid 1px grey" }}>
               <div style={{ border: "solid 1px grey" }}>출고 아이콘</div>
               <div>
@@ -64,7 +63,7 @@ export default function DashboardUI(props) {
                 <div style={{ border: "solid 1px grey" }}>최근 7일 기준</div>
               </div>
             </div>
-            {/* <BoundChart tyep="outboundChart" usageDataset={props.usageDataset} storageAreaData={props.storageAreaData} /> */}
+            <BoundChart type="outboundChart" />
           </div>
           <div style={{ width: "50%", border: "solid 1px grey", margin: "10px" }}>
             <div>
@@ -74,19 +73,19 @@ export default function DashboardUI(props) {
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px" }}>
               <div style={{ backgroundColor: "grey", padding: "20px", textAlign: "center" }}>
                 <text>출고 예정</text>
-                <text>5건</text>
+                <text>10건</text>
               </div>
               <div style={{ backgroundColor: "grey", padding: "20px", textAlign: "center" }}>
                 <text>처리 중</text>
-                <text>47건</text>
+                <text>27건</text>
               </div>
               <div style={{ backgroundColor: "grey", padding: "20px", textAlign: "center" }}>
                 <text>출고 완료</text>
-                <text>75건</text>
+                <text>45건</text>
               </div>
               <div style={{ backgroundColor: "grey", padding: "20px", textAlign: "center" }}>
                 <text>총 출고 수</text>
-                <text>127건</text>
+                <text>82건</text>
               </div>
             </div>
           </div>
@@ -94,8 +93,11 @@ export default function DashboardUI(props) {
       </div>
 
 
-      <div style={{ width: "100%" }}>
-        <LineChart />
+      <div style={{ width: "100%", height: "40vh",display: "flex", justifyContent: "space-between", border: "solid 1px grey"}}>
+        <div style={{ width: "70%" }}>
+          <LineChart />
+        </div>
+        <div style={{ width: "30%", border: "solid 1px grey", margin: "10px" }}><UsageChart /></div>
       </div>
       <div style={{ width: "100%" }}>
         <LineChart />

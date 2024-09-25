@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Line } from "react-chartjs-2";
+import axios from "axios";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -9,7 +10,7 @@ import {
   Title,
   Tooltip,
   Legend,
-  Filler
+  Filler,
 } from "chart.js";
 
 // Chart.js 구성 요소 등록
@@ -25,14 +26,33 @@ ChartJS.register(
 );
 
 export default function LossChart(props) {
-  const { lossDataset } = props;
-  const labelsArray = Object.values(lossDataset).map(item => item.dateTime);
-  const dataArray = Object.values(lossDataset).map(item => item.data);
+  const [labelsArray, setLabelsArray] = useState([]);
+  const [dataArray, setDataArray] = useState([]);
 
-  let total = 0;
-  dataArray.map((item) => {
-    total += item;
-  });
+  const fetchDataset = async () => {
+    try {
+      const response = await axios.get("http://localhost:8080/api/lossData");
+      
+      const fetchedData = response.data;
+
+      const labels = fetchedData.map((item) => item.dateTime);
+      const data = fetchedData.map((item) => item.data);
+
+      setLabelsArray(labels);
+      setDataArray(data);
+
+    } catch (error) {
+      ////////////////////////////////////////////// 예외 처리 해줘야하는데...
+      console.log("손실 그래프 에러");
+    }
+  };
+
+  useEffect(() => {
+    fetchDataset();
+  }, []);
+
+
+  const total = dataArray.reduce((acc, item) => acc + item, 0);
 
   const data = {
     labels: labelsArray,
@@ -42,14 +62,15 @@ export default function LossChart(props) {
         data: dataArray,
         borderColor: "rgba(255, 0, 0, 0.8)",
         backgroundColor: "rgba(255, 0, 0, 0.3)",
-        fill: 'start',
-        tension: 0.3
+        fill: "start",
+        tension: 0.3,
       },
     ],
   };
 
   const options = {
     responsive: true,
+    maintainAspectRatio: false,
     plugins: {
       legend: {
         display: false,
@@ -58,7 +79,7 @@ export default function LossChart(props) {
         display: true,
         align: "start",
         text: " 월간 손실: $" + total,
-        padding: 10
+        padding: 10,
       },
     },
     scales: {
@@ -71,5 +92,9 @@ export default function LossChart(props) {
     },
   };
 
-  return <Line data={data} options={options} />;
+  return (
+    <div style={{width: "100%", height: "100%"}}>
+      <Line data={data} options={options} />
+    </div>
+  );
 }

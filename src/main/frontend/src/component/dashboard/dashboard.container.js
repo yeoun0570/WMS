@@ -32,10 +32,6 @@ import axios from "axios";
 */
 
 export default function Dashboard(props) {
-
-  const [loss, setLoss] = useState([]);
-  const [usage, setUsage] = useState([]);
-  const [storageArea, setStorageArea] = useState();
   const [inReqForWeek, setInReqForWeek] = useState();
   const [inCompForWeek, setInCompForWeek] = useState();
   const [inReqForMonth, setInReqForMonth] = useState();
@@ -48,47 +44,8 @@ export default function Dashboard(props) {
   const [outCompForMonth, setOutCompForMonth] = useState();
   const [invenTrend, setInvenTrend] = useState([]);
 
-  // 손실 그래프 데이터셋 초기화
-  const fetchlossDataset = async () => {
-    try {
-      const response = await axios.get("http://localhost:8080/api/lossData");
-      setLoss(response.data);
-    } catch (error) {
-      ////////////////////////////////////////////// 예외 처리 해줘야하는데...
-      console.log('손실 그래프 에러');
-    }
-  };
-
-  // 창고 사용률 그래프 데이터셋 초기화
-  const fetchUsageDataset = async () => {
-    try {
-      const response = await axios.get("http://localhost:8080/api/usageData");
-      setUsage(response.data.products);
-      setStorageArea(response.data.storageArea);
-    } catch (error) {
-      ////////////////////////////////////////////// 예외 처리 해줘야하는데...
-      console.log('창고 사용률 에러');
-    }
-  }
-
   // 최근 7일 입고 그래프 데이터셋 초기화
-  const fetchInboundForWeek = async () => {
-    try {
-      const response = await axios.get("http://localhost:8080/api/inboundForWeekData");
-      setInReqForWeek(response.data.req);
-      setInCompForWeek(response.data.comp);
-    } catch (error) {
-      ////////////////////////////////////////////// 예외 처리 해줘야하는데...
-      console.log('창고 사용률 에러');
-    }
-  }
-
-  useEffect(() => {
-    fetchlossDataset();
-    fetchUsageDataset();
-    fetchInboundForWeek();
-  }, []);
-
+  
   // const lossDataset = async () => {
   //   try {
   //     const response = await axios.get("http://localhost:8080/api/lossData");
@@ -114,10 +71,5 @@ export default function Dashboard(props) {
   // }
 
   return <DashboardUI
-    lossDataset={loss}
-    usageDataset={usage}
-    storageAreaData={storageArea}
-    weekReqData={inReqForWeek}
-    weekCompData={inCompForWeek}
   />;
 }
