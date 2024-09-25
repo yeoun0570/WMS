@@ -1,4 +1,4 @@
-package lcw.lcw2_back.dto.Page;
+package lcw.lcw2_back.dto.outbound.page;
 
 import jakarta.validation.constraints.Min;
 import lombok.AllArgsConstructor;
@@ -9,15 +9,13 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.time.LocalDateTime;
 
 @Builder
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class PageRequestDTO {
+public class PageOutboundRequestDTO {
     @Builder.Default
     @Min(1)
     private int page = 1;

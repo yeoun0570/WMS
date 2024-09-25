@@ -1,7 +1,7 @@
 package lcw.lcw2_back.domain.outbound;
 
 import lcw.lcw2_back.domain.storage.Storage;
-import lcw.lcw2_back.domain.user.User;
+//import lcw.lcw2_back.domain.user.User;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -28,6 +28,8 @@ public class Outbound {
     private LocalDateTime completeDate;
 
     private String receivingStorageName;
+
+    private Long receivingStorageId;
 
     private boolean outboundMart;
 

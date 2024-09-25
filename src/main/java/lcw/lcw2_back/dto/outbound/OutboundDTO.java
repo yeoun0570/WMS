@@ -1,6 +1,5 @@
-package lcw.lcw2_back.dto;
+package lcw.lcw2_back.dto.outbound;
 
-import lcw.lcw2_back.domain.user.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -23,7 +22,10 @@ public class OutboundDTO {
     private LocalDateTime approvedDate;
     private LocalDateTime completeDate;
     private String productName;
+    private Long receivingStorageId;
     private String storageFromName;  // 출고 창고명
     private String storageToName;    // 입고 창고명
+    private boolean outboundMart;
     private List<Long> outboundIds;
+    private List<OutboundItemDTO> items;
 }

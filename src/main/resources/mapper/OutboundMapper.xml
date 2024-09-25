@@ -3,14 +3,22 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="lcw.lcw2_back.mapper.OutboundMapper">
-    <!-- 출고요청서 작성 -->
+    <!-- 출고 요청서 작성 -->
+    <!-- <selectKey> : insert작업 후에 자동으로 생성된 키를 가져옴
+            keyProperty : 가져온 키를 저장할 객체 지정
+            order="AFTER" : <selectKey>가 실행되는 시점 지정(insert문 실행 후) -->
     <insert id="insertOutbound">
-        INSERT INTO outbound(user_id, request_date, receiving_storage_id) VALUES(#{userId}, now(), #{receivingStorageId})
+        INSERT INTO outbound(user_id, request_date, receiving_storage_id, outbound_mart, status)
+        VALUES (#{userId}, now(), #{receivingStorageId}, #{outboundMart}, #{status})
+        <selectKey keyProperty="outboundId" resultType="long" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
     </insert>
 
-    <!-- 출고요청서 작성할 때 품목 추가 -->
-    <insert id="insertOutbound">
-        INSERT INTO Item(outboud_id, product_id, quantity) VALUES(#{outboundId}, #{productId}, #{quantity})
+    <!-- 출고 요청서 작성할 때 품목 추가 -->
+    <insert id="insertOutboundItem">
+        INSERT INTO item(outbound_id, product_id, quantity)
+        VALUES (#{outboundId}, #{productId}, #{quantity})
     </insert>
 
 
@@ -27,7 +35,7 @@
         a. 만약 WHERE1=1이 없다면 새로운 조건을 생성해줄 때 마다 이전 조건에도 추가한 조건에 대한 부분을 추가(수정)해줘야 하는데 그냥 새로운 조건만 AND하면 되서 그럴 필요가 없다.-->
 
     <!-- 출고요청서 조회 -->
-    <select id="selectNotDoneList" resultType="lcw.lcw2_back.domain.outbound.Outbound" parameterType="map">
+    <select id="selectOutboundNotDoneList" resultType="lcw.lcw2_back.domain.outbound.Outbound" parameterType="map">
         SELECT o.outbound_id,
         p.product_name,
         s_from.storage_name,
@@ -75,7 +83,7 @@
     </select>
 
     <!-- 출고요청서 총 개수 -->
-    <select id="getCountNotDoneList" resultType="int">
+    <select id="getCountInboundNotDoneList" resultType="int">
         SELECT count(*) FROM outbound WHERE status IN ('NOT APPROVED', 'APPROVED', 'REJECTED')
     </select>
 
@@ -84,7 +92,7 @@
 
 
     <!-- 출고현황 조회 -->
-    <select id="selectDoneList" resultType="lcw.lcw2_back.domain.outbound.Outbound" parameterType="map">
+    <select id="selectOutboundDoneList" resultType="lcw.lcw2_back.domain.outbound.Outbound" parameterType="map">
         SELECT o.outbound_id,
         p.product_name,
         s_from.storage_name,
@@ -130,7 +138,7 @@
         LIMIT #{skip}, #{size}
     </select>
 
-    <select id="getCountDoneList" resultType="int">
+    <select id="getCountOutboundDoneList" resultType="int">
         SELECT count(*) FROM outbound WHERE status IN ('DONE', 'APPROVED')
     </select>
 
@@ -140,7 +148,7 @@
 
 
     <!-- 출고요청 승인하기 -->
-    <update id="updateApprove">
+    <update id="updateOutboundApprove">
         UPDATE Outbound
         SET status = 'APPROVED'
         WHERE outbound_id IN (
@@ -151,7 +159,7 @@
     </update>
 
     <!--출고요청 반려하기-->
-    <update id="updateRejected">
+    <update id="updateOutboundRejected">
         UPDATE Outbound
         SET status = 'REJECTED'
         WHERE outbound_id IN (

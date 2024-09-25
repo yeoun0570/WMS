@@ -1,9 +1,9 @@
 package lcw.lcw2_back.controller;
 
 import jakarta.validation.Valid;
-import lcw.lcw2_back.dto.OutboundDTO;
-import lcw.lcw2_back.dto.page.PageRequestDTO;
-import lcw.lcw2_back.dto.page.PageResponseDTO;
+import lcw.lcw2_back.dto.outbound.OutboundDTO;
+import lcw.lcw2_back.dto.outbound.page.PageOutboundRequestDTO;
+import lcw.lcw2_back.dto.outbound.page.PageOutboundResponseDTO;
 import lcw.lcw2_back.service.outbound.OutboundServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
@@ -21,9 +21,15 @@ public class OutboundController {
 
     private final OutboundServiceImpl outboundService;
 
+    //출고요청서 작성
+    @PostMapping("outbound/write_outbound")
+    public void writeOutbound(@RequestBody OutboundDTO outboundDTO) {
+        outboundService.registerOutbound(outboundDTO);
+    }
+
     // 출고 요청서 조회
     @GetMapping("/outbound/request_list")
-    public Map<String, Object> requestList(@ModelAttribute @Valid PageRequestDTO pageRequestDTO, BindingResult bindingResult) {
+    public Map<String, Object> requestList(@ModelAttribute @Valid PageOutboundRequestDTO pageOutboundRequestDTO, BindingResult bindingResult) {
 
         // 결과를 담을 Map 객체
         Map<String, Object> resultMap = new HashMap<>();
@@ -35,7 +41,7 @@ public class OutboundController {
         }
 
         // 서비스에서 조회된 데이터와 페이지 정보를 받아옴
-        PageResponseDTO<OutboundDTO> responseDTO = outboundService.getNotDoneList(pageRequestDTO);
+        PageOutboundResponseDTO<OutboundDTO> responseDTO = outboundService.getOutboundNotDoneList(pageOutboundRequestDTO);
 
         // 결과를 Map에 추가
         resultMap.put("data", responseDTO.getDtoList());
@@ -46,25 +52,25 @@ public class OutboundController {
 
     //출고현황 조회
     @GetMapping("outbound/request_done_list")
-    public Map<String, Object> requestDoneList(@ModelAttribute @Valid PageRequestDTO pageRequestDTO, BindingResult bindingResult) {
+    public Map<String, Object> requestDoneList(@ModelAttribute @Valid PageOutboundRequestDTO pageOutboundRequestDTO, BindingResult bindingResult) {
 
         // 결과를 담을 Map 객체
-        Map<String, Object> resultMap = new HashMap<>();
+        Map<String, Object> responseMap = new HashMap<>();
 
         // 유효성 검사 오류 처리
         if (bindingResult.hasErrors()) {
-            resultMap.put("error", bindingResult.getAllErrors());
-            return resultMap;
+            responseMap.put("error", bindingResult.getAllErrors());
+            return responseMap;
         }
 
         // 서비스에서 조회된 데이터와 페이지 정보를 받아옴
-        PageResponseDTO<OutboundDTO> responseDTO = outboundService.getDoneList(pageRequestDTO);
+        PageOutboundResponseDTO<OutboundDTO> responseDTO = outboundService.getOutboundDoneList(pageOutboundRequestDTO);
 
         // 결과를 Map에 추가
-        resultMap.put("data", responseDTO.getDtoList());
-        resultMap.put("pageInfo", responseDTO);
+        responseMap.put("data", responseDTO.getDtoList());
+        responseMap.put("pageInfo", responseDTO);
 
-        return resultMap;
+        return responseMap;
     }
 
     //출고요청 승인
@@ -72,7 +78,7 @@ public class OutboundController {
     public Map<String, List<Long>> approveOutboundRequests(@RequestBody OutboundDTO outboundDTO) {
 
         // 서비스 호출하여 출고 요청 승인 처리
-        outboundService.modifyApprove(outboundDTO.getOutboundIds());
+        outboundService.modifyOutboundApprove(outboundDTO.getOutboundIds());
 
         // 응답을 담을 Map 생성
         Map<String, List<Long>> responseMap = new HashMap<>();
@@ -88,7 +94,7 @@ public class OutboundController {
     public Map<String, List<Long>> rejectOutboundRequests(@RequestBody OutboundDTO outboundDTO) {
 
         // 서비스 호출하여 출고 요청 승인 처리
-        outboundService.modifyRejected(outboundDTO.getOutboundIds());
+        outboundService.modifyOutboundRejected(outboundDTO.getOutboundIds());
 
         // 응답을 담을 Map 생성
         Map<String, List<Long>> responseMap = new HashMap<>();
