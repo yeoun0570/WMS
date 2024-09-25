@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class TestChartController {
+
   @GetMapping("/api/lossData")
   public List<DatasetVO> test() {
     List<DatasetVO> list = new ArrayList<>();
@@ -68,22 +69,33 @@ public class TestChartController {
   }
 
   @GetMapping("/api/invInTrend")
-  public List<Map> invInTrend() {
-    List<Map> list = new ArrayList<>();
-    Map<String, String>
+  public Map<String, List<Long>> invInTrend() {
+    Map<String, List<Long>> map = new HashMap<>();
+    for (int i = 1; i <= 10; i++) {
+      List<Long> list = new ArrayList<>();
+      for (int j = 1; j <= 12; j++) {
+        long x = (long) Math.max(0, 1000.0 + (Math.random() * 1000 - 500));
+        list.add(x);
+      }
+      map.put("상품" + i, list);
+    }
+
+    System.out.println(map);
+
+    return map;
   }
 
-  @GetMapping("/api/invOutTrend")
-  public List<Map> invOutTrend() {
-    List<Map> list = new ArrayList<>();
-    Map<String, String>
-  }
-
-  @GetMapping("/api/invTotalTrend")
-  public List<Map> invTotalTrend() {
-    List<Map> list = new ArrayList<>();
-    Map<String, String>
-  }
+//  @GetMapping("/api/invOutTrend")
+//  public List<Map> invOutTrend() {
+//    List<Map> list = new ArrayList<>();
+//    Map<String, String>
+//  }
+//
+//  @GetMapping("/api/invTotalTrend")
+//  public List<Map> invTotalTrend() {
+//    List<Map> list = new ArrayList<>();
+//    Map<String, String>
+//  }
 
 }
 //  loss

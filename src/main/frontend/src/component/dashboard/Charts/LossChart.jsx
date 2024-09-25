@@ -32,7 +32,7 @@ export default function LossChart(props) {
   const fetchDataset = async () => {
     try {
       const response = await axios.get("http://localhost:8080/api/lossData");
-
+      
       const fetchedData = response.data;
 
       const labels = fetchedData.map((item) => item.dateTime);

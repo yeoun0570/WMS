@@ -10,7 +10,7 @@ export default function DashboardUI(props) {
     <div>
       <div style={{ display: "flex", height: "20vh", justifyContent: "space-between", border: "solid 1px grey" }}>
         <div style={{ width: "25%", border: "solid 1px grey", margin: "10px" }}>공지사항</div>
-        <div style={{ width: "25%", border: "solid 1px grey", margin: "10px" }}>입출고 요청 수</div>
+        <div style={{ width: "25%", border: "solid 1px grey", margin: "10px" }}>대기 중인 입출고 요청 수</div>
         <div style={{ width: "50%", border: "solid 1px grey", margin: "10px" }}><LossChart /></div>
       </div>
 
