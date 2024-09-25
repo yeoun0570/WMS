@@ -2,7 +2,7 @@ package lcw.lcw2_back.outbound.mapper;
 
 // import lcw.lcw2_back.domain.outbound.OutboundPK;
 import lcw.lcw2_back.domain.outbound.Outbound;
-import lcw.lcw2_back.dto.page.PageRequestDTO;
+import lcw.lcw2_back.dto.outbound.page.PageOutboundRequestDTO;
 import lcw.lcw2_back.mapper.OutboundMapper;
         import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,17 +18,17 @@ public class OutboundMapperTests {
     private OutboundMapper outboundMapper;
 
     @Test
-    public void updateApproveTest() {
+    public void updateOutboundApproveTest() {
         List<Long> ids = new ArrayList<>();
         ids.add(1L);
         ids.add(3L);
 
-        outboundMapper.updateApprove(ids);
+        outboundMapper.updateOutboundApprove(ids);
     }
 
     @Test
-    public void selectNotDoneList() {
-        PageRequestDTO pageRequestDTO = PageRequestDTO.builder()
+    public void selectOutboundNotDoneList() {
+        PageOutboundRequestDTO pageOutboundRequestDTO = PageOutboundRequestDTO.builder()
                 .page(1)
                 .size(15)
                 .startDate(LocalDateTime.of(2024,9,1,0,0,0))
@@ -36,30 +36,30 @@ public class OutboundMapperTests {
                 .item("Product X")
                 .build();
 
-        List<Outbound> voList = outboundMapper.selectNotDoneList(pageRequestDTO);
+        List<Outbound> voList = outboundMapper.selectOutboundNotDoneList(pageOutboundRequestDTO);
         voList.forEach(vo-> System.out.println(vo));
     }
 
     @Test
-    public void getCountNotDoneList() {
-        PageRequestDTO pageRequestDTO = PageRequestDTO.builder()
+    public void getCountOutboundNotDoneList() {
+        PageOutboundRequestDTO pageOutboundRequestDTO = PageOutboundRequestDTO.builder()
                 .page(1)
                 .size(5)
                 .build();
 
-        int total = outboundMapper.getCountNotDoneList(pageRequestDTO);
+        int total = outboundMapper.getCountOutboundNotDoneList(pageOutboundRequestDTO);
     }
 
     @Test
-    public void selectDoneListTest() {
-        PageRequestDTO pageRequestDTO = PageRequestDTO.builder()
+    public void selectOutboundDoneListTest() {
+        PageOutboundRequestDTO pageOutboundRequestDTO = PageOutboundRequestDTO.builder()
                 .page(1)
                 .size(5)
                 .item("Product Z")
                 .status("DONE")
                 .build();
 
-        List<Outbound> voList = outboundMapper.selectDoneList(pageRequestDTO);
+        List<Outbound> voList = outboundMapper.selectOutboundDoneList(pageOutboundRequestDTO);
         voList.forEach(vo-> System.out.println(vo));
 
     }

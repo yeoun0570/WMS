@@ -1,7 +1,5 @@
-package lcw.lcw2_back.domain.outbound;
+package lcw.lcw2_back.domain.inbound;
 
-import lcw.lcw2_back.domain.storage.Storage;
-//import lcw.lcw2_back.domain.user.User;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -11,9 +9,9 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class Outbound {
+public class Inbound {
 
-    private Long outboundId;
+    private Long inboundId;
 
     private String userId;
 
@@ -27,11 +25,9 @@ public class Outbound {
 
     private LocalDateTime completeDate;
 
-    private String receivingStorageName;
+    private String shippingStorageName;
 
-    private Long receivingStorageId;
-
-    private boolean outboundMart;
+    private Long shippingStorageId;
 
     private String productName;
 

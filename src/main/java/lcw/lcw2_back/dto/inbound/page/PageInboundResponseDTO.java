@@ -1,4 +1,4 @@
-package lcw.lcw2_back.dto.Page;
+package lcw.lcw2_back.dto.inbound.page;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -8,8 +8,7 @@ import java.util.List;
 
 @Getter
 @ToString
-public class PageResponseDTO<E> {
-
+public class PageInboundResponseDTO<E> {
     private int page;
     private int size;
     private int total;
@@ -27,14 +26,14 @@ public class PageResponseDTO<E> {
     private List<E> dtoList;
 
     @Builder(builderMethodName = "withAll")
-    public PageResponseDTO(PageRequestDTO pageRequestDTO, List<E> dtoList, int total) {
+    public PageInboundResponseDTO(PageInboundRequestDTO pageInboundRequestDTO, List<E> dtoList, int total) {
 
         if (total <= 0) {
             return;
         }
 
-        this.page = pageRequestDTO.getPage();
-        this.size = pageRequestDTO.getSize();
+        this.page = pageInboundRequestDTO.getPage();
+        this.size = pageInboundRequestDTO.getSize();
 
         this.total = total;
         this.dtoList = dtoList;

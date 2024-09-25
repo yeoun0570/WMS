@@ -1,6 +1,7 @@
 package lcw.lcw2_back.outbound.controller;
 
 import lcw.lcw2_back.controller.OutboundController;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -32,5 +33,10 @@ public class OutboundControllerTests {
 //                .build();
 //
 //        outboundController.requestDoneList(pageRequestDTO);
+//    }
+
+//    @Test
+//    public void writeOutboundTest() {
+//        outboundController.writeOutbound();
 //    }
 }

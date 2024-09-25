@@ -1,6 +1,6 @@
-package lcw.lcw2_back.dto;
+package lcw.lcw2_back.dto.inbound;
 
-import lcw.lcw2_back.domain.user.User;
+import lcw.lcw2_back.dto.outbound.OutboundItemDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,8 +13,8 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class OutboundDTO {
-    private Long outboundId;          // 엔티티에서 자동 생성되므로 읽기 전용으로 사용
+public class InboundDTO {
+    private Long inboundId;          // 엔티티에서 자동 생성되므로 읽기 전용으로 사용
     private String userId;             // 사용자 ID
     private Long productId;          // 제품 ID
     private Long quantity;    // 요청 수량
@@ -23,7 +23,9 @@ public class OutboundDTO {
     private LocalDateTime approvedDate;
     private LocalDateTime completeDate;
     private String productName;
+    private Long shippingStorageId;
     private String storageFromName;  // 출고 창고명
     private String storageToName;    // 입고 창고명
-    private List<Long> outboundIds;
+    private List<Long> inboundIds;
+    private List<InboundItemDTO> items;
 }

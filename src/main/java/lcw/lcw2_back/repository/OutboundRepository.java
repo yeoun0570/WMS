@@ -4,7 +4,7 @@
 //import lcw.lcw2_back.domain.outbound.Outbound;
 //import lcw.lcw2_back.domain.storage.Storage;
 //import lcw.lcw2_back.domain.user.User;
-//import lcw.lcw2_back.dto.OutboundDTO;
+//import lcw.lcw2_back.dto.outbound.OutboundDTO;
 //import org.springframework.data.domain.Page;
 //import org.springframework.data.domain.Pageable;
 //import org.springframework.data.jpa.repository.JpaRepository;
@@ -23,7 +23,7 @@
 //    void updateStatusForOutboundIds(@Param("ids") List<Long> outboundIds);
 //
 //    //출고요청서 전체 조회(미승인, 승인 조건 만들어야 하는데 검색엔진으로 커버 가능한지 모르겠으니 일단 보류)
-//    @Query("SELECT new lcw.lcw2_back.dto.OutboundDTO(o.outboundId, p.productName, s_from.storageName, oi.quantity, o.status, o.requestDate, s_to.storageName) " +
+//    @Query("SELECT new lcw.lcw2_back.dto.outbound.OutboundDTO(o.outboundId, p.productName, s_from.storageName, oi.quantity, o.status, o.requestDate, s_to.storageName) " +
 //            "FROM Outbound o " +
 //            "JOIN o.userId u " +
 //            "JOIN u.storageId s_from " +
@@ -35,7 +35,7 @@
 //    Page<OutboundDTO> findOutboundNotDone(Pageable pageable);
 //
 //    //출고목록(처리) 전체 조회(검색엔진 위와같은 이유로 보류)
-//    @Query("SELECT new lcw.lcw2_back.dto.OutboundDTO(o.outboundId, p.productName, s_from.storageName, oi.quantity, o.completeDate, o.status, s_to.storageName) " +
+//    @Query("SELECT new lcw.lcw2_back.dto.outbound.OutboundDTO(o.outboundId, p.productName, s_from.storageName, oi.quantity, o.completeDate, o.status, s_to.storageName) " +
 //            "FROM Outbound o " +
 //            "JOIN o.userId u " +
 //            "JOIN u.storageId s_from " +

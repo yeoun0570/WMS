@@ -1,4 +1,4 @@
-package lcw.lcw2_back.domain.outbound;
+package lcw.lcw2_back.domain.inbound;
 
 import lcw.lcw2_back.domain.product.Product;
 import lombok.AllArgsConstructor;
@@ -10,10 +10,10 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class OutboundItem {
+public class InboundItem {
     private Long itemId;
 
-    private Long outboundId;
+    private Long inboundId;
 
     private Long productId;
 
