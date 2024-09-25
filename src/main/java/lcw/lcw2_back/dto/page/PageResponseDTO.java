@@ -1,4 +1,4 @@
-package lcw.lcw2_back.dto.page;
+package lcw.lcw2_back.dto.Page;
 
 import lombok.Builder;
 import lombok.Getter;
