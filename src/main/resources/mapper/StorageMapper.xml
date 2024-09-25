@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="lcw.lcw2_back.mapper.StorageMapper">
+    <select id="selectStorage" resultType="lcw.lcw2_back.domain.storage.Storage">
+        SELECT * FROM storage;
+    </select>
+
+    <insert id="insertStorage">
+        INSERT INTO storage VALUES (NULL, #{storageName}, #{address}, #{addressDetail}, #{zipcode}, #{storageArea})
+    </insert>
+
+    <delete id="deleteStorage">
+        DELETE FROM storage WHERE storage_id = #{storageId}
+    </delete>
+
+    <update id="updateStorage">
+        UPDATE storage
+        <set>
+            <!-- storageName이 null이 아니면 업데이트 -->
+            <if test="storageName != null">
+                storage_name = #{storageName},
+            </if>
+            <!-- address가 null이 아니면 업데이트 -->
+            <if test="address != null">
+                address = #{address},
+            </if>
+            <!-- addressDetail이 null이 아니면 업데이트 -->
+            <if test="addressDetail != null">
+                address_detail = #{addressDetail},
+            </if>
+            <!-- zipcode가 null이 아니면 업데이트 -->
+            <if test="zipcode != null">
+                zipcode = #{zipcode},
+            </if>
+            <!-- storageArea가 null이 아니면 업데이트 -->
+            <if test="storageArea != null">
+                storage_area = #{storageArea},
+            </if>
+        </set>
+        WHERE storage_id = #{storageId}
+    </update>
+
+</mapper>

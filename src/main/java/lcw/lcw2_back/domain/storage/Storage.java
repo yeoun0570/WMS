@@ -5,28 +5,28 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import lombok.*;
 
-@Entity
+//@Entity
 @Getter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
 public class Storage {
-    @Id
+    //@Id
     private Long storageId;
 
-    @Column(name = "STORAGE_NAME", nullable = false)
+    //@Column(name = "STORAGE_NAME", nullable = false)
     private String storageName;
 
-    @Column(name = "ADDRESS", nullable = false)
+    //@Column(name = "ADDRESS", nullable = false)
     private String address;
 
-    @Column(name = "ADDRESS_DETAIL", nullable = false)
+    //@Column(name = "ADDRESS_DETAIL", nullable = false)
     private String addressDetail;
 
-    @Column(name = "ZIPCODE", nullable = false)
+    //@Column(name = "ZIPCODE", nullable = false)
     private Long zipcode;
 
-    @Column(name = "STORAGE_AREA", nullable = false)
+    //@Column(name = "STORAGE_AREA", nullable = false)
     private Long storageArea;
 }
