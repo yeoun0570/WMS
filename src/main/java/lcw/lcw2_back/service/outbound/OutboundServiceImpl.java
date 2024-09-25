@@ -1,15 +1,11 @@
 package lcw.lcw2_back.service.outbound;
 
-import jakarta.transaction.Transactional;
 import lcw.lcw2_back.domain.outbound.Outbound;
 import lcw.lcw2_back.dto.OutboundDTO;
-import lcw.lcw2_back.dto.Page.PageRequestDTO;
-import lcw.lcw2_back.dto.Page.PageResponseDTO;
+import lcw.lcw2_back.dto.page.PageRequestDTO;
+import lcw.lcw2_back.dto.page.PageResponseDTO;
 import lcw.lcw2_back.mapper.OutboundMapper;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;

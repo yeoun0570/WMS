@@ -1,17 +1,12 @@
 package lcw.lcw2_back.controller;
 
 import jakarta.validation.Valid;
-import lcw.lcw2_back.domain.outbound.Outbound;
 import lcw.lcw2_back.dto.OutboundDTO;
-import lcw.lcw2_back.dto.Page.PageRequestDTO;
-import lcw.lcw2_back.dto.Page.PageResponseDTO;
+import lcw.lcw2_back.dto.page.PageRequestDTO;
+import lcw.lcw2_back.dto.page.PageResponseDTO;
 import lcw.lcw2_back.service.outbound.OutboundServiceImpl;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 

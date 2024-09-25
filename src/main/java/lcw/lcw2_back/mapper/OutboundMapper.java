@@ -2,7 +2,7 @@ package lcw.lcw2_back.mapper;
 
 import lcw.lcw2_back.domain.outbound.Outbound;
 import lcw.lcw2_back.dto.OutboundDTO;
-import lcw.lcw2_back.dto.Page.PageRequestDTO;
+import lcw.lcw2_back.dto.page.PageRequestDTO;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
