@@ -31,10 +31,9 @@ export default function LayoutPage(props) {
   const [loading, setLoading] = useState(false);
   //////////////////////////////나중에 다른파일로 바꿔서 import합시다.
   const pageMap = {
-    "/wms/dashboard": ["대시보드"],
-    "/wms/member": ["회원관리", "회원가입요청승인"],
-    "/wms/member/1": ["회원관리", "내정보"],
-    "/wms/member/2": ["회원관리", "사원관리"],
+    "/wms/member": ["회원관리", "회원조회"],
+    "/wms/member/1": ["회원관리", "회원승인"],
+    "/wms/member/2": ["회원관리", "또뭐있"],
     "/wms/warehouse": ["창고관리", "창고현황"],
     "/wms/warehouse/1": ["창고관리", "또뭐있"],
     "/wms/outbound": ["출고관리", "출고현황"],
@@ -56,7 +55,6 @@ export default function LayoutPage(props) {
     };
   };
   const items = [
-    getItem("대시보드", "/wms/dashboard", <PieChartOutlined />),
     getItem("회원관리", "sub1", <UserOutlined />, [
       getItem(pageMap["/wms/member"][1], "/wms/member"),
       getItem(pageMap["/wms/member/1"][1], "/wms/member/1"),
@@ -123,15 +121,13 @@ export default function LayoutPage(props) {
           <LayoutNavigation onClickNav={onClickNav} items={items} />
         )}
         <Layout>
-          {!isLoginPage && (
-            <LayoutHeader
-              router={router}
-              setPage={setPage}
-              setDetail={setDetail}
-              showLoading={showLoading}
-              pageMap={pageMap}
-            />
-          )}
+          <LayoutHeader
+            router={router}
+            setPage={setPage}
+            setDetail={setDetail}
+            showLoading={showLoading}
+            pageMap={pageMap}
+          />
           <Content
             style={{
               margin: "0 16px",

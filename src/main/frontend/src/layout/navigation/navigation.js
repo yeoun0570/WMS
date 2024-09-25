@@ -7,14 +7,13 @@ export default function LayoutNavigation(props) {
   const [collapsed, setCollapsed] = useState(false);
   return (
     <Sider
-    style={{backgroundColor:"white"}}
       collapsible
       collapsed={collapsed}
       onCollapse={(value) => setCollapsed(value)}
     >
       <div className="demo-logo-vertical" />
       <Menu
-      style={{ backgroundColor: "white", color: "#333", fontSize: "16px" }}
+        theme="dark"
         defaultSelectedKeys={["/wms/member"]}
         mode="inline"
         items={props.items}

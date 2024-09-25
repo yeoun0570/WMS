@@ -3,7 +3,7 @@ import * as S from "./login.styles";
 export default function LoginUI(props) {
   return (
     <S.Wrapper>
-      <S.Title>Login</S.Title>
+      <S.Title>LCWMS</S.Title>
       <S.InputWrapper>
         <S.Label>사원번호</S.Label>
         <S.Input
@@ -20,7 +20,7 @@ export default function LoginUI(props) {
         <S.Input
           type="password"
           {...props.register("password", { required: true })}
-          placeholder="비밀번호를 작성해주세요."
+          placeholder="비밀번호을 작성해주세요."
         />
         {props.errors.password && <S.Error>비밀번호를 입력해주세요.</S.Error>}
       </S.InputWrapper>

@@ -2,7 +2,8 @@ import styled from "@emotion/styled";
 export const Wrapper = styled.div`
   width: 1200px;
   /* height: 1847px; */
-  margin: 150px;
+  border: 1px solid black;
+  margin: 100px;
   padding-top: 80px;
   padding-bottom: 100px;
   padding-left: 102px;
@@ -11,6 +12,7 @@ export const Wrapper = styled.div`
   flex-direction: column;
   align-items: center;
   border: none;
+  box-shadow: 0px 0px 10px gray;
 
   @media screen and (max-width: 767px) {
     /*모바일 */
@@ -42,7 +44,6 @@ export const NameWrapper = styled.div`
   flex-direction: row;
   justify-content: space-between;
   padding-top: 40px;
-  
   @media screen and (max-width: 767px) {
     /*모바일 */
     padding-top: 20px;
@@ -52,12 +53,8 @@ export const NameWrapper = styled.div`
 export const Name = styled.input`
   width: 486px;
   height: 52px;
-  background-color: white;
-  border: 0;
-  border-radius: 10px;
-  border: 1px solid #ced4da;
   padding-left: 16px;
-
+  border: 1px solid #bdbdbd;
   @media screen and (max-width: 767px) {
     /*모바일 */
     width: 230px;
@@ -81,7 +78,6 @@ export const Label = styled.div`
   padding-bottom: 16px;
   font-size: 16px;
   font-weight: 500;
-
   @media screen and (max-width: 767px) {
     /*모바일 */
     font-size: 10px;
@@ -90,7 +86,6 @@ export const Label = styled.div`
 
 export const InputWrapper = styled.div`
   padding-top: 40px;
-  
   @media screen and (max-width: 767px) {
     /*모바일 */
     padding-top: 20px;
@@ -100,13 +95,9 @@ export const InputWrapper = styled.div`
 export const Input = styled.input`
   width: 996px;
   height: 52px;
-  background-color: white;
-  border: 0;
-  border-radius: 10px;
-  border: 1px solid #ced4da;
   padding-left: 16px;
+  border: 1px solid #bdbdbd;
   @media screen and (max-width: 767px) {
-  
     /*모바일 */
     width: 500px;
     height: 30px;
@@ -127,9 +118,8 @@ export const ButtonWrapper = styled.div`
 export const CancelButton = styled.button`
   width: 179px;
   height: 52px;
-  background-color: #ced4da;
-  border: 0;
-  border-radius: 15px;
+  background-color: #bdbdbd;
+  border: none;
   font-size: 16px;
   font-weight: 500;
   margin-left: 12px;
@@ -140,15 +130,14 @@ export const CancelButton = styled.button`
 export const SubmitButton = styled.button`
   width: 179px;
   height: 52px;
-  border: 0;
-  border-radius: 15px;
-  outline: none;
+  border: none;
   font-size: 16px;
   font-weight: 500;
   margin-left: 12px;
   margin-right: 12px;
-  background-color: #fab005;
   cursor: pointer;
+
+  background-color: blue;
 `;
 
 export const Error = styled.div`
