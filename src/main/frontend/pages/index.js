@@ -3,13 +3,26 @@ import Head from "next/head";
 import { useEffect, useState } from "react";
 //백이랑 연결 잘 되어 있는 지 테스트...
 export default function Home() {
-  const [hello, setHello] = useState("되니");
+  const [hello, setHello] = useState();
 
   useEffect(() => {
-    axios
-      .get("http://localhost:8080/api/jw")
-      .then((response) => setHello(response.data))
-      .catch((error) => console.log(error));
+    const eventSource = new EventSource(
+      "http://localhost:8080/api/test/notice?userId=1"
+    );
+
+    eventSource.onmessage = (event) => {
+      console.log("New event received:", event.data);
+      setHello(event.data); // 수신된 데이터를 상태에 저장
+    };
+
+    eventSource.onerror = (error) => {
+      console.log("EventSource error:", error);
+      eventSource.close(); // 오류 발생 시 연결 종료
+    };
+
+    return () => {
+      eventSource.close(); // 컴포넌트 언마운트 시 연결 해제
+    };
   }, []);
   return (
     <>
