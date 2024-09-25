@@ -81,7 +81,6 @@ export default function LayoutPage(props) {
       getItem("음...", "/wms/inventory/1"),
       getItem("기타등등", "/wms/inventory/2"),
     ]),
-    
   ];
   /////////////////////////////여기 위에 지저분한거 나중에 다른파일로 뺍시다.리팩토링필요
   const {
@@ -124,13 +123,15 @@ export default function LayoutPage(props) {
           <LayoutNavigation onClickNav={onClickNav} items={items} />
         )}
         <Layout>
-          <LayoutHeader
-            router={router}
-            setPage={setPage}
-            setDetail={setDetail}
-            showLoading={showLoading}
-            pageMap={pageMap}
-          />
+          {!isLoginPage && (
+            <LayoutHeader
+              router={router}
+              setPage={setPage}
+              setDetail={setDetail}
+              showLoading={showLoading}
+              pageMap={pageMap}
+            />
+          )}
           <Content
             style={{
               margin: "0 16px",
