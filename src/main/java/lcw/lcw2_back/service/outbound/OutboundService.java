@@ -1,9 +1,8 @@
 package lcw.lcw2_back.service.outbound;
 
-import lcw.lcw2_back.domain.outbound.OutboundItem;
 import lcw.lcw2_back.dto.OutboundDTO;
-import lcw.lcw2_back.dto.Page.PageRequestDTO;
-import lcw.lcw2_back.dto.Page.PageResponseDTO;
+import lcw.lcw2_back.dto.page.PageRequestDTO;
+import lcw.lcw2_back.dto.page.PageResponseDTO;
 
 import java.util.List;
 
