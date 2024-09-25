@@ -2,8 +2,8 @@ package lcw.lcw2_back.outbound.service;
 
 
 import lcw.lcw2_back.dto.OutboundDTO;
-import lcw.lcw2_back.dto.Page.PageRequestDTO;
-import lcw.lcw2_back.dto.Page.PageResponseDTO;
+import lcw.lcw2_back.dto.page.PageRequestDTO;
+import lcw.lcw2_back.dto.page.PageResponseDTO;
 import lcw.lcw2_back.service.outbound.OutboundService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

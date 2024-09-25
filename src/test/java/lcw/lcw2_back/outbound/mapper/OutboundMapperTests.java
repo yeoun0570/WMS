@@ -2,15 +2,12 @@ package lcw.lcw2_back.outbound.mapper;
 
 // import lcw.lcw2_back.domain.outbound.OutboundPK;
 import lcw.lcw2_back.domain.outbound.Outbound;
-import lcw.lcw2_back.dto.OutboundDTO;
-import lcw.lcw2_back.dto.Page.PageRequestDTO;
+import lcw.lcw2_back.dto.page.PageRequestDTO;
 import lcw.lcw2_back.mapper.OutboundMapper;
         import org.junit.jupiter.api.Test;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
