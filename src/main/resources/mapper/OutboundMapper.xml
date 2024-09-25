@@ -83,7 +83,7 @@
     </select>
 
     <!-- 출고요청서 총 개수 -->
-    <select id="getCountInboundNotDoneList" resultType="int">
+    <select id="getCountOutboundNotDoneList" resultType="int">
         SELECT count(*) FROM outbound WHERE status IN ('NOT APPROVED', 'APPROVED', 'REJECTED')
     </select>
 
