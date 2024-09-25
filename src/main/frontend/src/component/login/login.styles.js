@@ -40,6 +40,7 @@ export const Label = styled.div`
   padding-bottom: 16px;
   font-size: 16px;
   font-weight: 500;
+
   @media screen and (max-width: 767px) {
     /*모바일 */
     font-size: 10px;
@@ -48,6 +49,7 @@ export const Label = styled.div`
 
 export const InputWrapper = styled.div`
   padding-top: 40px;
+  
   @media screen and (max-width: 767px) {
     /*모바일 */
     padding-top: 20px;
