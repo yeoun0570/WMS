@@ -71,7 +71,41 @@ public class TestChartController {
   @GetMapping("/api/invInTrend")
   public Map<String, List<Long>> invInTrend() {
     Map<String, List<Long>> map = new HashMap<>();
-    for (int i = 1; i <= 10; i++) {
+    for (int i = 1; i <= 5; i++) {
+      List<Long> list = new ArrayList<>();
+      for (int j = 1; j <= 12; j++) {
+        long x = (long) Math.max(0, 1000.0 + (Math.random() * 1000 - 500));
+        list.add(x);
+      }
+      map.put("상품" + i, list);
+    }
+
+    System.out.println(map);
+
+    return map;
+  }
+
+  @GetMapping("/api/invOutTrend")
+  public Map<String, List<Long>> invOutTrend() {
+    Map<String, List<Long>> map = new HashMap<>();
+    for (int i = 1; i <= 5; i++) {
+      List<Long> list = new ArrayList<>();
+      for (int j = 1; j <= 12; j++) {
+        long x = (long) Math.max(0, 1000.0 + (Math.random() * 1000 - 500));
+        list.add(x);
+      }
+      map.put("상품" + i, list);
+    }
+
+    System.out.println(map);
+
+    return map;
+  }
+
+  @GetMapping("/api/invTotalTrend")
+  public Map<String, List<Long>> invTotalTrend() {
+    Map<String, List<Long>> map = new HashMap<>();
+    for (int i = 1; i <= 5; i++) {
       List<Long> list = new ArrayList<>();
       for (int j = 1; j <= 12; j++) {
         long x = (long) Math.max(0, 1000.0 + (Math.random() * 1000 - 500));
