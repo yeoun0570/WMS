@@ -23,36 +23,77 @@ ChartJS.register(
   Legend,
 );
 
+const backgroundColor = [
+  "rgba(255, 99, 132, 0.2)",
+  "rgba(54, 162, 235, 0.2)",
+  "rgba(255, 206, 86, 0.2)",
+  "rgba(75, 192, 192, 0.2)",
+  "rgba(153, 102, 255, 0.2)",
+  "rgba(128, 128, 128, 0.2)",
+];
+
+const borderColor = [
+  "rgba(255, 99, 132, 1)",
+  "rgba(54, 162, 235, 1)",
+  "rgba(255, 206, 86, 1)",
+  "rgba(75, 192, 192, 1)",
+  "rgba(153, 102, 255, 1)",
+  "rgba(128, 128, 128, 1)",
+];
+
 export default function LineChart() {
   // 선택된 옵션을 관리하는 state
   const [selectedOption, setSelectedOption] = useState("전체");
+  const [inDataset, setInDataset] = useState();
 
-  // 선택된 옵션에 따라 다른 데이터 세트 제공
-  const getData = () => {
-    switch (selectedOption) {
-      case "입고":
-        return [12, 19, 3, 5, 2, 3]; // 입고 데이터
-      case "출고":
-        return [15, 10, 6, 8, 3, 7]; // 출고 데이터
-      case "전체":
-      default:
-        return [27, 29, 9, 13, 5, 10]; // 전체 데이터 (입고 + 출고)
+  const fetchDataset = async () => {
+    try{
+      let response;
+
+      switch(selectedOption){
+        case "입고":
+          response = await axios.get("http://localhost:8080/api/invInTrend");
+          break;
+        case "출고":
+          response = await axios.get("http://localhost:8080/api/invOutTrend");
+          break;
+        default:
+          response = await axios.get("http://localhost:8080/api/invTotalTrend");
+          break;
+      }
+
+      const labels = Object.keys(response.data);
+
+      console.log("라벨: " + labels);
+
+      const data = {
+        labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+        datasets: [],
+      };
+
+      labels.map((key, index) => (data.datasets.push({
+        label: key,
+        data: response.data[key],
+        borderColor: borderColor[index],
+        backgroundColor: backgroundColor[index],
+        tension: 0
+      })));
+
+      console.log(data);
+
+      setInDataset(data);
+      console.log(inDataset);
+      
+    } catch(error) {
+      console.log("재고 추이 에러...")
     }
   };
 
-  const data = {
-    labels: ["January", "February", "March", "April", "May", "June"],
-    datasets: [
-      {
-        label: selectedOption === "입고" ? "Inbound Data" :
-               selectedOption === "출고" ? "Outbound Data" : "Total Data",
-        data: getData(),
-        borderColor: "rgba(255, 0, 0, 0.8)",
-        backgroundColor: "rgba(255, 0, 0, 0.3)",
-        tension: 0.3
-      }
-    ],
-  };
+  useEffect(() => {
+    fetchDataset();
+  }, selectedOption);
+
+  
 
   const options = {
     responsive: true,
@@ -62,14 +103,14 @@ export default function LineChart() {
         position: 'top',
       },
       title: {
-        display: true,
+        display: false,
         position: 'top',
         text: selectedOption + " 재고 추이", // 선택된 옵션에 따라 제목 변경
       },
     },
     scales: {
       y: {
-        beginAtZero: true,
+        beginAtZero: false,
       },
     },
   };
@@ -109,31 +150,38 @@ export default function LineChart() {
   });
 
   return (
-    <div style={{ position: "relative" }}>
+    <div>
       {/* 입고, 출고, 전체 버튼 */}
-      <div style={{ marginBottom: "10px", position: "absolute", right: 20 }}>
-        <button
-          style={leftButtonStyle("전체")}
-          onClick={() => setSelectedOption("전체")}
-        >
-          전체
-        </button>
-        <button
-          style={middleButtonStyle("출고")}
-          onClick={() => setSelectedOption("출고")}
-        >
-          출고
-        </button>
-        <button
-          style={rightButtonStyle("입고")}
-          onClick={() => setSelectedOption("입고")}
-        >
-          입고
-        </button>
+      <div style={{display: "flex", justifyContent: "space-between", height: "5vh"}}>
+        <div>
+          {selectedOption + " 재고 추이"}
+        </div>
+        <div>
+          <button
+            style={leftButtonStyle("전체")}
+            onClick={() => {
+              setSelectedOption("전체");
+            }}
+          >
+            전체
+          </button>
+          <button
+            style={middleButtonStyle("출고")}
+            onClick={() => setSelectedOption("출고")}
+          >
+            출고
+          </button>
+          <button
+            style={rightButtonStyle("입고")}
+            onClick={() => setSelectedOption("입고")}
+          >
+            입고
+          </button>
+        </div>
       </div>
       {/* 차트 */}
-      <div style={{width: "100%", height: "40vh"}}>
-        <Line data={data} options={options} />
+      <div style={{width: "100%", height: "35vh"}}>
+        {inDataset && <Line data={inDataset} options={options} />}
       </div>
     </div>
   );
