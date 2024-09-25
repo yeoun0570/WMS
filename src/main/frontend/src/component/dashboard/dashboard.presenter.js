@@ -99,12 +99,6 @@ export default function DashboardUI(props) {
         </div>
         <div style={{ width: "30%", border: "solid 1px grey", margin: "10px" }}><UsageChart /></div>
       </div>
-      <div style={{ width: "100%" }}>
-        <LineChart />
-      </div>
-      <div style={{ width: "100%" }}>
-        <LineChart />
-      </div>
     </div>
   );
 }
