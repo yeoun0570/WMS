@@ -3,6 +3,7 @@ package lcw.lcw2_back.domain.user2;
 import lombok.*;
 
 @Getter
+@Setter
 @Builder
 @ToString
 @AllArgsConstructor

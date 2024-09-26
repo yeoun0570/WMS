@@ -26,7 +26,6 @@ public class LoginDTO {
     private String userRole; //직책 : ROLE_MANAGER, ROLE_USER
 
     @Nullable
-    @Size(min = 0, max = 1)
     private Byte userStatus; //계정 상태 : 0 - 비활성  1- 활성 Null - 미승인
 
 
