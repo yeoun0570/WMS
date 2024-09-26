@@ -22,7 +22,7 @@ public class OutboundServiceTests {
     OutboundService outboundService;
 
     @Test
-    public void selectInboundNotDoneList() {
+    public void selectOutboundNotDoneList() {
         PageOutboundRequestDTO pageOutboundRequestDTO = PageOutboundRequestDTO.builder()
                 .page(1)
                 .size(10)
@@ -33,7 +33,7 @@ public class OutboundServiceTests {
     }
 
     @Test
-    public void selectInboundDoneList() {
+    public void selectOutboundDoneList() {
         PageOutboundRequestDTO pageOutboundRequestDTO = PageOutboundRequestDTO.builder()
                 .page(1)
                 .size(15)

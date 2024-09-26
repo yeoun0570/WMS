@@ -28,6 +28,11 @@ public class OutboundController {
     }
 
     // 출고 요청서 조회
+    //RequestBody : HTTP 본문(JSON,XML)을 자바 오브젝트로 변환
+    // (GET요청은 데이터 조회에 사용되어서 HTTP본문에 담지 않고 URL 쿼리 파라미터에 데이터를 넣어준다. 그래서 부적합하다.)
+    //RequestParam : 단일 객체를 매핑해서 자바 오브젝트로 변환
+    // (DTO안에 여러 필드들이 존재해서 그것을 일일히 바꿔줘야 하기 때문에 가독성이 떨어진다.)
+    //ModelAttribute : 복합 객체를 매핑해서 자바 오브젝트로 변환
     @GetMapping("/outbound/request_list")
     public Map<String, Object> requestList(@ModelAttribute @Valid PageOutboundRequestDTO pageOutboundRequestDTO, BindingResult bindingResult) {
 
