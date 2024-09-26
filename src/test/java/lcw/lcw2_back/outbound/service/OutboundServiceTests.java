@@ -60,19 +60,18 @@ public class OutboundServiceTests {
         // 품목 리스트 생성
         OutboundItemDTO item1 = OutboundItemDTO.builder()
                 .productId(1L)
-                .quantity(55L)
+                .quantity(11L)
                 .build();
 
         OutboundItemDTO item2 = OutboundItemDTO.builder()
                 .productId(2L)
-                .quantity(24L)
+                .quantity(66L)
                 .build();
 
         // OutboundDTO 생성 및 품목 추가
         OutboundDTO outboundDTO = OutboundDTO.builder()
-                .userId("user2")
-                .receivingStorageId(1L)
-                .status("NOT APPROVED")
+                .userId("user4")
+                .outboundMart(true)
                 .items(Arrays.asList(item1, item2)) // 품목 리스트 설정
                 .build();
 

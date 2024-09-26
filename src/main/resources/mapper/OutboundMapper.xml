@@ -6,14 +6,30 @@
     <!-- 출고 요청서 작성 -->
     <!-- <selectKey> : insert작업 후에 자동으로 생성된 키를 가져옴
             keyProperty : 가져온 키를 저장할 객체 지정
-            order="AFTER" : <selectKey>가 실행되는 시점 지정(insert문 실행 후) -->
+            order="AFTER" : <selectKey>가 실행되는 시점 지정(insert문 실행 후)
+            if문을 통해 수신지나 마트출고여부 둘 중 하나만 insert하도록 작성-->
     <insert id="insertOutbound">
-        INSERT INTO outbound(user_id, request_date, receiving_storage_id, outbound_mart, status)
-        VALUES (#{userId}, now(), #{receivingStorageId}, #{outboundMart}, #{status})
+        INSERT INTO outbound (user_id, request_date
+        <if test="arriveStorageId != null">
+            , arrive_storage_id
+        </if>
+        <if test="outboundMart != null">
+            , outbound_mart
+        </if>
+        )
+        VALUES (#{userId}, now()
+        <if test="arriveStorageId != null">
+            , #{arriveStorageId}
+        </if>
+        <if test="outboundMart != null">
+            , #{outboundMart}
+        </if>
+        )
         <selectKey keyProperty="outboundId" resultType="long" order="AFTER">
             SELECT LAST_INSERT_ID()
         </selectKey>
     </insert>
+
 
     <!-- 출고 요청서 작성할 때 품목 추가 -->
     <insert id="insertOutboundItem">
@@ -34,23 +50,32 @@
     2. 여러 조건을 추가하기 좋다.
         a. 만약 WHERE1=1이 없다면 새로운 조건을 생성해줄 때 마다 이전 조건에도 추가한 조건에 대한 부분을 추가(수정)해줘야 하는데 그냥 새로운 조건만 AND하면 되서 그럴 필요가 없다.-->
 
-    <!-- 출고요청서 조회 -->
     <select id="selectOutboundNotDoneList" resultType="lcw.lcw2_back.domain.outbound.Outbound" parameterType="map">
-        SELECT o.outbound_id,
+        SELECT
+        o.outbound_id,
         p.product_name,
-        s_from.storage_name,
+        s_from.storage_name AS outbound_storage_name,
+
+        -- arrive_storage_id가 null일 때 '귤로벌마트' 출력, 아니면 실제 창고명 출력
+        CASE
+        WHEN o.arrive_storage_id IS NULL THEN '귤로벌마트'
+        ELSE s_to.storage_name
+        END AS arrive_storage_name,
+
+        u_from.user_id AS outbound_user_id,
+        u_to.user_id AS arrive_user_id,
         oi.quantity,
         o.status,
-        o.request_date,
-        s_to.storage_name
+        o.request_date
         FROM Outbound o
-        JOIN User u ON o.user_id = u.user_id
-        JOIN Storage s_from ON u.storage_id = s_from.storage_id
-        JOIN Storage s_to ON o.receiving_storage_id = s_to.storage_id  -- 수신지
+        JOIN User u_from ON o.user_id = u_from.user_id  <!-- 출고 창고의 사용자 -->
+        JOIN Storage s_from ON u_from.storage_id = s_from.storage_id
+        LEFT JOIN Storage s_to ON o.arrive_storage_id = s_to.storage_id  <!-- 수신지 창고 (LEFT JOIN 사용) -->
+        LEFT JOIN User u_to ON s_to.storage_id = u_to.storage_id  <!-- 입고 창고의 사용자 (LEFT JOIN 사용) -->
         JOIN Item oi ON oi.outbound_id = o.outbound_id
         JOIN Product p ON oi.product_id = p.product_id
         WHERE 1=1
-        AND status IN('NOT APPROVED', 'APPROVED')
+        AND o.status IN ('NOT APPROVED', 'APPROVED')
 
         <!-- 상태 필터: APPROVED 또는 NOT APPROVED -->
         <if test="status != null and status != ''">
@@ -62,15 +87,14 @@
             AND DATE(o.request_date) BETWEEN #{startDate} AND #{endDate}
         </if>
 
-
         <!-- 아이템 필터: 특정 제품 이름으로 검색 -->
         <if test="item != null and item != ''">
             AND p.product_name LIKE CONCAT('%', #{item}, '%')
         </if>
 
         <!-- 수신지 창고명 필터 -->
-        <if test="receivingStorageName != null and receivingStorageName != ''">
-            AND s_to.storage_name LIKE CONCAT('%', #{receivingStorageName}, '%')
+        <if test="arriveStorageName != null and arriveStorageName != ''">
+            AND s_to.storage_name LIKE CONCAT('%', #{arriveStorageName}, '%')
         </if>
 
         <!-- 출고 창고명 필터 : 총관리자만 사용 -->
@@ -78,9 +102,15 @@
             AND s_from.storage_name LIKE CONCAT('%', #{outboundStorageName}, '%')
         </if>
 
-        ORDER BY o.outbound_id DESC
+        <!-- 마트 여부 필터 추가 -->
+        <if test="outboundMart != null and outboundMart != ''">
+            AND o.outbound_mart LIKE CONCAT('%', #{outboundMart}, '%')
+        </if>
+
+        ORDER BY oi.outbound_id DESC
         LIMIT #{skip}, #{size}
     </select>
+
 
     <!-- 출고요청서 총 개수 -->
     <select id="getCountOutboundNotDoneList" resultType="int">
@@ -103,7 +133,7 @@
         FROM Outbound o
         JOIN User u ON o.user_id = u.user_id
         JOIN Storage s_from ON u.storage_id = s_from.storage_id
-        JOIN Storage s_to ON o.receiving_storage_id = s_to.storage_id  -- 수신지
+        JOIN Storage s_to ON o.arrive_storage_id = s_to.storage_id  -- 수신지
         JOIN Item oi ON oi.outbound_id = o.outbound_id
         JOIN Product p ON oi.product_id = p.product_id
         WHERE 1=1
@@ -125,8 +155,8 @@
         </if>
 
         <!-- 수신지 창고명 필터 -->
-        <if test="receivingStorageName != null and receivingStorageName != ''">
-            AND s_to.storage_name LIKE CONCAT('%', #{receivingStorageName}, '%')
+        <if test="arriveStorageName != null and arriveStorageName != ''">
+            AND s_to.storage_name LIKE CONCAT('%', #{arriveStorageName}, '%')
         </if>
 
         <!-- 출고 창고명 필터 : 총관리자만 사용 -->

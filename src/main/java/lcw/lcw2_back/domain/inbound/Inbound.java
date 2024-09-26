@@ -25,9 +25,9 @@ public class Inbound {
 
     private LocalDateTime completeDate;
 
-    private String shippingStorageName;
+    private String departStorageName;
 
-    private Long shippingStorageId;
+    private Long departStorageId;
 
     private String productName;
 

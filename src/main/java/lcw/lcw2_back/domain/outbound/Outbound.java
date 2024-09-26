@@ -27,9 +27,9 @@ public class Outbound {
 
     private LocalDateTime completeDate;
 
-    private String receivingStorageName;
+    private String arriveStorageName;
 
-    private Long receivingStorageId;
+    private Long arriveStorageId;
 
     private boolean outboundMart;
 

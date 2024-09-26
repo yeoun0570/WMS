@@ -26,7 +26,7 @@ public class PageInboundRequestDTO {
     private String item; //검색조건 : 품목명
     private LocalDateTime startDate; //검색조건 : 요청날짜 중 시작날짜
     private LocalDateTime endDate; //검색조건 : 요청날짜 중 끝날짜
-    private String shippingStorageName; //검색조건 : 발송지 창고
+    private String departStorageName; //검색조건 : 발송지 창고
     private String inboundStorageName; //검색조건 : 입고 창고 (총관리자만 사용)
 
 

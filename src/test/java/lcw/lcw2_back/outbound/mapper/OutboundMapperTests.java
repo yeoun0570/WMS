@@ -31,8 +31,7 @@ public class OutboundMapperTests {
         PageOutboundRequestDTO pageOutboundRequestDTO = PageOutboundRequestDTO.builder()
                 .page(1)
                 .size(15)
-                .startDate(LocalDateTime.of(2024,9,1,0,0,0))
-                .endDate(LocalDateTime.of(2024,9,11,23,59,59))
+                .outboundMart(true)
                 .item("Product X")
                 .build();
 

@@ -8,8 +8,8 @@
             keyProperty : 가져온 키를 저장할 객체 지정
             order="AFTER" : <selectKey>가 실행되는 시점 지정(insert문 실행 후) -->
     <insert id="insertInbound">
-        INSERT INTO inbound(user_id, request_date, shipping_storage_id, status)
-        VALUES (#{userId}, now(), #{shippingStorageId}, #{status})
+        INSERT INTO inbound(user_id, request_date, depart_storage_id, status)
+        VALUES (#{userId}, now(), #{departStorageId}, #{status})
         <selectKey keyProperty="inboundId" resultType="long" order="AFTER">
             SELECT LAST_INSERT_ID()
         </selectKey>
@@ -46,7 +46,7 @@
         FROM Inbound i
         JOIN User u ON i.user_id = u.user_id
         JOIN Storage s_from ON u.storage_id = s_from.storage_id
-        JOIN Storage s_to ON i.shipping_storage_id = s_to.storage_id  -- 발송지
+        JOIN Storage s_to ON i.depart_storage_id = s_to.storage_id  -- 발송지
         JOIN Item ii ON ii.inbound_id = i.inbound_id
         JOIN Product p ON ii.product_id = p.product_id
         WHERE 1=1
@@ -69,8 +69,8 @@
         </if>
 
         <!-- 수신지 창고명 필터 -->
-        <if test="shippingStorageName != null and shippingStorageName != ''">
-            AND s_to.storage_name LIKE CONCAT('%', #{shippingStorageName}, '%')
+        <if test="departStorageName != null and departStorageName != ''">
+            AND s_to.storage_name LIKE CONCAT('%', #{departStorageName}, '%')
         </if>
 
         <!-- 입고 창고명 필터 : 총관리자만 사용 -->
@@ -103,7 +103,7 @@
         FROM Inbound i
         JOIN User u ON i.user_id = u.user_id
         JOIN Storage s_from ON u.storage_id = s_from.storage_id
-        JOIN Storage s_to ON i.shipping_storage_id = s_to.storage_id  -- 수신지
+        JOIN Storage s_to ON i.depart_storage_id = s_to.storage_id  -- 수신지
         JOIN Item ii ON ii.inbound_id = i.inbound_id
         JOIN Product p ON ii.product_id = p.product_id
         WHERE 1=1
@@ -125,8 +125,8 @@
         </if>
 
         <!-- 수신지 창고명 필터 -->
-        <if test="shippingStorageName != null and shippingStorageName != ''">
-            AND s_to.storage_name LIKE CONCAT('%', #{shippingStorageName}, '%')
+        <if test="departStorageName != null and departStorageName != ''">
+            AND s_to.storage_name LIKE CONCAT('%', #{departStorageName}, '%')
         </if>
 
         <!-- 입고 창고명 필터 : 총관리자만 사용 -->

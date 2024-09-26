@@ -22,7 +22,7 @@ public class OutboundDTO {
     private LocalDateTime approvedDate;
     private LocalDateTime completeDate;
     private String productName;
-    private Long receivingStorageId;
+    private Long arriveStorageId;
     private String storageFromName;  // 출고 창고명
     private String storageToName;    // 입고 창고명
     private boolean outboundMart;

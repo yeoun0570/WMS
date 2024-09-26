@@ -23,7 +23,7 @@ public class InboundDTO {
     private LocalDateTime approvedDate;
     private LocalDateTime completeDate;
     private String productName;
-    private Long shippingStorageId;
+    private Long departStorageId;
     private String storageFromName;  // 출고 창고명
     private String storageToName;    // 입고 창고명
     private List<Long> inboundIds;
