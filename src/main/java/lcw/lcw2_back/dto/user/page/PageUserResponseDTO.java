@@ -8,7 +8,7 @@ import java.util.List;
 
 @Getter
 @ToString
-public class PageInboundResponseDTO<E> {
+public class PageUserResponseDTO<E> {
     private int page;
     private int size;
     private int total;
@@ -26,14 +26,14 @@ public class PageInboundResponseDTO<E> {
     private List<E> dtoList;
 
     @Builder(builderMethodName = "withAll")
-    public PageInboundResponseDTO(PageInboundRequestDTO pageInboundRequestDTO, List<E> dtoList, int total) {
+    public PageUserResponseDTO(PageUserRequestDTO pageUserRequestDTO, List<E> dtoList, int total) {
 
         if (total <= 0) {
             return;
         }
 
-        this.page = pageInboundRequestDTO.getPage();
-        this.size = pageInboundRequestDTO.getSize();
+        this.page = pageUserRequestDTO.getPage();
+        this.size = pageUserRequestDTO.getSize();
 
         this.total = total;
         this.dtoList = dtoList;

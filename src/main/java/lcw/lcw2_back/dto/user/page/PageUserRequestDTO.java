@@ -9,13 +9,12 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
-import java.time.LocalDateTime;
 
 @Builder
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class PageInboundRequestDTO {
+public class PageUserRequestDTO {
     @Builder.Default
     @Min(1)
     private int page = 1;
