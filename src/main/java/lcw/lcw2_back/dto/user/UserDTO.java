@@ -6,8 +6,8 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 @Getter
 @Setter
@@ -16,7 +16,7 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserDTO {
-    @NotNull
+
     private LoginDTO loginDTO; //로그인 및 인가 데이터
 
     @NotNull
@@ -27,7 +27,7 @@ public class UserDTO {
     private String userName; //이름
 
     @NotEmpty
-    private Date userBirth; //생일
+    private LocalDate userBirth; //생일
 
     @NotEmpty
     @Size(max = 30)
@@ -36,10 +36,6 @@ public class UserDTO {
     @NotEmpty
     @Size(max = 15)
     private String userContact; //전화번호
-
-    @Nullable
-    @Size(max = 100)
-    private String userAddress; // 집주소
 
     @Nullable
     private LocalDateTime regDate; //최초 생성일
@@ -54,8 +50,11 @@ public class UserDTO {
         this.loginDTO = loginDTO;
         this.userEmail = userEmail;
         this.userContact = userContact;
-        this.userAddress = userAddress;
-        this.modDate = LocalDateTime.now();
+    }
+
+    @Builder
+    public UserDTO(LoginDTO loginDTO) {
+        this.loginDTO = loginDTO;
     }
 
 
