@@ -15,7 +15,27 @@
                 - userStatus가 null일 때
 
     -->
-    <select id="selectUserList" resultType="lcw.lcw2_back.domain.user2.User" parameterType="lcw.lcw2_back.dto.user.page.PageInboundRequestDTO">
+    <resultMap id="UserLoginResultMap" type="lcw.lcw2_back.domain.user2.User">
+        <!-- User 필드 매핑 -->
+        <result property="storageId" column="storage_id"/>
+        <result property="userName" column="user_name"/>
+        <result property="userEmail" column="user_email"/>
+        <result property="userContact" column="user_contact"/>
+        <result property="userBirth" column="user_birth"/>
+        <result property="regDate" column="reg_date"/>
+        <result property="modDate" column="mod_date"/>
+
+        <!-- Login 객체 매핑 -->
+        <association property="login" javaType="lcw.lcw2_back.domain.user2.Login">
+            <id property="userId" column="user_id"/>
+            <result property="userPw" column="user_pw"/>
+            <result property="userRole" column="user_role"/>
+            <result property="userStatus" column="user_status"/>
+        </association>
+    </resultMap>
+
+
+    <select id="selectUserList" resultMap="UserLoginResultMap" parameterType="lcw.lcw2_back.dto.user.page.PageUserRequestDTO">
         SELECT *
         FROM user
         WHERE
@@ -25,10 +45,10 @@
             </choose>
         /*검색 조건*/
         /* 사용자가 입력한 검색 값이 숫자면 사원 번호로 검색함*/
-        <if test="inputValue != null and inputValue.matches('^[0-9]+$')">AND user_id = #{userId}</if>
+        <if test="userId != null and userId.matches('^[0-9]+$')">AND user_id = #{userId}</if>
 
         /*사용자가 입력한 검색 값이 문자이면 사원 이름으로 검색*/
-        <if test="inputValue != null and !inputValue.matches('^[0-9]+$')">AND user_name LIKE CONCAT('%', #{userName}, '%')</if>
+        <if test="userName != null and !userName.matches('^[0-9]+$')">AND user_name LIKE CONCAT('%', #{userName}, '%')</if>
 
         /*Role 으로 검색하기*/
         <if test="userRole != null and userRole != ''">AND user_role = #{userRole}</if>
@@ -61,16 +81,17 @@
             - 이메일
             - 전화번호
     -->
-    <update id="updateUserInfo" parameterType="map">
+
+    <update id="updateUserInfo" parameterType="lcw.lcw2_back.domain.user2.User">
         UPDATE user
         SET
-            user_pw = #{login.userPw},
-            user_email = #{user.userEmail},
-            user_contact = #{user.userContact},
+            user_pw = #{login.userPw},    <!-- User 객체의 login 필드 안의 userPw -->
+            user_email = #{userEmail},     <!-- User 객체의 userEmail -->
+            user_contact = #{userContact}, <!-- User 객체의 userContact -->
             mod_date = now()
-        WHERE user_id = #{login.userId}
-
+        WHERE user_id = #{login.userId}   <!-- User 객체의 login 필드 안의 userId -->
     </update>
+
 
 
 
@@ -98,6 +119,36 @@
 
     </select>
 
+
+
+    <!--6) 회원 객체 저장하기-->
+    <insert id="insertNewUser" parameterType="lcw.lcw2_back.domain.user2.User">
+        INSERT INTO user (
+            user_id,
+            user_pw,
+            user_role,
+            user_status,
+            storage_id,
+            user_name,
+            user_email,
+            user_contact,
+            user_birth,
+            reg_date,
+            mod_date
+        ) VALUES (
+            #{login.userId},
+            #{login.userPw},
+            #{login.userRole},
+            #{login.userStatus},
+            #{storageId},
+            #{userName},
+            #{userEmail},
+            #{userContact},
+            #{userBirth},
+            #{regDate},  -- reg_date는 현재 시간으로 설정
+            NOW()   -- mod_date도 현재 시간으로 설정
+        )
+    </insert>
 
 
 </mapper>
