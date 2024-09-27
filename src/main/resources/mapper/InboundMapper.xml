@@ -34,28 +34,31 @@
     2. 여러 조건을 추가하기 좋다.
         a. 만약 WHERE1=1이 없다면 새로운 조건을 생성해줄 때 마다 이전 조건에도 추가한 조건에 대한 부분을 추가(수정)해줘야 하는데 그냥 새로운 조건만 AND하면 되서 그럴 필요가 없다.-->
 
-    <!-- 입고요청서 조회 -->
+    <!--  해당 요청서 조회는 depart_user_id인 출고하는 사용자의 출고요청서 조회  -->
     <select id="selectInboundNotDoneList" resultType="lcw.lcw2_back.domain.inbound.Inbound" parameterType="map">
         SELECT i.inbound_id,
-        p.product_name,
-        s_from.storage_name,
-        ii.quantity,
+        s_from.storage_name AS depart_storage_name,
+        <!--  GROUP_CONCAT으로 product_name과 quantity를 문자열로 결합 -->
+        GROUP_CONCAT(CONCAT(p.product_name, ': ', ii.quantity) SEPARATOR ', ') AS products,
         i.status,
         i.request_date,
-        s_to.storage_name
+        s_to.storage_name AS arrive_storage_name,
+        u_to.user_id <!-- 요청 아이디 -->
         FROM Inbound i
-        JOIN User u ON i.user_id = u.user_id
+        JOIN User u_to ON i.user_id = u_to.user_id
         JOIN Storage s_from ON u.storage_id = s_from.storage_id
-        JOIN Storage s_to ON i.depart_storage_id = s_to.storage_id  -- 발송지
-        JOIN Item ii ON ii.inbound_id = i.inbound_id
+        JOIN Storage s_to ON i.depart_storage_id = s_to.storage_id  <!-- 발송지 -->
+        JOIN User u_from ON s_from.storage_id = u_from.storage_id <!-- 요청서 조회할 아이디를 얻기 위한 JOIN -->
+        JOIN Inbound_Item ii ON ii.inbound_id = i.inbound_id
         JOIN Product p ON ii.product_id = p.product_id
         WHERE 1=1
-        AND status IN('NOT APPROVED', 'APPROVED')
+        AND status IN('REJECTED','NOT APPROVED', 'APPROVED')
 
         <!-- 상태 필터: APPROVED 또는 NOT APPROVED -->
         <if test="status != null and status != ''">
             AND i.status = #{status}
         </if>
+
 
         <!-- 요청 날짜 범위 필터 -->
         <if test="startDate != null and endDate != null">
@@ -63,7 +66,7 @@
         </if>
 
 
-        <!-- 아이템 필터: 특정 제품 이름으로 검색 -->
+        <!-- 제품명 필터 (이 부분에서 Product JOIN 조건 추가) -->
         <if test="item != null and item != ''">
             AND p.product_name LIKE CONCAT('%', #{item}, '%')
         </if>
@@ -78,14 +81,20 @@
             AND s_from.storage_name LIKE CONCAT('%', #{inboundStorageName}, '%')
         </if>
 
+        <!-- inbound_id로만 그룹화 -->
+        GROUP BY i.inbound_id, depart_storage_name, arrive_storage_name, u_to.user_id, i.status, i.request_date
+
         ORDER BY i.inbound_id DESC
         LIMIT #{skip}, #{size}
     </select>
 
     <!-- 입고요청서 총 개수 -->
     <select id="getCountInboundNotDoneList" resultType="int">
-        SELECT count(*) FROM inbound WHERE status IN ('NOT APPROVED', 'APPROVED', 'REJECTED')
+        SELECT count(*) FROM inbound WHERE status IN ('REJECTED','NOT APPROVED', 'APPROVED')
     </select>
+
+
+
 
 
 
@@ -94,16 +103,16 @@
     <!-- 입고현황 조회 -->
     <select id="selectInboundDoneList" resultType="lcw.lcw2_back.domain.inbound.Inbound" parameterType="map">
         SELECT i.inbound_id,
-        p.product_name,
-        s_from.storage_name,
-        ii.quantity,
+        s_from.storage_name AS arrive_storage_name,
+        <!--  GROUP_CONCAT으로 product_name과 quantity를 문자열로 결합 -->
+        GROUP_CONCAT(CONCAT(p.product_name, ': ', ii.quantity) SEPARATOR ', ') AS products,
         i.status,
         i.complete_date,
-        s_to.storage_name
+        s_to.storage_name AS depart_storage_name
         FROM Inbound i
         JOIN User u ON i.user_id = u.user_id
         JOIN Storage s_from ON u.storage_id = s_from.storage_id
-        JOIN Storage s_to ON i.depart_storage_id = s_to.storage_id  -- 수신지
+        JOIN Storage s_to ON i.depart_storage_id = s_to.storage_id  <!-- 발송지 -->
         JOIN Item ii ON ii.inbound_id = i.inbound_id
         JOIN Product p ON ii.product_id = p.product_id
         WHERE 1=1
@@ -133,6 +142,9 @@
         <if test="inboundStorageName != null and inboundStorageName != ''">
             AND s_from.storage_name LIKE CONCAT('%', #{inboundStorageName}, '%')
         </if>
+
+        <!-- inbound_id로만 그룹화 -->
+        GROUP BY i.inbound_id, depart_storage_name, arrive_storage_name, i.status, i.request_date
 
         ORDER BY i.inbound_id DESC
         LIMIT #{skip}, #{size}
@@ -167,6 +179,17 @@
             #{id}
         </foreach>
         )
+    </update>
+
+
+    <!-- 출고요청 출고완료 -->
+    <update id="updateInboundCompleteOutbound">
+        UPDATE inbound SET status = '출고완료', outbound_complete_date = now() WHERE status LIKE '승인'
+    </update>
+
+    <!-- 출고요청 배송완료 -->
+    <update id="updateInboundCompleteInbound">
+        CALL updateInboundCompleteInbound();
     </update>
 
 </mapper>

@@ -21,4 +21,10 @@ public interface InboundService {
 
     //입고목록(처리) 전체 조회
     PageInboundResponseDTO<InboundDTO> getInboundDoneList(PageInboundRequestDTO pageInboundRequestDTO);
+
+    //진행상태 출고완료 스케줄링
+    void modifyInboundCompleteOutbound();
+
+    //진행상태 입고완료 스케줄링
+    void modifyInboundCompleteInbound();
 }

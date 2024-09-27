@@ -10,6 +10,7 @@ import lcw.lcw2_back.mapper.InboundMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -88,5 +89,17 @@ public class InboundServiceImpl implements InboundService{
                 <InboundDTO>withAll().dtoList(inboundDTOList)
                 .total(total).pageInboundRequestDTO(pageInboundRequestDTO).build();
         return pageInboundResponseDTO;
+    }
+
+    @Override
+    @Scheduled(cron = "0 0 16 * * *")
+    public void modifyInboundCompleteOutbound() {
+        inboundMapper.updateInboundCompleteOutbound();
+    }
+
+    @Override
+    @Scheduled(cron = "0 0 * * * *")
+    public void modifyInboundCompleteInbound() {
+        inboundMapper.updateInboundCompleteInbound();
     }
 }
