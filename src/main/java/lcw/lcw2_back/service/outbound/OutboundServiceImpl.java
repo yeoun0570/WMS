@@ -10,6 +10,7 @@ import lcw.lcw2_back.mapper.OutboundMapper;
 import lombok.extern.log4j.Log4j2;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -59,6 +60,19 @@ public class OutboundServiceImpl implements OutboundService {
         outboundMapper.updateOutboundRejected(outboundIds);
     }
 
+    //진행상태 출고완료 스케줄링
+    //cron 초 - 분 - 시 - 일 - 월 - 요일
+    @Override
+    @Scheduled(cron = "0 0 16 * * *")
+    public void modifyOutboundCompleteOutbound() {
+        outboundMapper.updateOutboundCompleteOutbound();
+    }
+
+    @Override
+    @Scheduled(cron = "0 0 * * * *") //매 시간 정각에 실행
+    public void modifyOutboundCompleteInbound() {
+        outboundMapper.updateOutboundCompleteInbound();
+    }
     
     //출고요청서 조회
     @Override
@@ -92,4 +106,5 @@ public class OutboundServiceImpl implements OutboundService {
                 .total(total).pageOutboundRequestDTO(pageOutboundRequestDTO).build();
         return pageOutboundResponseDTO;
     }
+
 }

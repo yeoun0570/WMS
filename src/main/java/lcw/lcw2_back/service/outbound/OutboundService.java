@@ -21,4 +21,10 @@ public interface OutboundService {
 
     //출고목록(처리) 전체 조회
     PageOutboundResponseDTO<OutboundDTO> getOutboundDoneList(PageOutboundRequestDTO pageOutboundRequestDTO);
+
+    //진행상태 출고완료 스케줄링
+    void modifyOutboundCompleteOutbound();
+
+    //진행상태 입고완료 스케줄링
+    void modifyOutboundCompleteInbound();
 }

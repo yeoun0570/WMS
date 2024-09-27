@@ -32,7 +32,7 @@ public class OutboundMapperTests {
                 .page(1)
                 .size(15)
                 .outboundMart(true)
-                .item("Product X")
+                .item("Product Y")
                 .build();
 
         List<Outbound> voList = outboundMapper.selectOutboundNotDoneList(pageOutboundRequestDTO);
@@ -55,7 +55,7 @@ public class OutboundMapperTests {
                 .page(1)
                 .size(5)
                 .item("Product Z")
-                .status("DONE")
+                .outboundMart(true)
                 .build();
 
         List<Outbound> voList = outboundMapper.selectOutboundDoneList(pageOutboundRequestDTO);

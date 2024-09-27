@@ -33,4 +33,10 @@ public interface OutboundMapper {
 
     //출고요청 반려하기
     void updateOutboundRejected(List<Long> outboundIds);
+
+    //출고요청 출고완료 처리
+    void updateOutboundCompleteOutbound();
+    
+    //출고요청 배송완료 처리
+    void updateOutboundCompleteInbound();
 }
