@@ -1,11 +1,12 @@
 import axios from "axios";
+import { useAPI } from "../src/axios/useAPI";
 import Head from "next/head";
 import { useEffect, useState } from "react";
 //백이랑 연결 잘 되어 있는 지 테스트...
 export default function Home() {
   const [hello, setHello] = useState();
-
-  useEffect(() => {
+  const { get } = useAPI();
+  /*useEffect(() => {//sse test
     const eventSource = new EventSource(
       "http://localhost:8080/api/test/notice?userId=1"
     );
@@ -23,7 +24,19 @@ export default function Home() {
     return () => {
       eventSource.close(); // 컴포넌트 언마운트 시 연결 해제
     };
-  }, []);
+  }, []);*/
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const result = await get("/hello");
+        setHello(result);
+      } catch (error) {
+        console.error("데이터 가져오기 실패:", error);
+      }
+    };
+
+    fetchData();
+  }, [get]);
   return (
     <>
       <Head>
