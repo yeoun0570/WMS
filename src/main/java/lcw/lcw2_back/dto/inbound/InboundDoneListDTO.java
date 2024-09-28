@@ -6,21 +6,16 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class InboundDTO {
+public class InboundDoneListDTO {
     private Long inboundId;
-    private String userId;
     private String status;
-    private LocalDateTime requestDate;
-    private LocalDateTime approvedDate;
-    private LocalDateTime outboundCompleteDate;
     private LocalDateTime inboundCompleteDate;
-    private Long departStorageId;
-    private List<InboundItemDTO> items;
-    private List<Long> inboundIds;
+    private String departStorageName;
+    private String arriveName;
+    private String products;
 }

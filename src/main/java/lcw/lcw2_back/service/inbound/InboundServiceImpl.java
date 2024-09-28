@@ -3,13 +3,16 @@ package lcw.lcw2_back.service.inbound;
 import lcw.lcw2_back.domain.inbound.Inbound;
 import lcw.lcw2_back.domain.inbound.InboundItem;
 import lcw.lcw2_back.dto.inbound.InboundDTO;
+import lcw.lcw2_back.dto.inbound.InboundDoneListDTO;
 import lcw.lcw2_back.dto.inbound.InboundItemDTO;
+import lcw.lcw2_back.dto.inbound.InboundNotDoneListDTO;
 import lcw.lcw2_back.dto.inbound.page.PageInboundRequestDTO;
 import lcw.lcw2_back.dto.inbound.page.PageInboundResponseDTO;
 import lcw.lcw2_back.mapper.InboundMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -59,16 +62,16 @@ public class InboundServiceImpl implements InboundService{
 
     //출고요청서 조회
     @Override
-    public PageInboundResponseDTO<InboundDTO> getInboundNotDoneList(PageInboundRequestDTO pageInboundRequestDTO) {
+    public PageInboundResponseDTO<InboundNotDoneListDTO> getInboundNotDoneList(PageInboundRequestDTO pageInboundRequestDTO) {
         List<Inbound> inboundList =inboundMapper.selectInboundNotDoneList(pageInboundRequestDTO);
-        List<InboundDTO> inboundDTOList = inboundList.stream()
-                .map(vo -> modelMapper.map(vo, InboundDTO.class))
+        List<InboundNotDoneListDTO> inboundDTOList = inboundList.stream()
+                .map(vo -> modelMapper.map(vo, InboundNotDoneListDTO.class))
                 .collect(Collectors.toList());
 
         int total = inboundMapper.getCountInboundNotDoneList(pageInboundRequestDTO);
 
-        PageInboundResponseDTO<InboundDTO> pageInboundResponseDTO = PageInboundResponseDTO.
-                <InboundDTO>withAll().dtoList(inboundDTOList)
+        PageInboundResponseDTO<InboundNotDoneListDTO> pageInboundResponseDTO = PageInboundResponseDTO.
+                <InboundNotDoneListDTO>withAll().dtoList(inboundDTOList)
                 .total(total).pageInboundRequestDTO(pageInboundRequestDTO).build();
         return pageInboundResponseDTO;
     }
@@ -76,17 +79,29 @@ public class InboundServiceImpl implements InboundService{
 
     //출고현황 조회
     @Override
-    public PageInboundResponseDTO<InboundDTO> getInboundDoneList(PageInboundRequestDTO pageInboundRequestDTO) {
+    public PageInboundResponseDTO<InboundDoneListDTO> getInboundDoneList(PageInboundRequestDTO pageInboundRequestDTO) {
         List<Inbound> inboundList =inboundMapper.selectInboundDoneList(pageInboundRequestDTO);
-        List<InboundDTO> inboundDTOList = inboundList.stream()
-                .map(vo -> modelMapper.map(vo, InboundDTO.class))
+        List<InboundDoneListDTO> inboundDTOList = inboundList.stream()
+                .map(vo -> modelMapper.map(vo, InboundDoneListDTO.class))
                 .collect(Collectors.toList());
 
         int total = inboundMapper.getCountInboundDoneList(pageInboundRequestDTO);
 
-        PageInboundResponseDTO<InboundDTO> pageInboundResponseDTO = PageInboundResponseDTO.
-                <InboundDTO>withAll().dtoList(inboundDTOList)
+        PageInboundResponseDTO<InboundDoneListDTO> pageInboundResponseDTO = PageInboundResponseDTO.
+                <InboundDoneListDTO>withAll().dtoList(inboundDTOList)
                 .total(total).pageInboundRequestDTO(pageInboundRequestDTO).build();
         return pageInboundResponseDTO;
+    }
+
+    @Override
+    @Scheduled(cron = "0 0 16 * * *")
+    public void modifyInboundCompleteOutbound() {
+        inboundMapper.updateInboundCompleteOutbound();
+    }
+
+    @Override
+    @Scheduled(cron = "0 0 * * * *")
+    public void modifyInboundCompleteInbound() {
+        inboundMapper.updateInboundCompleteInbound();
     }
 }

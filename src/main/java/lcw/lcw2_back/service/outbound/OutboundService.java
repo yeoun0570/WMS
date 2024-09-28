@@ -1,6 +1,8 @@
 package lcw.lcw2_back.service.outbound;
 
 import lcw.lcw2_back.dto.outbound.OutboundDTO;
+import lcw.lcw2_back.dto.outbound.OutboundDoneListDTO;
+import lcw.lcw2_back.dto.outbound.OutboundNotDoneListDTO;
 import lcw.lcw2_back.dto.outbound.page.PageOutboundRequestDTO;
 import lcw.lcw2_back.dto.outbound.page.PageOutboundResponseDTO;
 
@@ -17,8 +19,14 @@ public interface OutboundService {
     void modifyOutboundRejected(List<Long> outboundIds);
 
     //출고요청서 전체 조회
-    PageOutboundResponseDTO<OutboundDTO> getOutboundNotDoneList(PageOutboundRequestDTO pageOutboundRequestDTO);
+    PageOutboundResponseDTO<OutboundNotDoneListDTO> getOutboundNotDoneList(PageOutboundRequestDTO pageOutboundRequestDTO);
 
     //출고목록(처리) 전체 조회
-    PageOutboundResponseDTO<OutboundDTO> getOutboundDoneList(PageOutboundRequestDTO pageOutboundRequestDTO);
+    PageOutboundResponseDTO<OutboundDoneListDTO> getOutboundDoneList(PageOutboundRequestDTO pageOutboundRequestDTO);
+
+    //진행상태 출고완료 스케줄링
+    void modifyOutboundCompleteOutbound();
+
+    //진행상태 입고완료 스케줄링
+    void modifyOutboundCompleteInbound();
 }

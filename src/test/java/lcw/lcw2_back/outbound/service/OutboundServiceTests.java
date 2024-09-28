@@ -2,7 +2,9 @@ package lcw.lcw2_back.outbound.service;
 
 
 import lcw.lcw2_back.dto.outbound.OutboundDTO;
+import lcw.lcw2_back.dto.outbound.OutboundDoneListDTO;
 import lcw.lcw2_back.dto.outbound.OutboundItemDTO;
+import lcw.lcw2_back.dto.outbound.OutboundNotDoneListDTO;
 import lcw.lcw2_back.dto.outbound.page.PageOutboundRequestDTO;
 import lcw.lcw2_back.dto.outbound.page.PageOutboundResponseDTO;
 import lcw.lcw2_back.service.outbound.OutboundService;
@@ -26,9 +28,10 @@ public class OutboundServiceTests {
         PageOutboundRequestDTO pageOutboundRequestDTO = PageOutboundRequestDTO.builder()
                 .page(1)
                 .size(10)
+                .outboundMart(true)
                 .build();
 
-        PageOutboundResponseDTO<OutboundDTO> list = outboundService.getOutboundNotDoneList(pageOutboundRequestDTO);
+        PageOutboundResponseDTO<OutboundNotDoneListDTO> list = outboundService.getOutboundNotDoneList(pageOutboundRequestDTO);
         System.out.println(list);
     }
 
@@ -37,11 +40,10 @@ public class OutboundServiceTests {
         PageOutboundRequestDTO pageOutboundRequestDTO = PageOutboundRequestDTO.builder()
                 .page(1)
                 .size(15)
-                .startDate(LocalDateTime.of(2024,9,6,0,0,0))
-                .endDate(LocalDateTime.of(2024,9,10,23,59,59))
+                .outboundMart(true)
                 .build();
 
-        PageOutboundResponseDTO<OutboundDTO> list = outboundService.getOutboundDoneList(pageOutboundRequestDTO);
+        PageOutboundResponseDTO<OutboundDoneListDTO> list = outboundService.getOutboundDoneList(pageOutboundRequestDTO);
         System.out.println(list);
     }
 
@@ -60,19 +62,18 @@ public class OutboundServiceTests {
         // 품목 리스트 생성
         OutboundItemDTO item1 = OutboundItemDTO.builder()
                 .productId(1L)
-                .quantity(55L)
+                .quantity(11L)
                 .build();
 
         OutboundItemDTO item2 = OutboundItemDTO.builder()
                 .productId(2L)
-                .quantity(24L)
+                .quantity(66L)
                 .build();
 
         // OutboundDTO 생성 및 품목 추가
         OutboundDTO outboundDTO = OutboundDTO.builder()
-                .userId("user2")
-                .receivingStorageId(1L)
-                .status("NOT APPROVED")
+                .userId("user4")
+                .outboundMart(true)
                 .items(Arrays.asList(item1, item2)) // 품목 리스트 설정
                 .build();
 

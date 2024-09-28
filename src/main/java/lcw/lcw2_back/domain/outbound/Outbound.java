@@ -1,10 +1,10 @@
 package lcw.lcw2_back.domain.outbound;
 
-import lcw.lcw2_back.domain.storage.Storage;
-//import lcw.lcw2_back.domain.user.User;
+import lcw.lcw2_back.dto.outbound.OutboundItemDTO;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Builder
@@ -27,12 +27,14 @@ public class Outbound {
 
     private LocalDateTime completeDate;
 
-    private String receivingStorageName;
-
-    private Long receivingStorageId;
+    private String departStorageName;
+    private Long arriveStorageId;
+    private String arriveName;
 
     private boolean outboundMart;
 
-    private String productName;
+    private String products;
 
+    private List<OutboundItemDTO> items; // 필요시 item 리스트 유지
 }
+

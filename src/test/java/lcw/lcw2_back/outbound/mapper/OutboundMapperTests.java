@@ -1,6 +1,5 @@
 package lcw.lcw2_back.outbound.mapper;
 
-// import lcw.lcw2_back.domain.outbound.OutboundPK;
 import lcw.lcw2_back.domain.outbound.Outbound;
 import lcw.lcw2_back.dto.outbound.page.PageOutboundRequestDTO;
 import lcw.lcw2_back.mapper.OutboundMapper;
@@ -8,7 +7,6 @@ import lcw.lcw2_back.mapper.OutboundMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,6 +14,7 @@ import java.util.List;
 public class OutboundMapperTests {
     @Autowired
     private OutboundMapper outboundMapper;
+
 
     @Test
     public void updateOutboundApproveTest() {
@@ -31,9 +30,7 @@ public class OutboundMapperTests {
         PageOutboundRequestDTO pageOutboundRequestDTO = PageOutboundRequestDTO.builder()
                 .page(1)
                 .size(15)
-                .startDate(LocalDateTime.of(2024,9,1,0,0,0))
-                .endDate(LocalDateTime.of(2024,9,11,23,59,59))
-                .item("Product X")
+                .outboundStorageName("Storage B")
                 .build();
 
         List<Outbound> voList = outboundMapper.selectOutboundNotDoneList(pageOutboundRequestDTO);
@@ -56,7 +53,7 @@ public class OutboundMapperTests {
                 .page(1)
                 .size(5)
                 .item("Product Z")
-                .status("DONE")
+                .outboundMart(true)
                 .build();
 
         List<Outbound> voList = outboundMapper.selectOutboundDoneList(pageOutboundRequestDTO);

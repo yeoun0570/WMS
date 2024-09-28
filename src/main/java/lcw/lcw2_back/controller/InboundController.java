@@ -2,6 +2,8 @@ package lcw.lcw2_back.controller;
 
 import jakarta.validation.Valid;
 import lcw.lcw2_back.dto.inbound.InboundDTO;
+import lcw.lcw2_back.dto.inbound.InboundDoneListDTO;
+import lcw.lcw2_back.dto.inbound.InboundNotDoneListDTO;
 import lcw.lcw2_back.dto.inbound.page.PageInboundRequestDTO;
 import lcw.lcw2_back.dto.inbound.page.PageInboundResponseDTO;
 import lcw.lcw2_back.service.inbound.InboundService;
@@ -41,7 +43,7 @@ public class InboundController {
 
 
     // 서비스에서 조회된 데이터와 페이지 정보를 받아옴
-    PageInboundResponseDTO<InboundDTO> responseDTO = inboundService.getInboundNotDoneList(pageInboundRequestDTO);
+    PageInboundResponseDTO<InboundNotDoneListDTO> responseDTO = inboundService.getInboundNotDoneList(pageInboundRequestDTO);
 
     // 결과를 Map에 추가
         responseMap.put("data", responseDTO.getDtoList());
@@ -64,7 +66,7 @@ public Map<String, Object> requestDoneList(@ModelAttribute @Valid PageInboundReq
     }
 
     // 서비스에서 조회된 데이터와 페이지 정보를 받아옴
-    PageInboundResponseDTO<InboundDTO> responseDTO = inboundService.getInboundDoneList(pageInboundRequestDTO);
+    PageInboundResponseDTO<InboundDoneListDTO> responseDTO = inboundService.getInboundDoneList(pageInboundRequestDTO);
 
     // 결과를 Map에 추가
     responseMap.put("data", responseDTO.getDtoList());

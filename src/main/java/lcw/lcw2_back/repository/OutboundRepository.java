@@ -27,7 +27,7 @@
 //            "FROM Outbound o " +
 //            "JOIN o.userId u " +
 //            "JOIN u.storageId s_from " +
-//            "JOIN o.receivingStorageId s_to " +
+//            "JOIN o.arriveStorageId s_to " +
 //            "JOIN Item oi ON oi.outbound = o " +  // Item과 조인
 //            "JOIN oi.product p " +  // Product와 조인
 //            "WHERE o.status in('NOT APPROVED', 'APPROVED') " +
@@ -39,7 +39,7 @@
 //            "FROM Outbound o " +
 //            "JOIN o.userId u " +
 //            "JOIN u.storageId s_from " +
-//            "JOIN o.receivingStorageId s_to " +
+//            "JOIN o.arriveStorageId s_to " +
 //            "JOIN Item oi ON oi.outbound = o " +  // Item과 조인
 //            "JOIN oi.product p " +  // Product와 조인
 //            "WHERE o.status in('DONE', 'APPROVED') " +
