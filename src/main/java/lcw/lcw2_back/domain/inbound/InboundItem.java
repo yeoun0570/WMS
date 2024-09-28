@@ -1,6 +1,5 @@
 package lcw.lcw2_back.domain.inbound;
 
-import lcw.lcw2_back.domain.product.Product;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
