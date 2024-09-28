@@ -16,6 +16,7 @@ export default function Outbound() {
   const [arriveName, setArriveName] = useState(null);
   const [outboundStorageName, setOutboundStorageName] = useState(null);
   const [outboundMart, setOutboundMart] = useState(null);
+  const [requestDate, setRequestDate] = useState(null);
   const [outboundIds, setOutboundIds] = useState([]); // 한번에 여러 아이디를 담을거기 때문에 배열로 설정
 
   // 데이터를 가져오는 fetchData 함수 정의
@@ -24,6 +25,7 @@ export default function Outbound() {
       const response = await axios.get("http://localhost:8080/api/outbound/request_list", {
         params: {
           status: status,
+          requestDate: requestDate,
           startDate: startDate,
           endDate: endDate,
           item: item,
@@ -113,6 +115,8 @@ export default function Outbound() {
          <OutboundUI 
          data={data} 
          status={status} 
+         requestDate={requestDate}
+         setRequestDate={setRequestDate}
          setStatus={setStatus} 
          startDate={startDate} 
          setStartDate={setStartDate} 
