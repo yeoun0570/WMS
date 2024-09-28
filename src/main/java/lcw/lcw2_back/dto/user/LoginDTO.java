@@ -26,7 +26,7 @@ public class LoginDTO {
     private String userRole; //직책 : ROLE_MANAGER, ROLE_USER
 
     @Nullable
-    private Byte userStatus; //계정 상태 : 0 - 비활성  1- 활성 Null - 미승인
+    private String userStatus; //계정 상태 : 0 - 비활성  1- 활성 Null - 미승인
 
 
     @Builder
@@ -46,12 +46,4 @@ public class LoginDTO {
     public LoginDTO(String userId) {
         this.userId = userId;
     }
-
-    @Builder
-    public LoginDTO(String userId, @Nullable Byte userStatus) {
-        this.userId = userId;
-        this.userStatus = userStatus;
-    }
-
-
 }

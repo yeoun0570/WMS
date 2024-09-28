@@ -1,46 +1,100 @@
-import * as s from "./member.styles";
+import React, { useState } from 'react';
+import { Divider, Tabs ,Table } from 'antd';
 
-
-export default function MemberUI(props) {
-  return (
-    <s.Wrapper>
-      <s.Title>사원 관리</s.Title>
-      
-      <s.Wrapper>
-        <s.ButtonWrapper>
-        <button onClick={props.showEmployeeList}>사원 목록</button>
-        <button onClick={props.showNonEmployeeList}>비사원 목록</button>
-        </s.ButtonWrapper>
-      </s.Wrapper>
-
-      <s.Wrapper>
-        <s.Table>
-          <thead>
-            <s.Tr>
-              <s.Th>목록 번호</s.Th>
-              <s.Th>이름</s.Th>
-              <s.Th>사원번호</s.Th>
-              <s.Th>이메일</s.Th>
-              <s.Th>근무처</s.Th>
-              <s.Th>직함</s.Th>
-              <s.Th>연락처</s.Th>
-            </s.Tr>
-          </thead>
-          <tbody>
-            {props.data&&props.data.map((item) => (
-              <s.Tr key={item.id}>
-                <s.Td>{item.id}</s.Td>
-                <s.Td>{item.name}</s.Td>
-                <s.Td>{item.employeeNumber}</s.Td>
-                <s.Td>{item.email}</s.Td>
-                <s.Td>{item.workplace}</s.Td>
-                <s.Td>{item.title}</s.Td>
-                <s.Td>{item.contact}</s.Td>
-              </s.Tr>
-            ))}
-          </tbody>
-        </s.Table>
-      </s.Wrapper>
-    </s.Wrapper>
-  );
+const onChange = (key) => {
+  console.log(key);
 }
+
+const items = [
+  {
+    key: '1',
+    label: '사원목록',
+  },
+  {
+    key: '2',
+    label: '비사원목록',
+  }
+];
+
+
+const columns = [
+  {
+    title: '이름',
+    dataIndex: 'name',
+    // render: (text) => <a>{text}</a>,
+  },
+  {
+    title: '사원번호',
+    dataIndex: 'userId',
+  },
+  {
+    title: '이메일',
+    dataIndex: 'email',
+  },
+  {
+    title: '근무처',
+    dataIndex: 'address',
+  },
+  {
+    title: '직함',
+    dataIndex: 'role',
+  },
+];
+const data = [
+  {
+    key: '1',
+    name: '이효승',
+    userId: '960304',
+    email: 'dlgytmd5468@naver.com',
+    address: '강남구 삼성동',
+    role: '사원',
+  },
+  {
+    key: '2',
+    name: 'Jim Green',
+    age: 42,
+    address: 'London No. 1 Lake Park',
+  },
+  {
+    key: '3',
+    name: 'Joe Black',
+    age: 32,
+    address: 'Sydney No. 1 Lake Park',
+  },
+  {
+    key: '4',
+    name: 'Disabled User',
+    age: 99,
+    address: 'Sydney No. 1 Lake Park',
+  },
+];
+
+// rowSelection object indicates the need for row selection
+const rowSelection = {
+  onChange: (selectedRowKeys, selectedRows) => {
+    console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+  },
+  getCheckboxProps: (record) => ({
+    disabled: record.name === 'Disabled User',
+    // Column configuration not to be checked
+    name: record.name,
+  }),
+};
+const App = () => {
+  const [selectionType, setSelectionType] = useState('checkbox');
+  return (
+    <div>
+      <Tabs defaultActiveKey="1" items={items} onChange={onChange} />
+      <Divider />
+      <Table
+        rowSelection={{
+          type: selectionType,
+          ...rowSelection,
+        }}
+        columns={columns}
+        dataSource={data}
+      />
+    </div>
+  );
+};
+export default App;
