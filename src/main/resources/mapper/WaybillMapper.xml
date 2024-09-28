@@ -48,21 +48,21 @@
         WHEN w.inbound_id IS NOT NULL THEN
         (SELECT s.address FROM storage s WHERE s.storage_id = i.depart_storage_id)
         ELSE
-        (SELECT s.address FROM storage s WHERE s.storage_id = o.depart_storage_id)
+        (SELECT s.address FROM storage s join user u on u.user_id = o.user_id and s.storage_id = u.user_id)
         END AS depart_address,
 
         CASE
         WHEN w.inbound_id IS NOT NULL THEN
         (SELECT s.address_detail FROM storage s WHERE s.storage_id = i.depart_storage_id)
         ELSE
-        (SELECT s.address_detail FROM storage s WHERE s.storage_id = o.depart_storage_id)
+        (SELECT s.address_detail FROM storage s join user u on u.user_id = o.user_id and s.storage_id = u.user_id)
         END AS depart_address_detail,
 
         CASE
         WHEN w.inbound_id IS NOT NULL THEN
         (SELECT s.zipcode FROM storage s WHERE s.storage_id = i.depart_storage_id)
         ELSE
-        (SELECT s.zipcode FROM storage s WHERE s.storage_id = o.depart_storage_id)
+        (SELECT s.zipcode FROM storage s join user u on u.user_id = o.user_id and s.storage_id = u.user_id)
         END AS depart_zipcode
 
         FROM waybill w

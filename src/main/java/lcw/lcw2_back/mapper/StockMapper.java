@@ -14,7 +14,7 @@ public interface StockMapper {
 
     public List<StockVO> listAll(PageStockRequestDTO pageStockRequestDTO);
 
-    public void modifyQuantity(@Param("stockVO")StockVO stockVO, Long quantity);//SQL 쿼리 매핑 시 매개변수에 이름을 지정
+    public int modifyQuantity(@Param("stockVO")StockVO stockVO, Long quantity);//SQL 쿼리 매핑 시 매개변수에 이름을 지정
     public Integer getCount(PageStockRequestDTO pageStockRequestDTO);
 
     public StockVO findStockById(Long storageId, Long productId);

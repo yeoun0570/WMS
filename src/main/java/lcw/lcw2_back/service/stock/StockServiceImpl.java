@@ -41,7 +41,7 @@ public class StockServiceImpl implements StockService{
     }
 
     @Override
-    public void modifyQuantity(Long storageId, Long productId, Long quantity) {
+    public int modifyQuantity(Long storageId, Long productId, Long quantity) {
 
         Optional<StockVO> optionalStockVO = Optional.ofNullable(stockMapper.findStockById(storageId, productId));
 
@@ -50,7 +50,7 @@ public class StockServiceImpl implements StockService{
             throw new NoSuchElementException("조회되지 않음");
         }
         StockVO stockVO = optionalStockVO.get();
-        stockMapper.modifyQuantity(stockVO, quantity);
+        return  stockMapper.modifyQuantity(stockVO, quantity);
     }
 
 }

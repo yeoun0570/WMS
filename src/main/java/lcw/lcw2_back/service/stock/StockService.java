@@ -11,6 +11,6 @@ import org.springframework.transaction.annotation.Transactional;
 public interface StockService {
 
     PageStockResponseDTO<StockDTO> listAll(PageStockRequestDTO pageStockRequestDTO);
-    void modifyQuantity(Long storageId, Long productId, Long quantity);
+    int modifyQuantity(Long storageId, Long productId, Long quantity);
 
 }

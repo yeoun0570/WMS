@@ -27,7 +27,7 @@
         select count(*) from stock
     </select>
 
-    <update id="modifyQuantity" parameterType="lcw.lcw2_back.domain.stock.StockVO">
+    <update id="modifyQuantity" parameterType="lcw.lcw2_back.domain.stock.StockVO" >
         update stock set stock_quantity=#{quantity} where storage_id=#{stockVO.storageId} and product_id=#{stockVO.productId}
     </update>
 
