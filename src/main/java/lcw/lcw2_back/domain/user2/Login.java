@@ -6,6 +6,7 @@ import lombok.*;
 @Setter
 @Builder
 @ToString
+@NoArgsConstructor
 @AllArgsConstructor
 public class Login {
     private String userId;
@@ -14,5 +15,5 @@ public class Login {
 
     private String userRole;
 
-    private Byte userStatus;
+    private String userStatus;
 }

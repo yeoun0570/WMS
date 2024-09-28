@@ -24,13 +24,7 @@ public class PageUserRequestDTO {
     private String userId; //검색조건 : 사원번호
     private String userName; //검색조건 : 사원이름
     private String userRole; //검색조건 : 직책
-    private String userStatus; //null , 0, 1 : 미승인, 비사원, 사원
-//    private String item; //검색조건 : 품목명
-//    private LocalDateTime startDate; //검색조건 : 요청날짜 중 시작날짜
-//    private LocalDateTime endDate; //검색조건 : 요청날짜 중 끝날짜
-//    private String shippingStorageName; //검색조건 : 발송지 창고
-//    private String inboundStorageName; //검색조건 : 입고 창고 (총관리자만 사용)
-
+    private String userStatus; //0, 1, 2 : 미승인, 비사원, 사원
 
     public Pageable getPageable(String...props) {
         return PageRequest.of(this.page -1, this.size, Sort.by(props).descending());
