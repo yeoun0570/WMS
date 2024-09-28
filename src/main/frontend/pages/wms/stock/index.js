@@ -1,4 +1,4 @@
-import Inventory from "../../../src/component/inventory/inventory.container";
+import Inventory from "../../../src/component/stock/stock.container";
 
 export default function InventoryManagementPage() {
   return <Inventory />;

@@ -1,17 +1,18 @@
 import styled from "@emotion/styled";
-import theme from "../../styles/theme";
+import theme from "../../../styles/theme";
 
 export const Wrapper = styled.div`
   width: 600px;
   /* height: 1847px; */
-  margin: 10px 130px;
-  padding-top: 40px;
-  padding-bottom: 40px;
-  padding-left: 0px;
-  padding-right: 102px;
+  margin: 20px 400px;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  padding-left: 20px;
+  padding-right: 20px;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: left;
+  border: solid 1px green;
 
 
   @media screen and (max-width: 767px) {
@@ -22,16 +23,14 @@ export const Wrapper = styled.div`
     padding-left: 50px;
     padding-right: 50px;
     padding-bottom: 60px;
-  } 
+  }
 `;
 
 export const Title = styled.div`
-  width: 100%;
   text-align: left;
+  width: 100%;
   font-size: 34px;
   font-weight: bold;
-  border-color: red;
-  
 
   @media screen and (max-width: 767px) {
     /*모바일 */
@@ -39,8 +38,6 @@ export const Title = styled.div`
   }
 `;
 
-
-/*Text*/
 export const Label = styled.div`
   padding-bottom: 16px;
   font-size: 16px;
@@ -81,35 +78,13 @@ export const Input = styled.input`
 export const ButtonWrapper = styled.div`
   display: flex;
   flex-direction: row;
-  align-items: left;
-  padding: 0px;
-  
-
+  justify-content: flex-start;
+  padding: 10px;
+  border: solid 1px red;
   @media screen and (max-width: 767px) {
     /*모바일 */
     padding-top: 20px;
   }
-`;
-
-/*Button*/
-export const EmployeeListButton = styled.button`
-  width: 100px;
-  height: 50px;
-  background-color: white;
-  border: ${theme.borders.greyBorder}; 
-  border-radius: 0px;
-  font-size: 16px;
-  cursor: pointer;
-`;
-
-export const NonEmployeeButton = styled.button`
-  width: 100px;
-  height: 50px;
-  background-color: white;
-  border: ${theme.borders.greyBorder}; 
-  border-radius: 0px;
-  font-size: 16px;
-  cursor: pointer;
 `;
 
 export const CancelButton = styled.button`
@@ -138,7 +113,16 @@ export const SubmitButton = styled.button`
   cursor: pointer;
 `;
 
-/* 재작성 해야 하는 경우*/
+export const NewuserrequestButton = styled.button`
+  width: 155px;
+  height: 50px;
+  background-color: white;
+  border: solid 1px blue;
+  border-radius: 0px;
+  font-size: 16px;
+  cursor: pointer;
+`
+
 export const Error = styled.div`
   font-size: 10px;
   color: red;
@@ -148,23 +132,24 @@ export const Error = styled.div`
     font-size: 8px;
   }
 `;
-
-/*Table*/
 export const TableWrapper = styled.div`
   overflow-x: auto; /* 테이블이 화면을 넘어갈 때 스크롤 가능하도록 */
   overflow-y: auto;
+  padding: 10px;
+  border: solid 1px black;
 `;
 
 export const Table = styled.table`
   width: 100%;
   border-collapse: collapse;
+  border-spacing: 
 `;
 
 export const Th = styled.th`
   border: 1px solid #ddd;
   padding: 8px;
   text-align: left;
-  background-color: glbLightGrey;
+  background-color: #f2f2f2;
 `;
 
 export const Td = styled.td`

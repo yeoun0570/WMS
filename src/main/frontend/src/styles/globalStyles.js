@@ -4,7 +4,8 @@ export const globalStyles = css`
   * {
     margin: 0;
     box-sizing: border-box;
-    font-size: 20px;
+    font-size: 16px;
+    font-weight: bold;
     font-family: "myFont";
   }
   /* 기본 토글 버튼 배경색 변경 */
@@ -22,6 +23,6 @@ export const globalStyles = css`
   @font-face {
     //전체 폰트설정은 여기서 해주자고
     font-family: "myFont";
-    src: url("/fonts/GeistVF.woff");
+    src: url("/fonts/NanumSquareRoundR.ttf");
   }
 `;

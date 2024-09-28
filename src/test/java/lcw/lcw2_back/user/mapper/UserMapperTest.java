@@ -12,8 +12,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
+import static java.time.LocalTime.now;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
@@ -23,10 +25,10 @@ class UserMapperTest {
     private UserMapper userMapper;
 
     Login login = Login.builder()
-            .userId("202409")
+            .userId("202413")
             .userPw("password")
             .userRole("ROLE_MANAGER")
-            .userStatus((byte) 1)
+            .userStatus(null)
             .build();
 
     @Test
@@ -65,7 +67,7 @@ class UserMapperTest {
 
     @Test
     public void updateUserStatus() {
-        login.setUserStatus((byte) 0);
+        login.setUserStatus("0");
         userMapper.updateUserStatus(login);
     }
 
@@ -81,15 +83,16 @@ class UserMapperTest {
     public void insertUser() {
         User user = User.builder()
                 .userName("테스트")
-                .userEmail("javaisthebest@java.com")
+                .userEmail("hello@java.com")
                 .userContact("java-java-java")
-                .userBirth(LocalDate.parse("2000-01-01"))
-                .regDate(LocalDateTime.parse("2024-08-10T00:00:00"))  // 시간 정보 추가
-                .modDate(LocalDateTime.parse("2024-08-10T00:00:00"))
+                .userBirth(LocalDate.of(1990, 1, 1))  // LocalDate로 설정
+                .regDate(LocalDateTime.now())  // 현재 날짜 및 시간
+                .modDate(LocalDateTime.now())  // 현재 날짜 및 시간
                 .storageId(1)
                 .login(login)
                 .build();
 
         userMapper.insertNewUser(user);
     }
+
 }

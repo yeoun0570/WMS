@@ -1,4 +1,4 @@
-import * as S from "./warehouse.styles";
+import * as S from "./modifywaybill.styles";
 
 export default function WarehouseUI() {
   return (

@@ -24,6 +24,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public PageUserResponseDTO<UserDTO> getUserList(PageUserRequestDTO pageUserRequestDTO) {
         List<User> users = userMapper.selectUserList(pageUserRequestDTO);
+        modelMapper.typeMap(Login.class, LoginDTO.class);
+        modelMapper.typeMap(User.class, UserDTO.class).addMappings(mapper -> {mapper.map(User::getLogin, UserDTO::setLoginDTO);});
         List<UserDTO> dto = users.stream().map(user -> modelMapper.map(user, UserDTO.class)).toList();
         return PageUserResponseDTO.<UserDTO>withAll().dtoList(dto).total(dto.size()).pageUserRequestDTO(pageUserRequestDTO).build();
     }
@@ -31,12 +33,17 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDTO getUserOne(LoginDTO loginDTO) {
-        return modelMapper.map(userMapper.selectUserById(modelMapper.map(loginDTO, Login.class)), UserDTO.class);
+        modelMapper.typeMap(Login.class, LoginDTO.class);
+        modelMapper.typeMap(User.class, UserDTO.class).addMappings(mapper -> {mapper.map(User::getLogin, UserDTO::setLoginDTO);});
+        User user = userMapper.selectUserById(modelMapper.map(loginDTO, Login.class));
+        return modelMapper.map(user, UserDTO.class);
     }
 
 
     @Override
     public boolean updateUserInfo(UserDTO userDTO) {
+        modelMapper.typeMap(LoginDTO.class, Login.class);
+        modelMapper.typeMap(UserDTO.class, User.class).addMappings(mapper -> mapper.map(UserDTO::getLoginDTO, User::setLogin));
         int result = userMapper.updateUserInfo(modelMapper.map(userDTO, User.class));
         return result > 0;
     }
