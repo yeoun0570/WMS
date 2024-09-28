@@ -2,7 +2,9 @@ package lcw.lcw2_back.outbound.service;
 
 
 import lcw.lcw2_back.dto.outbound.OutboundDTO;
+import lcw.lcw2_back.dto.outbound.OutboundDoneListDTO;
 import lcw.lcw2_back.dto.outbound.OutboundItemDTO;
+import lcw.lcw2_back.dto.outbound.OutboundNotDoneListDTO;
 import lcw.lcw2_back.dto.outbound.page.PageOutboundRequestDTO;
 import lcw.lcw2_back.dto.outbound.page.PageOutboundResponseDTO;
 import lcw.lcw2_back.service.outbound.OutboundService;
@@ -26,9 +28,10 @@ public class OutboundServiceTests {
         PageOutboundRequestDTO pageOutboundRequestDTO = PageOutboundRequestDTO.builder()
                 .page(1)
                 .size(10)
+                .outboundMart(true)
                 .build();
 
-        PageOutboundResponseDTO<OutboundDTO> list = outboundService.getOutboundNotDoneList(pageOutboundRequestDTO);
+        PageOutboundResponseDTO<OutboundNotDoneListDTO> list = outboundService.getOutboundNotDoneList(pageOutboundRequestDTO);
         System.out.println(list);
     }
 
@@ -37,11 +40,10 @@ public class OutboundServiceTests {
         PageOutboundRequestDTO pageOutboundRequestDTO = PageOutboundRequestDTO.builder()
                 .page(1)
                 .size(15)
-                .startDate(LocalDateTime.of(2024,9,6,0,0,0))
-                .endDate(LocalDateTime.of(2024,9,10,23,59,59))
+                .outboundMart(true)
                 .build();
 
-        PageOutboundResponseDTO<OutboundDTO> list = outboundService.getOutboundDoneList(pageOutboundRequestDTO);
+        PageOutboundResponseDTO<OutboundDoneListDTO> list = outboundService.getOutboundDoneList(pageOutboundRequestDTO);
         System.out.println(list);
     }
 
