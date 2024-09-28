@@ -25,26 +25,26 @@ export default function LayoutPage(props) {
   const isLoginPage = LOGIN_PAGE.includes(router.asPath);
   const [notices, setNotices] = useState([]);
 
-  const [page, setPage] = useState("회원관리");
-  const [detail, setDetail] = useState("회원조회");
+  const [page, setPage] = useState("대시보드");
+  const [detail, setDetail] = useState("사원관리");
   const [drawOpen, setDrawOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   //////////////////////////////나중에 다른파일로 바꿔서 import합시다.
   const pageMap = {
     "/wms/dashboard": ["대시보드"],
-    "/wms/member": ["회원관리", "회원가입요청승인"],
-    "/wms/member/1": ["회원관리", "내정보"],
-    "/wms/member/2": ["회원관리", "사원관리"],
-    "/wms/warehouse": ["창고관리", "창고현황"],
-    "/wms/warehouse/1": ["창고관리", "또뭐있"],
-    "/wms/outbound": ["출고관리", "출고현황"],
-    "/wms/outbound/1": ["출고관리", "출고승인"],
-    "/wms/outbound/2": ["출고관리", "기타등등"],
-    "/wms/inbound": ["입고관리", "입고현황"],
-    "/wms/inbound/1": ["입고관리", "입고승인"],
-    "/wms/inventory": ["재고관리", "재고현황"],
-    "/wms/inventory/1": ["재고관리", "음..."],
-    "/wms/inventory/2": ["재고관리", "기타등등"],
+    "/wms/member": ["회원관리", "사원관리"],
+    "/wms/member/newuserrequest": ["회원관리", "회원가입요청"],
+    "/wms/warehouse": ["창고관리", "창고조회"],
+    "/wms/warehouse/addwarehouse": ["창고관리", "창고등록"],
+    "/wms/outbound": ["출고관리", "출고요청서조회"],
+    "/wms/outbound/outbounddonelist": ["출고관리", "출고현황"],
+    "/wms/outbound/writeoutbound": ["출고관리", "출고요청서작성"],
+    "/wms/inbound": ["입고관리", "입고요청서조회"],
+    "/wms/inbound/inbounddonelist": ["입고관리", "입고현황"],
+    "/wms/inbound/writeinbound": ["입고관리", "입고요청서작성"],
+    "/wms/stock": ["재고관리", "재고조회"],
+    "/wms/waybill": ["운송장관리", "운송장조회"],
+    "/wms/waybill/modifywaybill": ["운송장관리", "운송장수정"],
     "/wms/mypage": ["WMS", "내정보"],
   };
   const getItem = (label, key, icon, children) => {
@@ -59,28 +59,30 @@ export default function LayoutPage(props) {
     getItem("대시보드", "/wms/dashboard", <PieChartOutlined />),
     getItem("회원관리", "sub1", <UserOutlined />, [
       getItem(pageMap["/wms/member"][1], "/wms/member"),
-      getItem(pageMap["/wms/member/1"][1], "/wms/member/1"),
-      getItem(pageMap["/wms/member/2"][1], "/wms/member/2"),
+      getItem(pageMap["/wms/member/newuserrequest"][1], "/wms/member/newuserrequest"),
     ]),
     getItem("창고관리", "sub2", <TeamOutlined />, [
-      getItem("창고현황 조회", "/wms/warehouse"),
-      getItem("또뭐가 있더라..", "/wms/warehouse/1"),
+      getItem("창고조회", "/wms/warehouse"),
+      getItem("창고등록", "/wms/warehouse/addwarehouse"),
     ]),
 
     getItem("출고관리", "sub3", <DesktopOutlined />, [
-      getItem("출고현황", "/wms/outbound"),
-      getItem("음...", "/wms/outbound/1"),
-      getItem("기타등등", "/wms/outbound/2"),
+      getItem("출고요청서조회", "/wms/outbound"),
+      getItem("출고현황", "/wms/outbound/outbounddonelist"),
+      getItem("출고요청서작성", "/wms/outbound/writeoutbound"),
     ]),
     getItem("입고관리", "sub4", <PieChartOutlined />, [
-      getItem("입고현황", "/wms/inbound"),
-      getItem("또뭐가 있더라..", "/wms/inbound/1"),
+      getItem("입고요청서조회", "/wms/inbound"),
+      getItem("입고현황", "/wms/inbound/inbounddonelist"),
+      getItem("입고요청서작성", "/wms/inbound/writeinbound"),
     ]),
     getItem("재고관리", "sub5", <DesktopOutlined />, [
-      getItem("재고현황", "/wms/inventory"),
-      getItem("음...", "/wms/inventory/1"),
-      getItem("기타등등", "/wms/inventory/2"),
+      getItem("재고조회", "/wms/stock"),
     ]),
+    getItem("운송장관리", "sub6", <DesktopOutlined />, [
+      getItem("운송장조회", "/wms/waybill"),
+      getItem("운송장수정", "/wms/modifywaybill"),
+    ])
   ];
   /////////////////////////////여기 위에 지저분한거 나중에 다른파일로 뺍시다.리팩토링필요
   const {

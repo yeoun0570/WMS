@@ -1,4 +1,4 @@
-import * as S from "./inventory.styles";
+import * as S from "./stock.styles";
 
 export default function InventoryUI() {
   return (

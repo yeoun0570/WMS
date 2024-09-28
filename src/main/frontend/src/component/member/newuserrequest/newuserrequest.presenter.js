@@ -1,28 +1,24 @@
 import React, { useState } from 'react';
-import { Divider, Tabs ,Table } from 'antd';
+import { Divider, Tabs, Table, Button } from 'antd';
+
 
 const onChange = (key) => {
   console.log(key);
 }
 
 const items = [
-  {
-    key: '1',
-    label: '사원목록',
-  },
-  {
-    key: '2',
-    label: '비사원목록',
-  }
-];
-
+{
+  key: '1',
+  label: '신규 요청 목록'
+}
+]
 
 const columns = [
   {
     title: '이름',
     dataIndex: 'name',
     // render: (text) => <a>{text}</a>,
-  },
+},
   {
     title: '사원번호',
     dataIndex: 'userId',
@@ -39,15 +35,14 @@ const columns = [
     title: '직함',
     dataIndex: 'role',
   },
+
 ];
 const data = [
   {
     key: '1',
-    name: '이효승',
-    userId: '960304',
-    email: 'dlgytmd5468@naver.com',
-    address: '강남구 삼성동',
-    role: '사원',
+    name: 'John Brown',
+    age: 32,
+    address: 'New York No. 1 Lake Park',
   },
   {
     key: '2',
@@ -84,7 +79,7 @@ const App = () => {
   const [selectionType, setSelectionType] = useState('checkbox');
   return (
     <div>
-      <Tabs defaultActiveKey="1" items={items} onChange={onChange} />
+      <Tabs defaultActiveKey='1' items={items} onChange={onChange}/>
       <Divider />
       <Table
         rowSelection={{

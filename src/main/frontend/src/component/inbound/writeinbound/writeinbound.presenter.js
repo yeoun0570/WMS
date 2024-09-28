@@ -1,4 +1,4 @@
-import * as S from "./inbound.styles";
+import * as S from "./writeinbound.styles";
 
 export default function InboundUI() {
   return (
