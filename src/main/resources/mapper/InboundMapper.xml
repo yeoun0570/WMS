@@ -9,7 +9,9 @@
             order="AFTER" : <selectKey>가 실행되는 시점 지정(insert문 실행 후) -->
     <insert id="insertInbound">
         INSERT INTO inbound(user_id, request_date, depart_storage_id, status)
-        VALUES (#{userId}, now(), #{departStorageId}, #{status})
+        VALUES (#{userId}, now(),
+        (SELECT storage_id FROM storage WHERE storage_name = #{departName}),
+                #{status})
         <selectKey keyProperty="inboundId" resultType="long" order="AFTER">
             SELECT LAST_INSERT_ID()
         </selectKey>
@@ -18,7 +20,9 @@
     <!-- 입고 요청서 작성할 때 품목 추가 -->
     <insert id="insertInboundItem">
         INSERT INTO item(inbound_id, product_id, quantity)
-        VALUES (#{inboundId}, #{productId}, #{quantity})
+        VALUES (#{inboundId},
+                (SELECT product_id FROM product WHERE product_name = #{productName}),
+                #{quantity})
     </insert>
 
 
@@ -52,7 +56,7 @@
         JOIN Inbound_Item ii ON ii.inbound_id = i.inbound_id
         JOIN Product p ON ii.product_id = p.product_id
         WHERE 1=1
-        AND status IN('REJECTED','NOT APPROVED', 'APPROVED')
+        AND status IN('반려', '미승인', '승인')
 
         <!-- 상태 필터: APPROVED 또는 NOT APPROVED -->
         <if test="status != null and status != ''">
@@ -90,7 +94,7 @@
 
     <!-- 입고요청서 총 개수 -->
     <select id="getCountInboundNotDoneList" resultType="int">
-        SELECT count(*) FROM inbound WHERE status IN ('REJECTED','NOT APPROVED', 'APPROVED')
+        SELECT count(*) FROM inbound WHERE status IN ('반려','미승인','승인')
     </select>
 
 
@@ -116,7 +120,7 @@
         JOIN Item ii ON ii.inbound_id = i.inbound_id
         JOIN Product p ON ii.product_id = p.product_id
         WHERE 1=1
-        AND status IN('DONE', 'APPROVED')
+        AND status IN('승인','출고완료','입고완료')
 
         <!-- 상태 필터: APPROVED 또는 NOT APPROVED -->
         <if test="status != null and status != ''">
@@ -151,7 +155,7 @@
     </select>
 
     <select id="getCountInboundDoneList" resultType="int">
-        SELECT count(*) FROM inbound WHERE status IN ('DONE', 'APPROVED')
+        SELECT count(*) FROM inbound WHERE status IN ('승인','출고완료','입고완료')
     </select>
 
 
@@ -162,23 +166,25 @@
     <!-- 입고요청 승인하기 -->
     <update id="updateApprove">
         UPDATE Inbound
-        SET status = 'APPROVED'
+        SET status = '승인'
         WHERE inbound_id IN (
         <foreach item="id" collection="list" separator=",">
             #{id}
         </foreach>
         )
+        AND status = '미승인'
     </update>
 
     <!--입고요청 반려하기-->
     <update id="updateRejected">
         UPDATE Inbound
-        SET status = 'REJECTED'
+        SET status = '반려'
         WHERE inbound_id IN (
         <foreach item="id" collection="list" separator=",">
             #{id}
         </foreach>
         )
+        AND status = '미승인'
     </update>
 
 

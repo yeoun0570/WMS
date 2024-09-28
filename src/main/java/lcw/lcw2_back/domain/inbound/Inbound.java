@@ -37,6 +37,4 @@ public class Inbound {
     private Long departStorageId;
 
     private String products;
-
-
 }

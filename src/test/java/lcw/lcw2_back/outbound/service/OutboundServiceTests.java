@@ -72,7 +72,7 @@ public class OutboundServiceTests {
 
         // OutboundDTO 생성 및 품목 추가
         OutboundDTO outboundDTO = OutboundDTO.builder()
-                .userId("user4")
+                .userId("user3")
                 .outboundMart(true)
                 .items(Arrays.asList(item1, item2)) // 품목 리스트 설정
                 .build();

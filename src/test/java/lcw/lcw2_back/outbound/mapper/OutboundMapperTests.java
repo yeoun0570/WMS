@@ -30,7 +30,6 @@ public class OutboundMapperTests {
         PageOutboundRequestDTO pageOutboundRequestDTO = PageOutboundRequestDTO.builder()
                 .page(1)
                 .size(15)
-                .outboundStorageName("Storage B")
                 .build();
 
         List<Outbound> voList = outboundMapper.selectOutboundNotDoneList(pageOutboundRequestDTO);

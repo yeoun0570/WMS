@@ -10,7 +10,7 @@
             if문을 통해 수신지나 마트출고여부 둘 중 하나만 insert하도록 작성-->
     <insert id="insertOutbound">
         INSERT INTO outbound (user_id, request_date
-        <if test="arriveStorageId != null">
+        <if test="arriveStorageId != null or arriveName != null">
             , arrive_storage_id
         </if>
         <if test="outboundMart != null">
@@ -18,8 +18,8 @@
         </if>
         )
         VALUES (#{userId}, now()
-        <if test="arriveStorageId != null">
-            , #{arriveStorageId}
+        <if test="arriveStorageId == null and arriveName != null">
+            , (SELECT storage_id FROM storage WHERE storage_name = #{arriveName})
         </if>
         <if test="outboundMart != null">
             , #{outboundMart}
@@ -34,7 +34,9 @@
     <!-- 출고 요청서 작성할 때 품목 추가 -->
     <insert id="insertOutboundItem">
         INSERT INTO outbound_item(outbound_id, product_id, quantity)
-        VALUES (#{outboundId}, #{productId}, #{quantity})
+        VALUES (#{outboundId},
+                (SELECT product_id FROM product WHERE product_name = #{productName} LIMIT 1),
+                #{quantity})
     </insert>
 
 
@@ -77,7 +79,7 @@
         JOIN Outbound_Item oi ON oi.outbound_id = o.outbound_id
         JOIN Product p ON oi.product_id = p.product_id
         WHERE 1=1
-        AND o.status IN ('REJECTED', 'NOT APPROVED', 'APPROVED')
+        AND o.status IN ('반려', '미승인', '승인')
 
         <!-- 상태 필터 -->
         <if test="status != null and status != ''">
@@ -118,7 +120,7 @@
 
     <!-- 출고요청서 총 개수 -->
     <select id="getCountOutboundNotDoneList" resultType="int">
-        SELECT count(*) FROM outbound WHERE status IN ('NOT APPROVED', 'APPROVED', 'REJECTED')
+        SELECT count(*) FROM outbound WHERE status IN ('반려', '미승인', '승인')
     </select>
 
 
@@ -145,7 +147,7 @@
         JOIN Outbound_Item oi ON oi.outbound_id = o.outbound_id
         JOIN Product p ON oi.product_id = p.product_id
         WHERE 1=1
-        AND status IN('DONE', 'APPROVED')
+        AND status IN('승인', '출고완료', '입고완료')
 
         <!-- 상태 필터: APPROVED 또는 NOT APPROVED -->
         <if test="status != null and status != ''">
@@ -184,7 +186,7 @@
     </select>
 
     <select id="getCountOutboundDoneList" resultType="int">
-        SELECT count(*) FROM outbound WHERE status IN ('DONE', 'APPROVED')
+        SELECT count(*) FROM outbound WHERE status IN ('승인', '출고완료', '입고완료')
     </select>
 
 
@@ -195,25 +197,25 @@
     <!-- 출고요청 승인하기 -->
     <update id="updateOutboundApprove">
         UPDATE Outbound
-        SET status = 'APPROVED'
+        SET status = '승인'
         WHERE outbound_id IN (
         <foreach item="id" collection="list" separator=",">
             #{id}
         </foreach>
-        AND status = 'NOT APPROVED'
         )
+        AND status = '미승인'
     </update>
 
     <!--출고요청 반려하기-->
     <update id="updateOutboundRejected">
         UPDATE Outbound
-        SET status = 'REJECTED'
+        SET status = '반려'
         WHERE outbound_id IN (
         <foreach item="id" collection="list" separator=",">
             #{id}
         </foreach>
-        AND status = 'NOT APPROVED'
         )
+        AND status = '미승인'
     </update>
 
     <!-- 출고요청 출고완료 -->

@@ -2,7 +2,9 @@ package lcw.lcw2_back.domain.outbound;
 
 import lcw.lcw2_back.dto.outbound.OutboundItemDTO;
 import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -21,11 +23,13 @@ public class Outbound {
 
     private Long quantity;
 
-    private LocalDateTime requestDate;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate requestDate;
 
-    private LocalDateTime approvedDate;
+    private LocalDate approvedDate;
 
-    private LocalDateTime completeDate;
+    private LocalDate outboundCompleteDate;
+    private LocalDate inboundCompleteDate;
 
     private String departStorageName;
     private Long arriveStorageId;
