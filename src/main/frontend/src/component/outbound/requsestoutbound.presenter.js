@@ -1,4 +1,4 @@
-import * as S from "./outbound.styles";
+import * as S from "./requsestoutbound.styles";
 
 export default function OutboundUI() {
   return (
