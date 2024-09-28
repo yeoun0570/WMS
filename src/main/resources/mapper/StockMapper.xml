@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+                PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+                "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="lcw.lcw2_back.mapper.StockMapper">
+
+    <select id="listAll" resultType="lcw.lcw2_back.domain.stock.StockVO"  parameterType="lcw.lcw2_back.dto.stock.page.PageStockRequestDTO">
+        select s.storage_id, s.product_id, p.product_name, s.stock_quantity, st.storage_name
+        from stock s
+        JOIN storage st ON s.storage_id = st.storage_id
+        JOIN product p ON s.product_id = p.product_id
+        <where>
+            <if test="product_name != null and product_name != ''">
+                p.product_name like concat('%', #{product_name}, '%')
+            </if>
+            <if test="storage_name != null and storage_name != ''">
+                <if test="product_name != null and product_name != ''">
+                    and
+                </if>
+                st.storage_name like concat('%', #{storage_name}, '%')
+            </if>
+        </where>
+        order by s.storage_id desc limit #{skip}, #{size}
+    </select>
+
+    <select id="getCount" resultType="Integer">
+        select count(*) from stock
+    </select>
+
+    <update id="modifyQuantity" parameterType="lcw.lcw2_back.domain.stock.StockVO" >
+        update stock set stock_quantity=#{quantity} where storage_id=#{stockVO.storageId} and product_id=#{stockVO.productId}
+    </update>
+
+    <select id="findStockById" resultType="lcw.lcw2_back.domain.stock.StockVO">
+        select * from stock where storage_id=#{storageId} and product_id = #{productId}
+    </select>
+
+
+
+
+</mapper>
