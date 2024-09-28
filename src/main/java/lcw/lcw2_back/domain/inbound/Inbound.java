@@ -1,7 +1,9 @@
 package lcw.lcw2_back.domain.inbound;
 
 import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Getter
@@ -19,16 +21,22 @@ public class Inbound {
 
     private Long quantity;
 
-    private LocalDateTime requestDate;
+    private LocalDate requestDate;
 
-    private LocalDateTime approvedDate;
+    private LocalDate approvedDate;
 
-    private LocalDateTime completeDate;
+    private LocalDate inboundCompleteDate;
+    private LocalDate outboundCompleteDate;
+
+    private LocalDate startDate;
+    private LocalDate endDate;
 
     private String departStorageName;
+    private String arriveStorageName;
 
     private Long departStorageId;
 
-    private String productName;
+    private String products;
+
 
 }

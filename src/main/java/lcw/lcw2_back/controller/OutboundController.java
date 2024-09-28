@@ -2,6 +2,8 @@ package lcw.lcw2_back.controller;
 
 import jakarta.validation.Valid;
 import lcw.lcw2_back.dto.outbound.OutboundDTO;
+import lcw.lcw2_back.dto.outbound.OutboundDoneListDTO;
+import lcw.lcw2_back.dto.outbound.OutboundNotDoneListDTO;
 import lcw.lcw2_back.dto.outbound.page.PageOutboundRequestDTO;
 import lcw.lcw2_back.dto.outbound.page.PageOutboundResponseDTO;
 import lcw.lcw2_back.service.outbound.OutboundServiceImpl;
@@ -46,7 +48,7 @@ public class OutboundController {
         }
 
         // 서비스에서 조회된 데이터와 페이지 정보를 받아옴
-        PageOutboundResponseDTO<OutboundDTO> responseDTO = outboundService.getOutboundNotDoneList(pageOutboundRequestDTO);
+        PageOutboundResponseDTO<OutboundNotDoneListDTO> responseDTO = outboundService.getOutboundNotDoneList(pageOutboundRequestDTO);
 
         // 결과를 Map에 추가
         resultMap.put("data", responseDTO.getDtoList());
@@ -69,7 +71,7 @@ public class OutboundController {
         }
 
         // 서비스에서 조회된 데이터와 페이지 정보를 받아옴
-        PageOutboundResponseDTO<OutboundDTO> responseDTO = outboundService.getOutboundDoneList(pageOutboundRequestDTO);
+        PageOutboundResponseDTO<OutboundDoneListDTO> responseDTO = outboundService.getOutboundDoneList(pageOutboundRequestDTO);
 
         // 결과를 Map에 추가
         responseMap.put("data", responseDTO.getDtoList());
@@ -83,7 +85,7 @@ public class OutboundController {
     public Map<String, List<Long>> approveOutboundRequests(@RequestBody OutboundDTO outboundDTO) {
 
         // 서비스 호출하여 출고 요청 승인 처리
-        outboundService.modifyOutboundApprove(outboundDTO.getOutboundIds());
+        outboundService.modifyOutboundRejected(outboundDTO.getOutboundIds());
 
         // 응답을 담을 Map 생성
         Map<String, List<Long>> responseMap = new HashMap<>();
@@ -99,7 +101,7 @@ public class OutboundController {
     public Map<String, List<Long>> rejectOutboundRequests(@RequestBody OutboundDTO outboundDTO) {
 
         // 서비스 호출하여 출고 요청 승인 처리
-        outboundService.modifyOutboundRejected(outboundDTO.getOutboundIds());
+        outboundService.modifyOutboundApprove(outboundDTO.getOutboundIds());
 
         // 응답을 담을 Map 생성
         Map<String, List<Long>> responseMap = new HashMap<>();

@@ -3,7 +3,9 @@ package lcw.lcw2_back.service.outbound;
 import lcw.lcw2_back.domain.outbound.Outbound;
 import lcw.lcw2_back.domain.outbound.OutboundItem;
 import lcw.lcw2_back.dto.outbound.OutboundDTO;
+import lcw.lcw2_back.dto.outbound.OutboundDoneListDTO;
 import lcw.lcw2_back.dto.outbound.OutboundItemDTO;
+import lcw.lcw2_back.dto.outbound.OutboundNotDoneListDTO;
 import lcw.lcw2_back.dto.outbound.page.PageOutboundRequestDTO;
 import lcw.lcw2_back.dto.outbound.page.PageOutboundResponseDTO;
 import lcw.lcw2_back.mapper.OutboundMapper;
@@ -53,7 +55,7 @@ public class OutboundServiceImpl implements OutboundService {
         outboundMapper.updateOutboundApprove(outboundIds);
     }
 
-    
+
     //출고요청 반려
     @Override
     public void modifyOutboundRejected(List<Long> outboundIds) {
@@ -73,36 +75,36 @@ public class OutboundServiceImpl implements OutboundService {
     public void modifyOutboundCompleteInbound() {
         outboundMapper.updateOutboundCompleteInbound();
     }
-    
+
     //출고요청서 조회
     @Override
-    public PageOutboundResponseDTO<OutboundDTO> getOutboundNotDoneList(PageOutboundRequestDTO pageOutboundRequestDTO) {
-        List<Outbound> outboundList =outboundMapper.selectOutboundNotDoneList(pageOutboundRequestDTO);
-        List<OutboundDTO> outboundDTOList = outboundList.stream()
-                .map(vo -> modelMapper.map(vo, OutboundDTO.class))
+    public PageOutboundResponseDTO<OutboundNotDoneListDTO> getOutboundNotDoneList(PageOutboundRequestDTO pageOutboundRequestDTO) {
+        List<Outbound> outboundList = outboundMapper.selectOutboundNotDoneList(pageOutboundRequestDTO);
+        List<OutboundNotDoneListDTO> outboundDTOList = outboundList.stream()
+                .map(vo -> modelMapper.map(vo, OutboundNotDoneListDTO.class))
                 .collect(Collectors.toList());
 
         int total = outboundMapper.getCountOutboundNotDoneList(pageOutboundRequestDTO);
 
-        PageOutboundResponseDTO<OutboundDTO> pageOutboundResponseDTO = PageOutboundResponseDTO.
-                <OutboundDTO>withAll().dtoList(outboundDTOList)
+        PageOutboundResponseDTO<OutboundNotDoneListDTO> pageOutboundResponseDTO = PageOutboundResponseDTO.
+                <OutboundNotDoneListDTO>withAll().dtoList(outboundDTOList)
                 .total(total).pageOutboundRequestDTO(pageOutboundRequestDTO).build();
         return pageOutboundResponseDTO;
     }
 
-    
+
     //출고현황 조회
     @Override
-    public PageOutboundResponseDTO<OutboundDTO> getOutboundDoneList(PageOutboundRequestDTO pageOutboundRequestDTO) {
-        List<Outbound> outboundList =outboundMapper.selectOutboundDoneList(pageOutboundRequestDTO);
-        List<OutboundDTO> outboundDTOList = outboundList.stream()
-                .map(vo -> modelMapper.map(vo, OutboundDTO.class))
+    public PageOutboundResponseDTO<OutboundDoneListDTO> getOutboundDoneList(PageOutboundRequestDTO pageOutboundRequestDTO) {
+        List<Outbound> outboundList = outboundMapper.selectOutboundDoneList(pageOutboundRequestDTO);
+        List<OutboundDoneListDTO> outboundDTOList = outboundList.stream()
+                .map(vo -> modelMapper.map(vo, OutboundDoneListDTO.class))
                 .collect(Collectors.toList());
 
         int total = outboundMapper.getCountOutboundDoneList(pageOutboundRequestDTO);
 
-        PageOutboundResponseDTO<OutboundDTO> pageOutboundResponseDTO = PageOutboundResponseDTO.
-                <OutboundDTO>withAll().dtoList(outboundDTOList)
+        PageOutboundResponseDTO<OutboundDoneListDTO> pageOutboundResponseDTO = PageOutboundResponseDTO.
+                <OutboundDoneListDTO>withAll().dtoList(outboundDTOList)
                 .total(total).pageOutboundRequestDTO(pageOutboundRequestDTO).build();
         return pageOutboundResponseDTO;
     }

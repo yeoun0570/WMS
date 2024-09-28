@@ -1,6 +1,8 @@
 package lcw.lcw2_back.service.inbound;
 
 import lcw.lcw2_back.dto.inbound.InboundDTO;
+import lcw.lcw2_back.dto.inbound.InboundDoneListDTO;
+import lcw.lcw2_back.dto.inbound.InboundNotDoneListDTO;
 import lcw.lcw2_back.dto.inbound.page.PageInboundRequestDTO;
 import lcw.lcw2_back.dto.inbound.page.PageInboundResponseDTO;
 
@@ -17,10 +19,10 @@ public interface InboundService {
     void modifyInboundRejected(List<Long> inboundIds);
 
     //입고요청서 전체 조회
-    PageInboundResponseDTO<InboundDTO> getInboundNotDoneList(PageInboundRequestDTO pageInboundRequestDTO);
+    PageInboundResponseDTO<InboundNotDoneListDTO> getInboundNotDoneList(PageInboundRequestDTO pageInboundRequestDTO);
 
     //입고목록(처리) 전체 조회
-    PageInboundResponseDTO<InboundDTO> getInboundDoneList(PageInboundRequestDTO pageInboundRequestDTO);
+    PageInboundResponseDTO<InboundDoneListDTO> getInboundDoneList(PageInboundRequestDTO pageInboundRequestDTO);
 
     //진행상태 출고완료 스케줄링
     void modifyInboundCompleteOutbound();

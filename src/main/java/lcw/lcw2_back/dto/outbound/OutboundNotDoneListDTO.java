@@ -12,17 +12,12 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class OutboundDTO {
+public class OutboundNotDoneListDTO {
     private Long outboundId;
-    private String userId;
     private String status;
     private LocalDateTime requestDate;
-    private LocalDateTime approvedDate;
-    private LocalDateTime outboundCompleteDate;
-    private LocalDateTime inboundCompleteDate;
-    private Long arriveStorageId;
+    private String departStorageName;
+    private String arriveName;
     private boolean outboundMart;
-    private List<OutboundItemDTO> items;
-    private List<Long> outboundIds;
+    private String products;
 }
-

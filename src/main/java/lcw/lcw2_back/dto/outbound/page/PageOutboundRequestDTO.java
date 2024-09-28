@@ -8,7 +8,9 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.format.annotation.DateTimeFormat;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Builder
@@ -24,9 +26,11 @@ public class PageOutboundRequestDTO {
     private int size = 15;
     private String status; //검색조건 : 진행상태
     private String item; //검색조건 : 품목명
-    private LocalDateTime startDate; //검색조건 : 요청날짜 중 시작날짜
-    private LocalDateTime endDate; //검색조건 : 요청날짜 중 끝날짜
-    private String arriveStorageName; //검색조건 : 수신지 창고
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate startDate; //검색조건 : 요청날짜 중 시작날짜
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate endDate; //검색조건 : 요청날짜 중 끝날짜
+    private String arriveName; //검색조건 : 수신지
     private String outboundStorageName; //검색조건 : 출고 창고 (총관리자만 사용)
     private boolean outboundMart; //검색조건 : 마트출고여부
 
