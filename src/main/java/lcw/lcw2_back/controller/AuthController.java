@@ -4,12 +4,15 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import lcw.lcw2_back.auth.JwtTokenProvider;
+import lcw.lcw2_back.domain.notification.NotificationType;
 import lcw.lcw2_back.dto.auth.LoginJwtResponse;
 import lcw.lcw2_back.dto.auth.LoginRequest;
+import lcw.lcw2_back.dto.auth.SignInRequest;
 import lcw.lcw2_back.exception.auth.UserIdNotFoundException;
 import lcw.lcw2_back.exception.auth.UserPasswordNotCorrectException;
 import lcw.lcw2_back.exception.auth.UserStatusNotPermissionException;
 import lcw.lcw2_back.service.auth.AuthService;
+import lcw.lcw2_back.service.notification.NotificationService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -27,6 +30,7 @@ public class AuthController {
 
     private final AuthService authService;
     private final JwtTokenProvider jwtTokenProvider;
+    private final NotificationService notificationService;
 
     @PostMapping("/login")
     public ResponseEntity<Map<String,String>> login(@RequestBody LoginRequest loginRequest) {
@@ -64,6 +68,14 @@ public class AuthController {
 
         authService.logout(userId); // refresh, access token을 DB에서 지워주기
         return ResponseEntity.ok("로그아웃에 성공하였습니다.");
+    }
+    @PostMapping("/join")
+    public ResponseEntity<String> join(@RequestBody SignInRequest signInRequest) {
+        //userService에서 회원정보 저장하기 구현해야함.
+        // signInRequest를 디비에 저장하면 되것다.
+        notificationService.send("admin", NotificationType.MEMBER,"새 회원승인 요청");
+
+        return ResponseEntity.ok("success request signin");
     }
     @PostMapping("/reissue-access-token")
     public ResponseEntity<?> reissueAccessToken(@RequestHeader(value=JwtTokenProvider.REFRESH_HEADER_STRING, required=false) String refreshToken) {

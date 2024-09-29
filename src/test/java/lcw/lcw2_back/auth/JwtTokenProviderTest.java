@@ -74,7 +74,7 @@ class JwtTokenProviderTest {
         String userId = "qwe541";
         Role role = Role.MANAGER;
         authService.signIn(new SignInRequest(userId,null,"1234","고안나",
-                new Date(),"jh5045@naver.com","01022222","서울시 강남구","캠퍼스세븐",12355));
+                new Date(),"jh5045@naver.com","01022222"));
 
 
         //when,then
