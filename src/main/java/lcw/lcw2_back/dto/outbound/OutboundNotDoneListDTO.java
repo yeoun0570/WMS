@@ -4,7 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -15,7 +17,8 @@ import java.util.List;
 public class OutboundNotDoneListDTO {
     private Long outboundId;
     private String status;
-    private LocalDateTime requestDate;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate requestDate;
     private String departStorageName;
     private String arriveName;
     private boolean outboundMart;

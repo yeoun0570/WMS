@@ -10,6 +10,7 @@ export default function Outbound() {
   const [data, setData] = useState(null);
 
   //검색어 설정
+
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [item, setItem] = useState("");

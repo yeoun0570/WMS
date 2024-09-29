@@ -21,6 +21,7 @@ public class InboundDTO {
     private LocalDateTime outboundCompleteDate;
     private LocalDateTime inboundCompleteDate;
     private Long departStorageId;
+    private String departName;
     private List<InboundItemDTO> items;
     private List<Long> inboundIds;
 }

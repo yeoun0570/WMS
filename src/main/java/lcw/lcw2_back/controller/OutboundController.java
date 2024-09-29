@@ -26,6 +26,8 @@ public class OutboundController {
     //출고요청서 작성
     @PostMapping("outbound/write_outbound")
     public void writeOutbound(@RequestBody OutboundDTO outboundDTO) {
+        System.out.println("Received DTO: " + outboundDTO);
+        System.out.println("Items: " + outboundDTO.getItems());
         outboundService.registerOutbound(outboundDTO);
     }
 

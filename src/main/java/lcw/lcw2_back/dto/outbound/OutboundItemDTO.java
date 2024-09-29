@@ -16,6 +16,7 @@ public class OutboundItemDTO {
     private Long outboundId;
 
     private Long productId;
+    private String productName;
 
     private Long quantity;
 }

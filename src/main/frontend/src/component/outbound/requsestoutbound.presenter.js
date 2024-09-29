@@ -4,6 +4,8 @@
   export default function OutboundUI({
     data,
     status,
+    requestDate,
+    setRequestDate,
     setStatus,
     startDate,
     setStartDate,

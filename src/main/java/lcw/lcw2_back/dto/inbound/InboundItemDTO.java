@@ -13,5 +13,6 @@ public class InboundItemDTO {
     private Long itemId;
     private Long inboundId;
     private Long productId;
+    private String productName;
     private Long quantity;
 }
