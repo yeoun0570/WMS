@@ -1,28 +1,32 @@
 import styled from "@emotion/styled";
+import theme from "../../styles/theme";
 
 // 전체 컨테이너
 export const Container = styled.div`
   display: flex;
   flex-derection: colum;
-  margin: 20px, 400px;
+  margin: auto;
   width: 900px;
   height: 500px;
   background-color: white;
   border-radius: 20px;
+  aligen-items: center;
   box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+  border: ${theme.borders.greyBorder} !important;
 `;
 
 // 왼쪽 패널
-export const LeftPanel = styled.div`
+export const LeftPanel = styled.div`  
   flex: 1;
   background-color: #e1ebff;
   padding: 40px;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: flex-start;
+  align-items: center;
   border-top-left-radius: 8px;
   border-bottom-left-radius: 8px;
+  border: ${theme.borders.greyBorder} !important;
 `;
 
 export const TitleText = styled.h2`
