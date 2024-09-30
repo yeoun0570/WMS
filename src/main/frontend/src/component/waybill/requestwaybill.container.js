@@ -55,9 +55,6 @@ export default function Waybill() {
       setData(responseData);
       console.log("응답 데이터",responseData);
 
-
-      
-
             
     } catch (error) {
       console.error("데이터를 가져오는 중 오류가 발생했습니다:", error);
@@ -127,7 +124,7 @@ return (
 
         fetchData={fetchData} // fetchData 함수 전달
 
-        modifyWaybill={modifyWaybill}
+        modifyWaybill={modifyWaybill}//운송장 수정 함수
       /> // 데이터를 WaybillUI에 전달
     ) : (
       <p>데이터를 불러오는 중...</p>

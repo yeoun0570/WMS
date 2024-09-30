@@ -11,7 +11,8 @@ import {
   ExportOutlined,
   TeamOutlined,
   SettingOutlined,
-  CloseOutlined
+  CloseOutlined,
+  DesktopOutlined
 } from "@ant-design/icons";
 import themes from "../styles/theme";
 import { useState, useRef, useEffect } from "react";
