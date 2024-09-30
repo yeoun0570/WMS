@@ -1,6 +1,6 @@
 package lcw.lcw2_back.outbound.service;
 
-import lcw.lcw2_back.dto.StorageDTO;
+import lcw.lcw2_back.dto.storage.StorageDTO;
 import lcw.lcw2_back.service.storage.StorageService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
