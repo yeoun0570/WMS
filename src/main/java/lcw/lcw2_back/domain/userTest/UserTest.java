@@ -1,12 +1,11 @@
 package lcw.lcw2_back.domain.userTest;
 
-import lcw.lcw2_back.domain.storage.Storage;
 import lcw.lcw2_back.dto.auth.SignInRequest;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 @Getter
 @Setter
@@ -15,13 +14,13 @@ public class UserTest {
     //사원아이디 : PK
     private String userId;
     //창고아이디 : FK
-    private Storage storageId;
+    private String storageId;
     //비번
     private String userPw;
     //이름
     private String userName;
     //생년월일
-    private Date userBirth;
+    private LocalDate userBirth;
     //이메일
     private String userEmail;
     //전화번호
@@ -29,11 +28,7 @@ public class UserTest {
     //직책
     private Role userPosition;
     //계정 상태 : 활성화는 1, 비활성화는 0
-    private Byte userStatus;
-    //주소
-    private String userAddress;
-    private String userAddressDetail;
-    private Integer zipcode;
+    private String userStatus;
 
     public UserTest(SignInRequest sr){
         this.userId = sr.getUserId();
@@ -45,10 +40,6 @@ public class UserTest {
         this.userContact = sr.getUserContact();
         this.userPosition = Role.MANAGER;
         this.userStatus = null;
-        this.userAddress = sr.getUserAddress();
-        this.userAddressDetail = sr.getUserAddressDetail();
-        this.zipcode = sr.getZipcode();
-
     }
 
 }

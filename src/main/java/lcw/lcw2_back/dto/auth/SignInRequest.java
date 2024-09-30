@@ -3,22 +3,21 @@ package lcw.lcw2_back.dto.auth;
 import lcw.lcw2_back.domain.storage.Storage;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 @Getter
 @Setter
 @AllArgsConstructor
+@NoArgsConstructor
 public class SignInRequest {
     private String userId;
-    private Storage storageId;
+    private String storageId;
     private String userPw;
     private String userName;
-    private Date userBirth;
+    private LocalDate userBirth;
     private String userEmail;
     private String userContact;
-    private String userAddress;
-    private String userAddressDetail;
-    private Integer zipcode;
 }
