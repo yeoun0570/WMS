@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 //백이랑 연결 잘 되어 있는 지 테스트...
 export default function Home() {
   const [hello, setHello] = useState();
-  const { get } = useAPI();
+  const { get,post } = useAPI();
   /*useEffect(() => {//sse test
     const eventSource = new EventSource(
       "http://localhost:8080/api/test/notice?userId=1"
