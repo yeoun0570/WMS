@@ -28,10 +28,10 @@ export default function Home() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const result = await get("/hello");
+        const result = await get("/test/headerToken");
         setHello(result);
       } catch (error) {
-        console.error("데이터 가져오기 실패:", error);
+        console.error("데이터 가져오기 실패:", error.message);
       }
     };
 
