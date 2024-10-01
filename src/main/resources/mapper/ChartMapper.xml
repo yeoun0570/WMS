@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="lcw.lcw2_back.mapper.OutboundMapper">
+<!-- 최근 7일동안 출고 요청수 -->
+    <select id="getCountOutboundRequests" resultType="int">
+        SELECT COUNT(*)
+        FROM outbound o
+        JOIN Storage s_to ON o.arrive_storage_id = s_to.storage_id
+        JOIN User u_to ON s_to.storage_id = u_to.storage_id <!-- 요청서 조회할 아이디를 얻기 위한 JOIN -->
+        WHERE o.request_date BETWEEN DATE_SUB(now(), interval 7 day) AND now()
+        AND u_to.user_id = #{userId}
+    </select>
+    <!-- 최근 7일동안 출고(배송)완료수 -->
+    <select id="getCountOutboundComplete" resultType="int">
+        SELECT COUNT(*)
+        FROM outbound o
+        JOIN Storage s_to ON o.arrive_storage_id = s_to.storage_id
+        JOIN User u_to ON s_to.storage_id = u_to.storage_id <!-- 요청서 조회할 아이디를 얻기 위한 JOIN -->
+        WHERE o.inbound_complete_date BETWEEN DATE_SUB(now(), interval 7 day) AND now()
+        AND u_to.user_id = #{userId}
+    </select>
+
+    <!-- 최근 7일동안 입고 요청수 -->
+    <select id="getCountInboundRequests" resultType="int">
+        SELECT COUNT(*)
+        FROM intbound i
+        JOIN Storage s_from ON i.depart_storage_id = s_from.storage_id
+        JOIN User u_from ON s_from.storage_id = u_from.storage_id <!-- 요청서 조회할 아이디를 얻기 위한 JOIN -->
+        where i.request_date BETWEEN DATE_SUB(now(), interval 7 day) AND now()
+        AND u_from.user_id = #{userId}
+    </select>
+
+    <!-- 최근 7일동안 입고(배송)완료수 -->
+    <select id="getCountInboundDone" resultType="int">
+        SELECT COUNT(*)
+        FROM intbound i
+        JOIN Storage s_from ON i.depart_storage_id = s_from.storage_id
+        JOIN User u_from ON s_from.storage_id = u_from.storage_id <!-- 요청서 조회할 아이디를 얻기 위한 JOIN -->
+        where i.inbound_complete_date BETWEEN DATE_SUB(now(), interval 7 day) AND now()
+        AND u_from.user_id = #{userId}
+    </select>
+</mapper>

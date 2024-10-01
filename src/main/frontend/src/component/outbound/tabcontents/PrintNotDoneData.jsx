@@ -55,6 +55,7 @@ const columns = [
           if (type === "all") return true;
           if (type === "accepted") return item.status === "승인";
           if (type === "denied") return item.status === "미승인";
+          if (type === "search") return item;
           return false;
         })
       : [];
