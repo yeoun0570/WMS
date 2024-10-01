@@ -13,6 +13,7 @@
         w.depart_address,
         w.arrive_address,
         w.depart_address_detail,
+        w.arrive_address_detail,
         w.depart_zipcode,
         w.arrive_zipcode,
         w.depart_storage_name,

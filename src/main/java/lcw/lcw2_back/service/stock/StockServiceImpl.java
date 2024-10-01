@@ -4,10 +4,10 @@ import lcw.lcw2_back.domain.ListVO;
 import lcw.lcw2_back.domain.stock.StockVO;
 
 import lcw.lcw2_back.domain.storage.Storage;
-import lcw.lcw2_back.dto.StorageDTO;
 import lcw.lcw2_back.dto.stock.StockDTO;
 import lcw.lcw2_back.dto.stock.page.PageStockRequestDTO;
 import lcw.lcw2_back.dto.stock.page.PageStockResponseDTO;
+import lcw.lcw2_back.dto.storage.StorageDTO;
 import lcw.lcw2_back.mapper.StockMapper;
 import lcw.lcw2_back.mapper.StorageMapper;
 import lombok.RequiredArgsConstructor;
