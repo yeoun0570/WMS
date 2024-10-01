@@ -1,40 +1,18 @@
 import styled from "@emotion/styled";
-
-
-// InputWrapperStyled: input과 아이콘을 함께 묶는 스타일
-export const InputWrapperStyled = styled.div`
-  position: relative;
-  display: flex;
-  align-items: center;
-`;
-
-// IconButton: 아이콘 버튼 스타일
-export const IconButton = styled.button`
-  position: absolute;
-  right: 10px; // 오른쪽 여백 조정
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  color: gray; // 아이콘 색상
-  
-  &:focus {
-    outline: none;
-  }
-`;
-
+import theme from "../../styles/theme";
 
 export const Wrapper = styled.div`
-  width: 1200px;
+  width: 600px;
   /* height: 1847px; */
-  margin: 150px;
-  padding-top: 80px;
-  padding-bottom: 100px;
-  padding-left: 102px;
+  margin: 10px 130px;
+  padding-top: 40px;
+  padding-bottom: 40px;
+  padding-left: 0px;
   padding-right: 102px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  border: none;
+
 
   @media screen and (max-width: 767px) {
     /*모바일 */
@@ -44,15 +22,16 @@ export const Wrapper = styled.div`
     padding-left: 50px;
     padding-right: 50px;
     padding-bottom: 60px;
-  }
+  } 
 `;
 
 export const Title = styled.div`
   width: 100%;
-  text-align: center;
-  font-family: Arial, Helvetica, sans-serif;
+  text-align: left;
   font-size: 34px;
   font-weight: bold;
+  border-color: red;
+  
 
   @media screen and (max-width: 767px) {
     /*모바일 */
@@ -60,47 +39,8 @@ export const Title = styled.div`
   }
 `;
 
-export const NameWrapper = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  padding-top: 40px;
-  
-  @media screen and (max-width: 767px) {
-    /*모바일 */
-    padding-top: 20px;
-  }
-`;
 
-export const Name = styled.input`
-  width: 486px;
-  height: 52px;
-  background-color: white;
-  border: 0;
-  border-radius: 10px;
-  border: 1px solid #ced4da;
-  padding-left: 16px;
-
-  @media screen and (max-width: 767px) {
-    /*모바일 */
-    width: 230px;
-    height: 30px;
-  }
-`;
-
-export const Password = styled.input`
-  width: 996px;
-  height: 52px;
-  padding-left: 16px;
-  border: 1px solid #bdbdbd;
-  @media screen and (max-width: 767px) {
-    /*모바일 */
-    width: 230px;
-    height: 30px;
-  }
-`;
-
+/*Text*/
 export const Label = styled.div`
   padding-bottom: 16px;
   font-size: 16px;
@@ -122,17 +62,18 @@ export const InputWrapper = styled.div`
 `;
 
 export const Input = styled.input`
-  width: 996px;
-  height: 52px;
-  background-color: white;
-  border: 0;
-  border-radius: 10px;
-  border: 1px solid #ced4da;
-  padding-left: 16px;
+    width: 300px;
+    height: 32px;
+    font-size: 15px;
+    border: 0;
+    border-radius: 10px;
+    outline: none;
+    padding-left: 10px;
+    background-color: rgb(233,233,233);
+
   @media screen and (max-width: 767px) {
-  
     /*모바일 */
-    width: 500px;
+    width: 600px;
     height: 30px;
   }
 `;
@@ -140,12 +81,35 @@ export const Input = styled.input`
 export const ButtonWrapper = styled.div`
   display: flex;
   flex-direction: row;
-  justify-content: center;
-  padding-top: 40px;
+  align-items: left;
+  padding: 0px;
+  
+
   @media screen and (max-width: 767px) {
     /*모바일 */
     padding-top: 20px;
   }
+`;
+
+/*Button*/
+export const EmployeeListButton = styled.button`
+  width: 100px;
+  height: 50px;
+  background-color: white;
+  border: ${theme.borders.greyBorder}; 
+  border-radius: 0px;
+  font-size: 16px;
+  cursor: pointer;
+`;
+
+export const NonEmployeeButton = styled.button`
+  width: 100px;
+  height: 50px;
+  background-color: white;
+  border: ${theme.borders.greyBorder}; 
+  border-radius: 0px;
+  font-size: 16px;
+  cursor: pointer;
 `;
 
 export const CancelButton = styled.button`
@@ -164,22 +128,52 @@ export const CancelButton = styled.button`
 export const SubmitButton = styled.button`
   width: 179px;
   height: 52px;
+  font-size: 15px;
+  font-weight: 500;
   border: 0;
   border-radius: 15px;
   outline: none;
-  font-size: 16px;
-  font-weight: 500;
-  margin-left: 12px;
-  margin-right: 12px;
+  padding-left: 10px;
   background-color: #fab005;
   cursor: pointer;
 `;
 
+/* 재작성 해야 하는 경우*/
 export const Error = styled.div`
   font-size: 10px;
   color: red;
+
   @media screen and (max-width: 767px) {
     /*모바일 */
     font-size: 8px;
+  }
+`;
+
+/*Table*/
+export const TableWrapper = styled.div`
+  overflow-x: auto; /* 테이블이 화면을 넘어갈 때 스크롤 가능하도록 */
+  overflow-y: auto;
+`;
+
+export const Table = styled.table`
+  width: 100%;
+  border-collapse: collapse;
+`;
+
+export const Th = styled.th`
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+  background-color: glbLightGrey;
+`;
+
+export const Td = styled.td`
+  border: 1px solid #ddd;
+  padding: 8px;
+`;
+
+export const Tr = styled.tr`
+  &:nth-child(even) {
+    background-color: #f9f9f9;
   }
 `;
