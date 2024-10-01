@@ -159,6 +159,21 @@ export default function OutboundUI({
 
       <br></br>
       <br></br>
+      <label style={{ width: "98%", margin: "auto", paddingLeft: "10px" }}>발신지</label>
+      <Select
+        showSearch
+        placeholder="발신지"
+        onSearch={onSearch}
+        value={"자기 창고로 넣어야하는데............."}
+        disabled
+        style={{
+          width: "98%",
+          margin: "auto"
+        }}
+      />
+
+      <br/>
+
       <label style={{ width: "98%", margin: "auto", paddingLeft: "10px" }}>수신지</label>
       <Select
         showSearch
