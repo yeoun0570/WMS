@@ -16,12 +16,6 @@ public class InboundDTO {
     private Long inboundId;
     private String userId;
     private String status;
-    private LocalDateTime requestDate;
-    private LocalDateTime approvedDate;
-    private LocalDateTime outboundCompleteDate;
-    private LocalDateTime inboundCompleteDate;
-    private Long departStorageId;
-    private String departName;
+    private String departStorageName;
     private List<InboundItemDTO> items;
-    private List<Long> inboundIds;
 }

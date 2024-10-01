@@ -23,10 +23,10 @@ public class JwtInterceptor implements HandlerInterceptor {
         // 헤더에서 토큰을 가져오기
         System.out.println("토큰 유효성 검사..."+request);
         String token = jwtTokenProvider.resolveToken(request);
-        System.out.println("받은 토큰 : "+token);
         String userId = null;
         if(token!=null)
             userId = jwtTokenProvider.getUserId(token);
+        System.out.println("요청한 userId:"+userId);
 
         if (token == null || !jwtTokenProvider.validateToken(token)) {
             // 유효하지 않은 토큰이거나 없는 경우 401 반환

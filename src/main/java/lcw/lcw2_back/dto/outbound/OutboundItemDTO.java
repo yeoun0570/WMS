@@ -11,11 +11,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class OutboundItemDTO {
-    private Long itemId;
-
     private Long outboundId;
 
-    private Long productId;
     private String productName;
 
     private Long quantity;
