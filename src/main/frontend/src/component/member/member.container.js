@@ -1,81 +1,78 @@
 import MemberUI from "./member.presenter";
-import { useForm } from "react-hook-form";
-import { useRouter } from "next/router";
-import { errorModal } from "../../lib/util";
 import { useState,useEffect } from "react";
-import axios from "axios";
 import { useAPI } from "../../../src/axios/useAPI";
 
 
 export default function Member() {
-  const router = useRouter();
-  const { get, post } = useAPI();
-  const initialData = []; //초기 데이터
-  const [data, setData] = useState([]); // 데이터를 저장할 상태
-  const [userStatus, setUserStatus] = useState(1); // 현재 선택된 userStatus
-  
 
-  //******디비 연결 */
-  // API 호출 함수
+  /////////////////////////CONST/////////////////////////
+
+  const { get, post } = useAPI();
+
+  const [data, setData] = useState([]);
+
+  const [userStatus, setUserStatus] = useState("1");
+
+  const items = [{ key: '1', label: '사원목록' }, { key: '2', label: '비사원목록' }];
+  
+  const columns = [
+    {
+      title: '번호',
+      dataIndex: 'index',
+      key: 'index',
+      render: (text, record, index) => index + 1, // 행 번호를 1부터 시작
+    },
+    {
+      title: '이름',
+      dataIndex: 'userName',
+    },
+    {
+      title: '사원번호',
+      dataIndex: 'userId',
+    },
+    {
+      title: '이메일',
+      dataIndex: 'userEmail',
+    },
+    {
+      title: '근무처',
+      dataIndex: 'storageId',
+    },
+    {
+      title: '직함',
+      dataIndex: 'userPosition',
+    },
+  ];
+
+
+  
+  /////////////////////////METHOD/////////////////////////
+  
+  useEffect(() => {fetchData();}, [userStatus]);
+
   const fetchData = async () => {
     try {
-      const response = await post ('/user/list', {}); // 백엔드 API 호출
-
-      console.log(response.dto);
-
-      setData(response.dto.dtoList); // 응답 데이터를 테이블에 매핑
-
-    } catch (error) {
-      console.error("Error fetching user data: ", error);
-    }
-  };
-
-  useEffect(() => {
-    fetchData();
-  }, []);
-
-
-
-  const fetchMemberList = async (userStatus) => {
-    try {
+      const responseData = await post("/user/list", { userStatus });
+  
+      const userList = Array.isArray(responseData.dto) ? responseData.dto : [responseData.dto];
       
+      setData(userList);
+  
     } catch (error) {
-      if (error instanceof Error) errorModal("fail", error.message);
-    }
-  }
-
-  const onSubmitBoard = async (data) => {
-    try {
-      console.log(data);
-      //rest든 graphql이든 우리 백앤드로 data로 날리는 구간(await)
-      router.push(`/wms`);
-    } catch (error) {
-      if (error instanceof Error) errorModal("fail", error.message);
+      console.error('데이터를 가져오는 중 오류 발생:', error);
     }
   };
 
-
-  const onError = (data) => {
-    errorModal("fail", "빈칸없이 입력해주세요");
-  };
   
-     // 목록 토글 핸들러
-    const showEmployeeList = () => {
-      setUserStatus(1); // 사원 목록 버튼 클릭 시 userStatus를 1로 설정
-    };
-  
-    const showNonEmployeeList = () => {
-      setUserStatus(0); // 비사원 목록 버튼 클릭 시 userStatus를 0으로 설정
-    };
+  const handleTabChange = (key) => {setUserStatus(key);};
 
 
-
-
+  /////////////////////////RETURN/////////////////////////
 
   return <MemberUI 
-    data = {data}
-    showEmployeeList = {showEmployeeList}
-    showNonEmployeeList={showNonEmployeeList}
-    fetchData={fetchData}
-    />;
+    data={data}
+    items={items}
+    columns={columns}
+    onChange={handleTabChange}
+  />;
 }

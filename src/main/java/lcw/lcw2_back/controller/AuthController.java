@@ -1,11 +1,6 @@
 package lcw.lcw2_back.controller;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jws;
-import io.jsonwebtoken.Jwt;
-import io.jsonwebtoken.Jwts;
 import lcw.lcw2_back.auth.JwtTokenProvider;
-import lcw.lcw2_back.domain.notification.NotificationType;
 import lcw.lcw2_back.dto.auth.LoginJwtResponse;
 import lcw.lcw2_back.dto.auth.LoginRequest;
 import lcw.lcw2_back.dto.auth.SignInRequest;
@@ -14,15 +9,12 @@ import lcw.lcw2_back.exception.auth.UserIdNotFoundException;
 import lcw.lcw2_back.exception.auth.UserPasswordNotCorrectException;
 import lcw.lcw2_back.exception.auth.UserStatusNotPermissionException;
 import lcw.lcw2_back.service.auth.AuthService;
-import lcw.lcw2_back.service.notification.NotificationService;
 import lcw.lcw2_back.service.user.UserService;
 import lombok.AllArgsConstructor;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
 
