@@ -31,4 +31,7 @@ public interface UserService {
 
     //8) profile delete
     boolean deleteUserProfile(String userId);
+
+    //9)회원가입 요청 미승인 시 데이터베이스에서 삭제
+    boolean deleteNewUser(String userId);
 }

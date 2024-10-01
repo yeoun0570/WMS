@@ -33,6 +33,10 @@ public class UserServiceImpl implements UserService {
     @Value("${spring.cloud.gcp.storage.bucket}")
     private String bucketName;
 
+
+    @Override
+    public boolean deleteNewUser(String userId) {return userMapper.deleteNewUser(userId) > 0;}
+
     @Override
     public PageUserResponseDTO<UserDTO> getUserList(PageUserRequestDTO pageUserRequestDTO) {
         List<User> userList = userMapper.selectUserList(pageUserRequestDTO);

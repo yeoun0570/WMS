@@ -9,6 +9,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
+import java.util.List;
+
 
 @Builder
 @Data
@@ -26,6 +28,7 @@ public class PageUserRequestDTO {
     private String userPosition; //검색조건 : 직책
     @Builder.Default
     private String userStatus = "1"; //0, 1, 2 : 미승인, 비사원, 사원
+    private List<String> userIds;
 
     public Pageable getPageable(String...props) {
         return PageRequest.of(this.page -1, this.size, Sort.by(props).descending());
