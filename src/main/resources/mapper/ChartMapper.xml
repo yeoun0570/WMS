@@ -2,18 +2,46 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="lcw.lcw2_back.mapper.OutboundMapper">
-<!-- 최근 7일동안 출고 요청수 -->
-    <select id="getCountOutboundRequests" resultType="int">
+<mapper namespace="lcw.lcw2_back.mapper.ChartMapper">
+
+    <!-- 대기중인 출고 요청수(미승인) -->
+    <select id="selectCountOutboundNotDoneList" resultType="int">
+        SELECT COUNT(*)
+        FROM outbound o
+                 JOIN Storage s_to ON o.arrive_storage_id = s_to.storage_id
+                 JOIN User u_to ON s_to.storage_id = u_to.storage_id
+        WHERE o.status LIKE '미승인'
+        AND u_to.user_id = #{userId}
+    </select>
+
+    <!-- 대기중인 입고 요청수(미승인) -->
+    <select id="selectCountInboundNotDoneList" resultType="int">
+        SELECT COUNT(*)
+        FROM inbound i
+        JOIN Storage s_from ON i.depart_storage_id = s_from.storage_id
+        JOIN User u_from ON s_from.storage_id = u_from.storage_id
+        WHERE i.status LIKE '미승인'
+        AND u_from.user_id = #{userId}
+    </select>
+
+
+
+
+
+
+
+
+    <!-- 최근 7일동안 출고 요청수 -->
+    <select id="selectCountOutboundWeekendRequests" resultType="int">
         SELECT COUNT(*)
         FROM outbound o
         JOIN Storage s_to ON o.arrive_storage_id = s_to.storage_id
-        JOIN User u_to ON s_to.storage_id = u_to.storage_id <!-- 요청서 조회할 아이디를 얻기 위한 JOIN -->
+        JOIN User u_to ON s_to.storage_id = u_to.storage_id
         WHERE o.request_date BETWEEN DATE_SUB(now(), interval 7 day) AND now()
         AND u_to.user_id = #{userId}
     </select>
     <!-- 최근 7일동안 출고(배송)완료수 -->
-    <select id="getCountOutboundComplete" resultType="int">
+    <select id="selectCountOutboundWeekendComplete" resultType="int">
         SELECT COUNT(*)
         FROM outbound o
         JOIN Storage s_to ON o.arrive_storage_id = s_to.storage_id
@@ -23,9 +51,9 @@
     </select>
 
     <!-- 최근 7일동안 입고 요청수 -->
-    <select id="getCountInboundRequests" resultType="int">
+    <select id="selectCountInboundWeekendRequests" resultType="int">
         SELECT COUNT(*)
-        FROM intbound i
+        FROM inbound i
         JOIN Storage s_from ON i.depart_storage_id = s_from.storage_id
         JOIN User u_from ON s_from.storage_id = u_from.storage_id <!-- 요청서 조회할 아이디를 얻기 위한 JOIN -->
         where i.request_date BETWEEN DATE_SUB(now(), interval 7 day) AND now()
@@ -33,12 +61,219 @@
     </select>
 
     <!-- 최근 7일동안 입고(배송)완료수 -->
-    <select id="getCountInboundDone" resultType="int">
+    <select id="selectCountInboundWeekendDone" resultType="int">
         SELECT COUNT(*)
-        FROM intbound i
+        FROM inbound i
         JOIN Storage s_from ON i.depart_storage_id = s_from.storage_id
         JOIN User u_from ON s_from.storage_id = u_from.storage_id <!-- 요청서 조회할 아이디를 얻기 위한 JOIN -->
         where i.inbound_complete_date BETWEEN DATE_SUB(now(), interval 7 day) AND now()
         AND u_from.user_id = #{userId}
+    </select>
+
+
+
+
+
+
+
+    <!-- 손실 - 이번달 지출 [{12일, ₩1405, 2024-09-10}]배열꼴 -->
+    <select id="selectLoss"  resultType="lcw.lcw2_back.domain.chart.DatasetVO">
+        SELECT loss_date, loss_cost
+        FROM loss_history l
+                 JOIN storage s ON l.storage_id = s.storage_id
+                 JOIN user u ON s.storage_id = u.storage_id
+        WHERE l.loss_date BETWEEN date_format(now(), '%Y-%m-01') AND last_day(now())
+          AND u.user_id = #{userId}
+    </select>
+
+
+
+
+
+
+
+
+    <!-- 이번달 입고 예정량(미승인) -->
+    <select id="selectCountInboundMonthNotApproved" resultType="int">
+        SELECT COUNT(*)
+        FROM inbound i
+                 JOIN Storage s_from ON i.depart_storage_id = s_from.storage_id
+                 JOIN User u_from ON s_from.storage_id = u_from.storage_id
+        where i.request_date BETWEEN date_format(now(), '%Y-%m-01') AND last_day(now())
+          AND i.status = '미승인'
+          AND u_from.user_id = #{userId}
+    </select>
+
+    <!-- 이번달 입고 처리중(승인) -->
+    <select id="selectCountInboundMonthApproved" resultType="int">
+        SELECT COUNT(*)
+        FROM inbound i
+                 JOIN Storage s_from ON i.depart_storage_id = s_from.storage_id
+                 JOIN User u_from ON s_from.storage_id = u_from.storage_id
+        where i.approved_date BETWEEN date_format(now(), '%Y-%m-01') AND last_day(now())
+          AND i.status = '승인'
+          AND u_from.user_id = #{userId}
+    </select>
+
+    <!-- 이번달 입고완료 -->
+    <select id="selectCountInboundMonthDone" resultType="int">
+        SELECT COUNT(*)
+        FROM inbound i
+                 JOIN Storage s_from ON i.depart_storage_id = s_from.storage_id
+                 JOIN User u_from ON s_from.storage_id = u_from.storage_id
+        where i.inbound_complete_date BETWEEN date_format(now(), '%Y-%m-01') AND last_day(now())
+          AND i.status = '입고완료'
+          AND u_from.user_id = #{userId}
+    </select>
+
+    <!-- 이번달 총입고요청서 수 -->
+    <select id="selectCountInboundMonth" resultType="int">
+        SELECT COUNT(*)
+        FROM inbound i
+                 JOIN Storage s_from ON i.depart_storage_id = s_from.storage_id
+                 JOIN User u_from ON s_from.storage_id = u_from.storage_id
+        WHERE (
+            i.request_date BETWEEN date_format(now(), '%Y-%m-01') AND last_day(now())
+                OR i.approved_date BETWEEN date_format(now(), '%Y-%m-01') AND last_day(now())
+                OR i.inbound_complete_date BETWEEN date_format(now(), '%Y-%m-01') AND last_day(now())
+                OR i.outbound_complete_date BETWEEN date_format(now(), '%Y-%m-01') AND last_day(now())
+            )
+          AND u_from.user_id = #{userId}
+    </select>
+
+
+
+
+
+
+
+
+
+    <!-- 이번달 출고 예정량(미승인) -->
+    <select id="selectCountOutboundMonthNotApproved" resultType="int">
+        SELECT COUNT(*)
+        FROM outbound o
+                 JOIN Storage s_to ON o.arrive_storage_id = s_to.storage_id
+                 JOIN User u_to ON s_to.storage_id = u_to.storage_id
+        WHERE o.request_date BETWEEN date_format(now(), '%Y-%m-01') AND last_day(now())
+          AND o.status = '미승인'
+          AND u_to.user_id = #{userId}
+    </select>
+
+    <!-- 이번달 출고 처리중(승인) -->
+    <select id="selectCountOutboundMonthApproved" resultType="int">
+        SELECT COUNT(*)
+        FROM outbound o
+                 JOIN Storage s_to ON o.arrive_storage_id = s_to.storage_id
+                 JOIN User u_to ON s_to.storage_id = u_to.storage_id
+        WHERE o.approved_date BETWEEN date_format(now(), '%Y-%m-01') AND last_day(now())
+          AND o.status = '승인'
+          AND u_to.user_id = #{userId}
+    </select>
+
+    <!-- 이번달 출고완료 -->
+    <select id="selectCountOutboundMonthDone" resultType="int">
+        SELECT COUNT(*)
+        FROM outbound o
+                 JOIN Storage s_to ON o.arrive_storage_id = s_to.storage_id
+                 JOIN User u_to ON s_to.storage_id = u_to.storage_id
+        WHERE o.outbound_complete_date BETWEEN date_format(now(), '%Y-%m-01') AND last_day(now())
+          AND o.status = '출고완료'
+          AND u_to.user_id = #{userId}
+    </select>
+
+    <!-- 이번달 총출고요청서 수 -->
+    <select id="selectCountOutboundMonth" resultType="int">
+        SELECT COUNT(*)
+        FROM outbound o
+                 JOIN Storage s_to ON o.arrive_storage_id = s_to.storage_id
+                 JOIN User u_to ON s_to.storage_id = u_to.storage_id
+        WHERE (
+            o.request_date BETWEEN date_format(now(), '%Y-%m-01') AND last_day(now())
+                OR o.approved_date BETWEEN date_format(now(), '%Y-%m-01') AND last_day(now())
+                OR o.outbound_complete_date BETWEEN date_format(now(), '%Y-%m-01') AND last_day(now())
+                OR o.outbound_complete_date BETWEEN date_format(now(), '%Y-%m-01') AND last_day(now())
+            )
+          AND u_to.user_id = #{userId}
+    </select>
+
+
+<!-- 재고추이(입고)-->
+
+
+<!--창고 사용률-->
+    <select id="selectStorageUsed" resultType="lcw.lcw2_back.domain.chart.DatasetVO">
+        SELECT
+            st.storage_name,
+            st.storage_area,
+            p.product_name,
+            p.area_per_product,
+            s.stock_quantity,
+            (p.area_per_product * s.stock_quantity) AS total_area_used -- 물품 면적 * 재고 수량
+        FROM
+            stock s
+                JOIN
+            product p ON s.product_id = p.product_id
+                JOIN
+            storage st ON s.storage_id = st.storage_id
+                JOIN
+            User u ON st.storage_id = u.storage_id
+        WHERE u.user_id = #{userId}
+        ORDER BY
+            s.storage_id, p.product_id
+    </select>
+
+
+<!-- 재고 추이 -->
+    <select id="selectStockTend" resultType="lcw.lcw2_back.domain.chart.DatasetVO">
+        SELECT
+            COALESCE(inbound_data.month, outbound_data.month) AS month,
+        COALESCE(inbound_data.product_id, outbound_data.product_id) AS product_id,
+        COALESCE(inbound_data.product_name, outbound_data.product_name) AS product_name,
+        COALESCE(inbound_data.total_inbound, 0) AS total_inbound,
+        COALESCE(outbound_data.total_outbound, 0) AS total_outbound,
+        (COALESCE(inbound_data.total_inbound, 0) - COALESCE(outbound_data.total_outbound, 0)) AS stock_change
+        FROM
+            -- 입고 데이터를 서브쿼리로 사용
+            (
+            SELECT
+            DATE_FORMAT(i.inbound_complete_date, '%Y-%m') AS month,
+            p.product_id,
+            p.product_name,
+            SUM(s.stock_quantity) AS total_inbound -- 입고량 = 입고추이
+            FROM
+            inbound i
+            JOIN stock s ON i.depart_storage_id = s.storage_id
+            JOIN product p ON s.product_id = p.product_id
+            WHERE
+            i.inbound_complete_date IS NOT NULL
+            AND i.status = '입고완료'
+            AND i.user_id = #{userId} -- 특정 사용자의 데이터 필터링
+            GROUP BY
+            month, p.product_id
+            ) AS inbound_data
+
+            -- 출고 데이터를 서브쿼리로 사용
+            LEFT JOIN
+            (
+            SELECT
+            DATE_FORMAT(o.outbound_complete_date, '%Y-%m') AS month,
+            p.product_id,
+            p.product_name,
+            SUM(s.stock_quantity) AS total_outbound -- 출고량 = 출고추이
+            FROM
+            outbound o
+            JOIN stock s ON o.arrive_storage_id = s.storage_id
+            JOIN product p ON s.product_id = p.product_id
+            WHERE
+            o.outbound_complete_date IS NOT NULL
+            AND o.status = '출고완료'
+            AND o.user_id = #{userId} -- 특정 사용자의 데이터 필터링
+            GROUP BY
+            month, p.product_id
+            ) AS outbound_data
+        ON inbound_data.month = outbound_data.month
+            AND inbound_data.product_id = outbound_data.product_id
+        ORDER BY month, product_id;
     </select>
 </mapper>
