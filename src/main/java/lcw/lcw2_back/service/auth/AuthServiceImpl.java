@@ -75,7 +75,7 @@ public class AuthServiceImpl implements AuthService{
     public LoginJwtResponse reissueAccessToken(String refreshToken) {
 
         String userId = jwtTokenProvider.getUserId(refreshToken);
-
+        System.out.println("리프레시 토큰으ㅏ로 userId가져오는것 성공:"+userId);
         Date expiration = jwtTokenProvider.getExpiration(refreshToken);
         //실제로는 user Table 에서 직접 가져오는것이 맞겠지...
         String role = jwtTokenProvider.getRole(refreshToken);
@@ -87,6 +87,7 @@ public class AuthServiceImpl implements AuthService{
         }
         // 재발급
         String accessToken = jwtTokenProvider.createAccessToken(userId,Enum.valueOf(Role.class,role));
+        System.out.println("재발급된 리프레시 토큰 : "+accessToken);
 
         return new LoginJwtResponse(accessToken, refreshToken);
     }

@@ -19,9 +19,10 @@ export const useAPI = () => {
   //http요청시 accessToken 자동으로 추가
   api.interceptors.request.use(
     (config) => {
-      if (state.accessToken) {
-        console.log(state.accessToken);
-        config.headers.Authorization = state.accessToken;
+      const storedAccessToken = sessionStorage.getItem("accessToken"); // 세션 스토리지에서 가져오기
+      if (storedAccessToken) {
+        console.log(storedAccessToken);
+        config.headers.Authorization = storedAccessToken;
       }
       return config;
     },
@@ -29,7 +30,6 @@ export const useAPI = () => {
       return Promise.reject(error);
     }
   );
-
   //401 error : accessToken 기간만료시 (401) 다시 재발급 요청.
   //203 error : 토큰이 없음 => 로그인 하지 않음 login page로 리다이렉트
   api.interceptors.response.use(
@@ -65,11 +65,9 @@ export const useAPI = () => {
           // RefreshToken으로 새 AccessToken 발급 요청
           const response = await axios.post(
             "http://localhost:8080/auth/reissue-access-token",
-            {
-              refreshToken,
-            }
+            refreshToken
           );
-          const newAccessToken = response.data.accessToken;
+          const newAccessToken = response.data.Authorization;
           console.log("newAccessToken : " + newAccessToken);
           // 새 AccessToken을 Context와 세션 스토리지에 저장
           dispatch({
@@ -82,7 +80,7 @@ export const useAPI = () => {
 
           originalRequest.headers.Authorization = newAccessToken;
           return api(originalRequest);
-        } catch (error) {
+        } catch (refreshError) {
           console.error("Access Token 재발급 실패:", refreshError);
           // 재발급 실패 시 로그인 페이지로 이동
           router.push("/login");
