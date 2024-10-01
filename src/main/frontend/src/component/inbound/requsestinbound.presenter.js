@@ -2,7 +2,7 @@ import * as S from "./requsestinbound.styles";
 import React from "react";
 import { Divider, Tabs, Table, Button } from 'antd';
 import SearchContent from "./tabcontents/SearchNotDoneContent";
-import PrintData from "./tabcontents/PrintNoteDoneData";
+import PrintData from "./tabcontents/PrintNotDoneData";
 
 export default function InboundUI({
   data,
