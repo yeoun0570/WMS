@@ -1,5 +1,6 @@
 package lcw.lcw2_back.service.auth;
 
+import lcw.lcw2_back.domain.user.User;
 import lcw.lcw2_back.dto.auth.LoginJwtResponse;
 import lcw.lcw2_back.dto.auth.LoginRequest;
 import lcw.lcw2_back.dto.auth.SignInRequest;
@@ -15,4 +16,6 @@ public interface AuthService {
     public void signIn(SignInRequest signInRequest);
     //토큰재발급
     public LoginJwtResponse reissueAccessToken(String refreshToken);
+    //로그인 유저의 정보를 가져옵니다.
+    public User getLoginUserInfo();
 }

@@ -23,6 +23,7 @@ import java.util.Date;
 @AllArgsConstructor
 public class AuthServiceImpl implements AuthService{
 
+    private final UserInfo userInfo;
     private final UserMapper userMapper;
     private final JwtTokenProvider jwtTokenProvider;
     private final PasswordEncoder passwordEncoder;
@@ -45,6 +46,16 @@ public class AuthServiceImpl implements AuthService{
 
         if(storageUser.getUserStatus()==null)
             throw new UserStatusNotPermissionException("회원 계정이 승인되지 않았습니다.");
+
+        //UserInfo 에 login 한 유저정보 저장.
+        userInfo.setUserName(user.getUserName());
+        userInfo.setUserBirth(user.getUserBirth());
+        userInfo.setUserContact(user.getUserContact());
+        userInfo.setUserEmail(user.getUserEmail());
+        userInfo.setUserPosition(user.getUserPosition());
+        userInfo.setUserId(user.getUserId());
+        userInfo.setUserProfile(user.getUserProfile());
+        userInfo.setStorageId(user.getStorageId());
 
         return jwtTokenProvider.createLoginToken(user.getUserId(),user.getUserPosition());
     }
@@ -90,5 +101,11 @@ public class AuthServiceImpl implements AuthService{
         System.out.println("재발급된 리프레시 토큰 : "+accessToken);
 
         return new LoginJwtResponse(accessToken, refreshToken);
+    }
+
+    @Override
+    public User getLoginUserInfo(){
+        return new User(userInfo.getUserId(),"비밀번호는 가져올 수 없습니다.",userInfo.getUserName(),userInfo.getUserPosition(),userInfo.getStorageId()
+                ,userInfo.getUserBirth(), userInfo.getUserEmail(), userInfo.getUserContact(),"1", userInfo.getUserProfile());
     }
 }
