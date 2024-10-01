@@ -22,34 +22,40 @@ public class NotificationServiceImpl implements NotificationService{
 
     @Override
     public SseEmitter connectSSE(String userId) {
+        System.out.println("연결시도중....");
         String emitterId = userId;
-        SseEmitter emitter = emitterRepository.save(emitterId,new SseEmitter(timeout));
-
-        emitter.onCompletion(()->{
-            updateNotificationTableByUserId(userId);
-            emitterRepository.deleteById(emitterId);
-            //로그아웃이나 타임아웃시에 디비접근해서 한꺼번에 읽음 처리
-        });
-        emitter.onTimeout(()->{
-            updateNotificationTableByUserId(userId);
-            emitterRepository.deleteById(emitterId);
-        });
+        SseEmitter emitter = emitterRepository.findEmitterByUserId(userId);
+        if(emitter == null) {
+            emitter = emitterRepository.save(emitterId, new SseEmitter(-1L));
+            emitter.onCompletion(()->{
+                updateNotificationTableByUserId(userId);
+                //emitterRepository.deleteById(emitterId);
+                //로그아웃이나 타임아웃시에 디비접근해서 한꺼번에 읽음 처리
+            });
+            emitter.onTimeout(()->{
+                updateNotificationTableByUserId(userId);
+                emitterRepository.deleteById(emitterId);
+            });
+        }
         updateEventCacheFromNotificationDB(userId);
         //연결시 통지들 cache에 들고온다.
 
         //503 error 방지=> 더미 이벤트 전송해주기
         String eventId = System.currentTimeMillis()+"@"+userId;
-        sendNotification(emitter,eventId,emitterId,"[create SSE Connection] userId : "+userId);
+        sendNotification(emitter,eventId,emitterId,"dummy");
         return emitter;
     }
 
 
+    //로그아웃일때 객체를 삭제하자.
     @Override
     public void closeSSEConnect(String userId){
         SseEmitter sseEmitter = emitterRepository.findEmitterByUserId(userId);
         if (sseEmitter != null) {
             // SSE 연결 해제
             sseEmitter.complete();
+            emitterRepository.deleteById(userId);
+            updateNotificationTableByUserId(userId);
         }
     }
 
@@ -79,7 +85,7 @@ public class NotificationServiceImpl implements NotificationService{
         Notification notification= notificationRepository.save(new Notification(eventId,receivedUserId, notificationType.name(), content,notificationType));
 
 
-        SseEmitter emitter = emitterRepository.findEmitterByUserId(String.valueOf(receivedUserId));
+        SseEmitter emitter = emitterRepository.findEmitterByUserId(receivedUserId);
         emitterRepository.saveEventCache(eventId,notification);
         if(emitter == null){
             System.out.println("상대방이 로그아웃인 상태이거나 받을 수 없습니다.");
