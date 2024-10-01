@@ -17,6 +17,7 @@ import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Service
@@ -31,9 +32,17 @@ public class AuthServiceImpl implements AuthService{
 
     @Override
     public LoginJwtResponse login(LoginRequest loginRequest) throws UserIdNotFoundException, UserPasswordNotCorrectException {
-        if(loginRequest.getUserId().equals("admin")) //admin은 걍 로그인 되게하자.
-            return jwtTokenProvider.createLoginToken(loginRequest.getUserId(),Role.GENERAL_MANAGER);
-
+        if(loginRequest.getUserId().equals("admin")) {//admin은 걍 로그인 되게하자.
+            userInfo.setUserName("임꺽정");
+            userInfo.setUserBirth(LocalDate.of(1879,12,25));
+            userInfo.setUserContact("01000000000");
+            userInfo.setUserEmail("llld545@ssg.com");
+            userInfo.setUserPosition(Role.GENERAL_MANAGER);
+            userInfo.setUserId("admin");
+            userInfo.setUserProfile(null);
+            userInfo.setStorageId(null);
+            return jwtTokenProvider.createLoginToken(loginRequest.getUserId(), Role.GENERAL_MANAGER);
+        }
         User user = userMapper.selectUserById(loginRequest.getUserId());
         if(user==null) throw new UserIdNotFoundException("유저 이름을 찾을 수 없습니다.");
 

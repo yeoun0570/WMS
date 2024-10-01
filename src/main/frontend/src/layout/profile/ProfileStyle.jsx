@@ -2,6 +2,7 @@ import styled from "@emotion/styled";
 import theme from "../../styles/theme";
 
 export const ProfileModal = styled.div`
+  z-index: 100;
   position: fixed;
   top: 0;
   right: 0;
@@ -27,7 +28,7 @@ export const ProfileCard = styled.div`
 
   alignitems: center;
   overflow: hidden;
-`
+`;
 
 // 카드 상단 헤더 스타일
 export const ProfileHeader = styled.div`
@@ -100,10 +101,9 @@ export const Icon = styled.button`
   padding: 15px;
   border: none;
   cursor: pointer;
-  
+
   // hover 속성 추가
   &:hover {
     background-color: ${theme.colors.glbDarkOrange};
   }
 `;
-

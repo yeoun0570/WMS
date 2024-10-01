@@ -1,10 +1,13 @@
 package lcw.lcw2_back.controller;
 
 import jakarta.validation.Valid;
+import lcw.lcw2_back.domain.user.User;
 import lcw.lcw2_back.dto.user.UserDTO;
 import lcw.lcw2_back.dto.user.page.PageUserRequestDTO;
 import lcw.lcw2_back.dto.user.page.PageUserResponseDTO;
+import lcw.lcw2_back.service.auth.AuthService;
 import lcw.lcw2_back.service.user.UserService;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
@@ -26,8 +29,15 @@ public class UserController {
 
 
     private final UserService userService;
+    private final AuthService authService;
 
-    @DeleteMapping("/user/delete")
+    @GetMapping("/info")
+    public ResponseEntity<User> getLoginUserInfo(){
+        System.out.println("로그인유저정보ID: "+authService.getLoginUserInfo().getUserId());
+        return ResponseEntity.ok(authService.getLoginUserInfo());
+    }
+
+    @DeleteMapping("/delete")
     public ResponseEntity<String> deleteUsers(@RequestBody @Valid PageUserRequestDTO pageUserRequestDTO, BindingResult bindingResult) {
         List<String> userIds = pageUserRequestDTO.getUserIds();
         String status = pageUserRequestDTO.getUserStatus();
