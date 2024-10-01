@@ -19,7 +19,7 @@ public class PageStockRequestDTO {
     private int page = 1;
 
     @Builder.Default
-    private int size = 15;
+    private int size = 1000;
 
 
     /**프론트 입력값들**/
