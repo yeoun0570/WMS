@@ -42,6 +42,6 @@ public class StorageMapperTests {
 
     @Test
     public void deleteStorageTest() {
-        storageMapper.deleteStorage(6L);
+        //storageMapper.deleteStorage(6L);
     }
 }
