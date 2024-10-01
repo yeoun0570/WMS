@@ -3,10 +3,12 @@ import { useState,useEffect } from "react";
 import { useAPI } from "../../axios/useAPI";
 import { useForm } from "react-hook-form";
 import React from "react";
+import { useRouter } from "next/router";
 
 
 export default function MyPage() {
 
+  const [profile, setProfile] = useState({});
   const {
     register,
     handleSubmit,
@@ -26,28 +28,40 @@ export default function MyPage() {
 
   
   /////////////////////////METHOD/////////////////////////
-  
 
-  const fetchData = async () => {
+  //내 프로필 정보 받아오기
+  const getUserInfo = async () => {
     try {
-      const responseData = await get("/user/list", { '현재 로그인한 유저의 아이디' });
-  
-      const userList = Array.isArray(responseData.dto) ? responseData.dto : [responseData.dto];
-      
-      setData(userList);
-  
+      const response = await get("user/info");
+      console.log(response.data.userPosition);
+      setProfile({
+        id: response.data.userId,
+        url: response.data.userProfile,
+        name: response.data.userName,
+        email: response.data.userEmail,
+        role: response.data.userPosition,
+      });
     } catch (error) {
-      console.error('데이터를 가져오는 중 오류 발생:', error);
+      setProfile({
+        id: "숫자일까 문자일까",
+        url: "../../../public/img/gyulobal1.png",
+        name: "김정우",
+      });
+    } finally {
     }
   };
 
+  useEffect(() => {
+    console.log("내정보 들어오니??");
+    getUserInfo();
+  }, []);
 
   /////////////////////////RETURN/////////////////////////
 
   return <MyPageUI
-    data={data}
-    items={items}
-    columns={columns}
-    onChange={handleTabChange}
+    profile={profile}
+    // items={items}
+    // columns={columns}
+    // onChange={handleTabChange}
   />;
 }
