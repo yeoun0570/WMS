@@ -67,6 +67,7 @@ public class NotificationServiceImpl implements NotificationService{
             emitter.send(sseEventBuilder);
         } catch (IOException e) {
             emitterRepository.deleteById(emitterId);
+            updateNotificationTableByUserId(emitterId);
             System.err.println("sendNotification 에서 오류가 발생함 :"+e.getMessage());
         }
     }

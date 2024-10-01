@@ -29,7 +29,7 @@ class JwtTokenProviderTest {
     void beforeEach(){
         jwtTokenProvider = new JwtTokenProvider(Keys.secretKeyFor(SignatureAlgorithm.HS256).toString(),"ko",
                 new MemoryAccessTokenRepository(),new MemoryRefreshTokenRepository());
-        authService = new AuthServiceImpl(new MemoryUserRepository(),jwtTokenProvider,new PasswordEncoder("salt"));
+        //authService = new AuthServiceImpl(new MemoryUserRepository(),jwtTokenProvider,new PasswordEncoder("salt"));
     }
     @Test
     @DisplayName("secretKey")

@@ -1,10 +1,10 @@
-import axios from "axios";
+import { useAPI } from "../axios/useAPI";
 import { useRouter } from "next/router";
 import LayoutHeader from "./header/header";
 import LayoutNavigation from "./navigation/navigation";
 import LayoutFooter from "./footer/footer";
 import { Breadcrumb, Layout, theme, Button, Drawer } from "antd";
-import { 
+import {
   InboxOutlined,
   PieChartOutlined,
   ImportOutlined,
@@ -30,6 +30,7 @@ const LOGIN_PAGE = [
   //여기다가 로그인 페이지만 넣고 네비 안뜨게 설정하자구~
 ];
 export default function LayoutPage(props) {
+  const { get } = useAPI();
   const router = useRouter();
   const isLoginPage = LOGIN_PAGE.includes(router.asPath);
   const [notices, setNotices] = useState([]);
@@ -42,6 +43,7 @@ export default function LayoutPage(props) {
 
   const [noticeOpen, setNoticeOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
+  const [profileFlag, setProfileFlag] = useState(false);
   const modalRef = useRef();
 
   //sse 관련 변수
@@ -126,11 +128,20 @@ export default function LayoutPage(props) {
   const showProfile = async () => {
     setProfileOpen(true);
     setLoading(true);
+    if (!profileFlag) getUserInfo();
+    setProfileFlag(true);
+  };
+  //내 프로필 정보 받아오기
+  const getUserInfo = async () => {
     try {
-      const response = await axios.get(
-        "http://localhost:8080/api//test/profile"
-      );
-      setProfile(response.data);
+      const response = await get("user/info");
+      console.log(response.data);
+      setProfile({
+        id: response.data.userId,
+        url: response.data.userProfile,
+        name: response.data.userName,
+        email: response.data.userEmail,
+      });
     } catch (error) {
       setProfile({
         id: "숫자일까 문자일까",
@@ -141,7 +152,6 @@ export default function LayoutPage(props) {
       setLoading(false);
     }
   };
-
   // 바깥 클릭 감지
   useEffect(() => {
     const handleClickOutside = (event) => {
