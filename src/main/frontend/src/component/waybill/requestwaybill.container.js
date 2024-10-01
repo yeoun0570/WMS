@@ -195,6 +195,7 @@ export default function Waybill() {
         departZipcode: record.departZipcode,
         arriveZipcode: record.arriveZipcode,
       };
+      console.log("?!?!?!??!?!??",pageWaybillRequestDTO);
 
       await post("/waybill/modify", pageWaybillRequestDTO);
       fetchData(); // 수정 후 데이터를 다시 로드
