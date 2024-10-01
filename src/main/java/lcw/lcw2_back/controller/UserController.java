@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -26,6 +27,13 @@ public class UserController {
 
     private final UserService userService;
 
+    @DeleteMapping("/user/delete")
+    public ResponseEntity<String> deleteUsers(@RequestBody @Valid PageUserRequestDTO pageUserRequestDTO, BindingResult bindingResult) {
+        List<String> userIds = pageUserRequestDTO.getUserIds();
+        String status = pageUserRequestDTO.getUserStatus();
+        int deletedCount = (int) userIds.stream().filter(userService::deleteNewUser).count();
+        return ResponseEntity.ok(deletedCount + " 개의 회원 가입 요청이 미승인 처리 됨.");
+    }
 
 
     @PostMapping("/register")
@@ -74,11 +82,11 @@ public class UserController {
     }
 
     @PutMapping("/update/status")
-    public ResponseEntity<String> updateUserStatus(@RequestBody Map<String, String> userStatus) {
-        boolean updated = userService.updateUserStatus(userStatus);
-        return updated
-                ? ResponseEntity.ok("성공 : 사용자 상태 업데이트 완료")
-                : ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("실패 : 사용자 상태 업데이트 실패");
+    public ResponseEntity<String> updateUserStatus(@RequestBody @Valid PageUserRequestDTO pageUserRequestDTO, BindingResult bindingResult) {
+        List<String> userIds = pageUserRequestDTO.getUserIds();
+        String status = pageUserRequestDTO.getUserStatus();
+        int updatedCount = (int) userIds.stream().filter(userId -> userService.updateUserStatus(Map.of("userStatus", status, "userId", userId))).count();
+        return ResponseEntity.ok(updatedCount + " 성공 : 사용자 상태 업데이트 완료");
     }
 
     @PostMapping("/profile/upload")
