@@ -11,7 +11,6 @@ import {
 
 export default function NoticeUI(props) {
   const [isHoverd, setIsHovered] = useState(false);
-  console.log("프롭스 ", props);
   return (
     <>
       <Card

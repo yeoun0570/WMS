@@ -2,7 +2,6 @@ package lcw.lcw2_back.service.stock;
 
 import lcw.lcw2_back.domain.ListVO;
 import lcw.lcw2_back.domain.storage.Storage;
-import lcw.lcw2_back.dto.StorageDTO;
 import lcw.lcw2_back.dto.stock.StockDTO;
 import lcw.lcw2_back.dto.stock.page.PageStockRequestDTO;
 import lcw.lcw2_back.dto.stock.page.PageStockResponseDTO;

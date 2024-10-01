@@ -1,10 +1,10 @@
 package lcw.lcw2_back.dto.waybill.page;
 
 
-import lcw.lcw2_back.dto.StorageDTO;
 import lcw.lcw2_back.dto.inbound.InboundItemDTO;
 import lcw.lcw2_back.dto.outbound.OutboundItemDTO;
 
+import lcw.lcw2_back.dto.storage.StorageDTO;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;

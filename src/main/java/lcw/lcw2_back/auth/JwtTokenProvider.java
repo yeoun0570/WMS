@@ -20,7 +20,7 @@ import java.util.Date;
 
 @Component
 public class JwtTokenProvider {
-    public final static long ACCESS_TOKEN_TIME = 1000*60*60*60;//30min
+    public final static long ACCESS_TOKEN_TIME = 1000*60;//30min
     public final static String ACCESS_PREFIX_STRING = "Bearer ";
     public final static String ACCESS_HEADER_STRING = "Authorization";
     public final static String REFRESH_HEADER_STRING = "RefreshToken";
@@ -164,13 +164,19 @@ public class JwtTokenProvider {
     }
 
     public boolean validateToken(String accessToken){
-        AccessToken ret = accessTokenRepository.findTokenByUserId(this.getUserId(accessToken));
-        return ret != null && !ret.getExpiration().before(new Date());
+        AccessToken ret;
+        try{
+            ret = accessTokenRepository.findTokenByUserId(this.getUserId(accessToken));
+        } catch (NullPointerException e) {
+            System.out.println("null pointer exception");
+            return false;
+        }
+        return ret.getExpiration().after(new Date());
     }
     public boolean validateRefreshToken(String refreshToken){
 
         RefreshToken ret = refreshTokenRepository.findTokenByUserId(this.getUserId(refreshToken));
-        return ret != null && !ret.getExpiration().after(new Date());//현재 시간이 만료라면
+        return ret != null && ret.getExpiration().after(new Date());//현재 시간이 만료라면
     }
 
     public void deleteTokenByUserId(String userId){

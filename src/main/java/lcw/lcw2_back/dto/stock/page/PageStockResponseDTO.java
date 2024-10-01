@@ -2,7 +2,7 @@ package lcw.lcw2_back.dto.stock.page;
 
 import lcw.lcw2_back.domain.ListVO;
 import lcw.lcw2_back.domain.storage.Storage;
-import lcw.lcw2_back.dto.StorageDTO;
+import lcw.lcw2_back.dto.storage.StorageDTO;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
