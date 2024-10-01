@@ -27,13 +27,13 @@ export default function LoginUI(props) {
         {props.errors.password && <S.Error>비밀번호를 입력해주세요.</S.Error>}
       </S.InputWrapper>
       <S.ButtonWrapper>
-        <S.CancelButton onClick={props.onClickJoin}>Join</S.CancelButton>
+        <S.CancelButton onClick={props.onClickJoin}>회원가입</S.CancelButton>
         <S.SubmitButton
           isActive={props.isValid}
           type="submit"
           onClick={props.handleSubmit(props.onSubmitBoard, props.onError)}
         >
-          Sign in
+          로그인
         </S.SubmitButton>
       </S.ButtonWrapper>
     </S.Wrapper>

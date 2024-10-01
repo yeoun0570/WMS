@@ -173,7 +173,7 @@ export const ButtonWrapper = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  padding: 40px;
+  padding: 60px;
   @media screen and (max-width: 767px) {
     /*모바일 */
     padding-top: 20px;
@@ -181,27 +181,27 @@ export const ButtonWrapper = styled.div`
 `;
 
 export const CancelButton = styled.button`
-  width: 150px;
-  height: 52px;
+  width: 140px;
+  height: 40px;
   background-color: #ced4da;
   border: 0;
   border-radius: 15px;
   font-size: 16px;
   font-weight: 500;
-  margin-left: 12px;
+  margin-left: 3px;
   margin-right: 12px;
   cursor: pointer;
 `;
 
 export const SubmitButton = styled.button`
-  width: 150px;
-  height: 52px;
+  width: 140px;
+  height: 40px;
   font-size: 15px;
   font-weight: 500;
   border: 0;
   border-radius: 15px;
   outline: none;
-  padding-left: 10px;
+  padding-left: 5px;
   background-color: #fab005;
   cursor: pointer;
 `;
