@@ -9,9 +9,10 @@ export const Wrapper = styled.div`
 export const Title = styled.div`
   width: 100%;
   padding-top: 6px;
-  text-align: center;
-  font-size: 16px;
-  font-weight: bold;
+  margin-left: 10px;
+  text-align: start;
+  font-size: 15px;
+  font-weight: normal;
 
 
   @media screen and (max-width: 767px) {

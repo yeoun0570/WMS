@@ -23,6 +23,23 @@ export const Htable = styled(Table)`
     font-weight: 200; /*폰트 굵기*/
 }
 
+.ant-table-cell > .ant-btn-primary {
+  background-color: ${theme.colors.glbOrange};
+
+  &:hover {
+    background-color: ${theme.colors.glbDarkOrange};
+  }
+}
+
+.ant-table-cell > .ant-btn-default {
+  background-color: ${theme.colors.glbWhite};
+
+  &:hover {
+    color: ${theme.colors.glbOrange};
+    border-color: ${theme.colors.glbOrange};
+  }
+}
+
 .ant-table-cell-control-interactive {
     width: 80px;  /* 컨트롤 크기 */
 }
