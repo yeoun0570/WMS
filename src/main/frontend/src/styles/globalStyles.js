@@ -5,6 +5,7 @@ export const globalStyles = css`
   *:not(.anticon) {
     margin: 0;
     box-sizing: border-box;
+    font-family: "myFont";
     font-size: 16px;
     font-weight: bold;
   }
@@ -16,16 +17,12 @@ export const globalStyles = css`
     font-weight: bold;
   }
 
-
-
   /* 마우스 호버 시 배경색 변경 */
   .ant-layout-sider-trigger:hover {
     background-color: ${theme.colors.glbDarkOrange} !important;
     color: white !important;
     border-right: solid 1px white;
   }
-
-
 
   /* 서브 메뉴 */
   .ant-menu-submenu-title {
@@ -36,7 +33,8 @@ export const globalStyles = css`
     border-top: solid 1px ${theme.colors.glbWhite};
     margin-inline: 8px !important;
 
-    transition: background-color 0.3s ease, color 0.3s ease, margin 0.3s ease, padding 0.3s ease;
+    transition: background-color 0.3s ease, color 0.3s ease, margin 0.3s ease,
+      padding 0.3s ease;
   }
 
   .ant-menu-submenu-title:hover {
@@ -55,10 +53,9 @@ export const globalStyles = css`
 
     margin-inline: 8px !important;
 
-    transition: background-color 0.3s ease, color 0.3s ease, margin 0.3s ease, padding 0.3s ease;
+    transition: background-color 0.3s ease, color 0.3s ease, margin 0.3s ease,
+      padding 0.3s ease;
   }
-
-  
 
   /* 메뉴 아이템 */
   .ant-menu-item {
@@ -72,10 +69,8 @@ export const globalStyles = css`
     background-color: ${theme.colors.glbGrey} !important;
   }
 
-
-
   /* 선택된 메뉴 아이템 */
-  .ant-menu-item-selected,  {
+  .ant-menu-item-selected {
     background-color: ${theme.colors.glbWhite} !important;
     color: ${theme.colors.glbOrange} !important;
   }
@@ -83,7 +78,6 @@ export const globalStyles = css`
   .ant-menu-item-selected:active {
     background-color: ${theme.colors.glbDarkGrey} !important;
   }
-
 
   /* 테두리 설정 */
   .last-item {
@@ -94,7 +88,7 @@ export const globalStyles = css`
   @font-face {
     //전체 폰트설정은 여기서 해주자고
     font-family: "myFont";
-    src: url("/fonts/NanumSquareRoundR.ttf");
+    src: url("/fonts/NanumSquareRoundR.ttf") format("truetype");
   }
 
   /* 테이블 설정 */
@@ -103,26 +97,26 @@ export const globalStyles = css`
   }
 
   .ant-tabs-tab-btn[aria-selected="false"]:hover {
-      color: ${theme.colors.glbOrange} !important;
+    color: ${theme.colors.glbOrange} !important;
   }
 
   .ant-tabs-ink-bar {
     background-color: ${theme.colors.glbOrange} !important;
   }
-  
+
   .ant-pagination-item {
     border-color: ${theme.colors.glbOrange} !important;
   }
 
   .ant-pagination-item {
-    border : none !important;
+    border: none !important;
   }
 
-  .ant-pagination-item>a {
+  .ant-pagination-item > a {
     color: ${theme.colors.glbBlack} !important;
   }
 
-  .ant-pagination-item-active>a {
+  .ant-pagination-item-active > a {
     border: solid 1px ${theme.colors.glbOrange};
     border-radius: 6px;
     color: ${theme.colors.glbOrange} !important;
