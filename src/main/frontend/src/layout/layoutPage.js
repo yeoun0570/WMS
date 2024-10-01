@@ -273,11 +273,16 @@ export default function LayoutPage(props) {
 
           {/* 프로필 창 */}
           {profileOpen && (
-            <>
-              <P.ProfileModal ref={modalRef}>
-                <ProfileItem profile={profile} />
-              </P.ProfileModal>
-            </>
+            <P.ProfileModal ref={modalRef}>
+              <ProfileItem 
+                profile={profile}
+                router={router}
+                setPage={setPage}
+                setDetail={setDetail}
+                pageMap={pageMap}
+                setProfileOpen={setProfileOpen}
+                 />
+            </P.ProfileModal>
           )}
 
           <Content

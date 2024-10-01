@@ -1,6 +1,7 @@
 import * as S from "./requestwaybill.styles";
 import * as H from "../../styles/pageStyles";
-import { useState } from 'react';
+import AddressInput from "./AddressInput";
+import { useEffect, useState } from 'react';
 import { Button, Modal } from 'antd';
 
 const columns = ({ showModal }) => [
@@ -53,6 +54,32 @@ export default function WaybillUI({ data, fetchData, modifyWaybill }) {
   const [selectedRecord, setSelectedRecord] = useState(null);
   const [modifiedData, setModifiedData] = useState({}); // 수정된 데이터를 저장할 상태
 
+  const [arriveZonecode, setArriveZonecode] = useState('');
+  const [arriveAddress, setArriveAddress] = useState('');
+  const [arriveDetailedAddress, setArriveDetailedAddress] = useState('');
+
+  const [departZonecode, setDepartZonecode] = useState('');
+  const [departAddress, setDepartAddress] = useState('');
+  const [departDetailedAddress, setDepartDetailedAddress] = useState('');
+
+  useEffect(() => {
+    setModifiedData((prev) => ({
+      ...prev,
+      departZipcode: departZonecode,
+      departAddress: departAddress,
+      departAddressDetail: departDetailedAddress,
+    }));
+  }, [departZonecode, departAddress, departDetailedAddress]);
+
+  useEffect(() => {
+    setModifiedData((prev) => ({
+      ...prev,
+      arriveZipcode: arriveZonecode,
+      arriveAddress: arriveAddress,
+      arriveAddressDetail: arriveDetailedAddress,
+    }));
+  }, [arriveZonecode, arriveAddress, arriveDetailedAddress]);
+
   const showModal = (record) => {
     setSelectedRecord(record);
     setModifiedData({
@@ -82,6 +109,7 @@ export default function WaybillUI({ data, fetchData, modifyWaybill }) {
 
   const handleSubmit = async () => {
     const success = await modifyWaybill(modifiedData); // 수정된 데이터로 수정 요청
+    console.log("!!!!!!!!", modifiedData);
 
     if (success) {
       fetchData(); // 데이터를 갱신하여 테이블 업데이트
@@ -113,101 +141,121 @@ export default function WaybillUI({ data, fetchData, modifyWaybill }) {
       />
 
       <Modal
-        title="상세정보 수정"
+        title="상세정보"
         visible={isModalVisible}
         onCancel={handleModalCancel}
         footer={null}
+        centered
       >
         {selectedRecord && (
-          <div>
-            <p>운송장번호: {selectedRecord.waybillId}</p>
+          <S.Wrapper style={{ borderTop: "solid 1px #f0f0f0" }}>
+            <S.Input>
+              <div>운송장번호</div>
+              <input
+                name="waybillId"
+                defaultValue={selectedRecord.waybillId}
+                readOnly />
+            </S.Input>
 
-            <div>
-              <label>발신지 주소:</label>
+            <S.Input>
+              <div>발신지 주소</div>
+              <div style={{ display: "flex" }}>
+                <input
+                  readOnly
+                  value={departZonecode || modifiedData.departZipcode}
+                  name="departZipcode"
+                  onChange={handleInputChange}
+                  style={{ width: "0px" }} />
+                <AddressInput setZonecode={setDepartZonecode} setAddress={setDepartAddress} />
+              </div>
+            </S.Input>
+            <S.Input>
               <input
                 type="text"
                 name="departAddress"
-                value={modifiedData.departAddress}
                 onChange={handleInputChange}
+                value={departAddress || modifiedData.departAddress}
               />
-            </div>
-            <div>
-              <label>상세주소:</label>
+            </S.Input>
+            <S.Input>
+              <div>상세주소</div>
               <input
                 type="text"
                 name="departAddressDetail"
-                value={modifiedData.departAddressDetail}
-                onChange={handleInputChange}
-              />
-            </div>
-            <div>
-              <label>우편번호:</label>
-              <input
-                type="text"
-                name="departZipcode"
-                value={modifiedData.departZipcode}
-                onChange={handleInputChange}
-              />
-            </div>
-            <div>
-              <label>수신지 주소:</label>
+                value={departDetailedAddress || modifiedData.departAddressDetail}
+                onChange={handleInputChange} />
+            </S.Input>
+
+            <S.Input>
+              <div>수신지 주소</div>
+              <div style={{ display: "flex" }}>
+                <input
+                  readOnly
+                  value={arriveZonecode || modifiedData.arriveZipcode}
+                  name="arriveZipcode"
+                  onChange={handleInputChange}
+                  style={{ width: "0px" }} />
+                <AddressInput setZonecode={setArriveZonecode} setAddress={setArriveAddress} />
+              </div>
+            </S.Input>
+            <S.Input>
               <input
                 type="text"
                 name="arriveAddress"
-                value={modifiedData.arriveAddress}
                 onChange={handleInputChange}
+                value={arriveAddress || modifiedData.arriveAddress}
               />
-            </div>
-            <div>
-              <label>상세주소:</label>
+            </S.Input>
+            <S.Input>
+              <div>상세주소</div>
               <input
                 type="text"
                 name="arriveAddressDetail"
-                value={modifiedData.arriveAddressDetail}
-                onChange={handleInputChange}
-              />
-            </div>
-            <div>
-              <label>우편번호:</label>
-              <input
-                type="text"
-                name="arriveZipcode"
-                value={modifiedData.arriveZipcode}
-                onChange={handleInputChange}
-              />
-            </div>
+                value={arriveDetailedAddress || modifiedData.arriveAddressDetail}
+                onChange={handleInputChange} />
+            </S.Input>
+
+            <div style={{ borderBottom: "solid 1px #f0f0f0" }} />
 
             {/* 입고 품목 목록 */}
             {selectedRecord.inboundItemList && selectedRecord.inboundItemList.length > 0 && (
-              <div>
-                <h4>입고 품목</h4>
+              <S.Input>
+                <div style={{ fontSize: "15px" }}>입고 품목</div>
+                <div style={{display: "flex"}}>
+                  <div>상품 ID</div>
+                  <div>수량</div>
+                </div>
                 {selectedRecord.inboundItemList.map((item, idx) => (
-                  <div key={idx}>
-                    <p>상품 ID: {item.productId}</p>
-                    <p>수량: {item.quantity}</p>
+                  <div key={idx} style={{display: "flex", gap: "6px", marginBottom: "3px"}}>
+                    <input defaultValue={item.productId} readOnly/>
+                    <input defaultValue={item.quantity} readOnly/>
                   </div>
                 ))}
-              </div>
+              </S.Input>
             )}
 
             {/* 출고 품목 목록 */}
             {selectedRecord.outboundItemList && selectedRecord.outboundItemList.length > 0 && (
-              <div>
-                <h4>출고 품목</h4>
-                {selectedRecord.outboundItemList.map((item, idx) => (
-                  <div key={idx}>
-                    <p>상품 ID: {item.productId}</p>
-                    <p>수량: {item.quantity}</p>
-                  </div>
-                ))}
+              <S.Input>
+              <div style={{ fontSize: "15px" }}>출고 품목</div>
+              <div style={{display: "flex"}}>
+                <div>상품 ID</div>
+                <div>수량</div>
               </div>
+              {selectedRecord.outboundItemList.map((item, idx) => (
+                <div key={idx} style={{display: "flex", gap: "6px", marginBottom: "3px"}}>
+                  <input defaultValue={item.productId} readOnly/>
+                  <input defaultValue={item.quantity} readOnly/>
+                </div>
+              ))}
+            </S.Input>
             )}
 
-            <div style={{ marginTop: '16px' }}>
-              <Button onClick={handleSubmit}>수정</Button>
-              <Button onClick={handleModalCancel} style={{ marginLeft: '8px' }}>취소</Button>
+            <div style={{ marginTop: '16px', display: "flex", justifyContent: "end" }}>
+              <S.MyButton onClick={handleSubmit}>수정</S.MyButton>
+              <S.MyButton onClick={handleModalCancel} style={{ marginLeft: '8px' }}>취소</S.MyButton>
             </div>
-          </div>
+          </S.Wrapper>
         )}
       </Modal>
     </div>

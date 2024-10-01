@@ -1,67 +1,67 @@
 import { useAPI } from "../../axios/useAPI";
 import * as S from "./stock.styles";
 import * as H from "../../styles/pageStyles";
-import { SearchOutlined } from '@ant-design/icons';
+import { SearchOutlined, ReloadOutlined } from '@ant-design/icons';
 import React, { useState, useEffect } from 'react';
 import { Divider, Table, Input, Button, message } from 'antd';
 
 const columns = ({
-  editingKey, 
-  setEditingKey, 
-  editedQuantity, 
-  setEditedQuantity, 
-  handleSave, 
-  handleCancel 
+  editingKey,
+  setEditingKey,
+  editedQuantity,
+  setEditedQuantity,
+  handleSave,
+  handleCancel
 }) => [
-  {
-    title: '상품Id',
-    dataIndex: 'productId',
-  },
-  {
-    title: '상품명',
-    dataIndex: 'productName',
-  },
-  {
-    title: '창고ID',
-    dataIndex: 'storageId',
-  },
-  {
-    title: '창고이름',
-    dataIndex: 'storageName',
-  },
-  {
-    title: '재고',
-    dataIndex: 'stockQuantity',
-    render: (text, record) => {
-      return editingKey === record.key ? (
-        <Input
-          value={editedQuantity}
-          onChange={(e) => setEditedQuantity(e.target.value)} 
-          style={{ width: '100px' }}
-        />
-      ) : (
-        text
-      );
+    {
+      title: '상품Id',
+      dataIndex: 'productId',
     },
-  },
-  {
-    title: '수정',
-    dataIndex: 'edit',
-    render: (_, record) => {
-      const editable = editingKey === record.key;
-      return editable ? (
-        <>
-          <Button onClick={() => handleSave(record)} type="primary" style={{ marginRight: 8 }}>
-            확인
-          </Button>
-          <Button onClick={handleCancel}>취소</Button>
-        </>
-      ) : (
-        <Button onClick={() => setEditingKey(record.key)}>수정</Button>
-      );
+    {
+      title: '상품명',
+      dataIndex: 'productName',
     },
-  },
-];
+    {
+      title: '창고ID',
+      dataIndex: 'storageId',
+    },
+    {
+      title: '창고이름',
+      dataIndex: 'storageName',
+    },
+    {
+      title: '재고',
+      dataIndex: 'stockQuantity',
+      render: (text, record) => {
+        return editingKey === record.key ? (
+          <Input
+            value={editedQuantity}
+            onChange={(e) => setEditedQuantity(e.target.value)}
+            style={{ width: '100px' }}
+          />
+        ) : (
+          text
+        );
+      },
+    },
+    {
+      title: '수정',
+      dataIndex: 'edit',
+      render: (_, record) => {
+        const editable = editingKey === record.key;
+        return editable ? (
+          <>
+            <Button onClick={() => handleSave(record)} type="primary" style={{ marginRight: 8 }}>
+              확인
+            </Button>
+            <Button onClick={handleCancel}>취소</Button>
+          </>
+        ) : (
+          <Button onClick={() => setEditingKey(record.key)}>수정</Button>
+        );
+      },
+    },
+  ];
 
 const rowSelection = {
   onChange: (selectedRowKeys, selectedRows) => {
@@ -80,8 +80,8 @@ const App = ({
   setQuantity,
 }) => {
   const [selectionType, setSelectionType] = useState('checkbox');
-  const [editingKey, setEditingKey] = useState(''); 
-  const [editedQuantity, setEditedQuantity] = useState(''); 
+  const [editingKey, setEditingKey] = useState('');
+  const [editedQuantity, setEditedQuantity] = useState('');
 
   const { post } = useAPI();
 
@@ -94,7 +94,7 @@ const App = ({
   //     };
 
   //     const response = await post(`/stock/modify`, params);
-      
+
   //     if (response.status === 200) {
   //       message.success('재고가 성공적으로 수정되었습니다.');
   //       fetchData(); 
@@ -114,22 +114,22 @@ const App = ({
         storageId: record.storageId,
         quantity: editedQuantity,  // editedQuantity는 상태로 관리
       };
-  
+
       // POST 요청을 통해 수량 수정 API 호출
       const response = await post(`/stock/modify`, params);
 
-      console.log("응답!!!!!!",response);
-      
-      console.log("응답.status!!!!!!",response.status);
-      
-      
+      console.log("응답!!!!!!", response);
+
+      console.log("응답.status!!!!!!", response.status);
+
+
       // 응답이 성공적인 경우
       if (response.status === 'success') {
         message.success('재고가 성공적으로 수정되었습니다.');
-  
+
         // 재고 목록을 새로 고침하여 업데이트
         fetchData();  // 데이터를 다시 가져와서 상태를 업데이트
-        
+
         // 수정 모드 종료
         setEditingKey('');
       } else {
@@ -142,10 +142,10 @@ const App = ({
       console.error('에러 발생:', error);
     }
   };
-  
-  
+
+
   const handleCancel = () => {
-    setEditingKey(''); 
+    setEditingKey('');
   };
 
   const tableData = data?.dtoList?.map((item, index) => ({
@@ -158,7 +158,7 @@ const App = ({
   }));
 
   const handleSearch = () => {
-    fetchData(); 
+    fetchData();
   };
 
   const handleReset = () => {
@@ -174,47 +174,55 @@ const App = ({
 
   return (
     <>
-      <H.HSelectWrapper>
-        <S.Title>품목</S.Title>
-        <H.HSelect
-          showSearch
-          placeholder="품목을 선택해주세요"
-          onChange={(value) => setProductName(value)}
-          value={productName}
-          options={data?.productList?.map((p, index) => ({
-            key: index + 1,
-            label: p.content,
-            value: p.content,
-          }))}
-        />
+      <H.HSelectWrapper style={{ width: "auto", justifyContent: "start" }}>
+        <div>
+          <S.Title>품목</S.Title>
+          <H.HSelect
+            showSearch
+            placeholder="품목을 선택해주세요"
+            onChange={(value) => setProductName(value)}
+            value={productName || undefined}
+            style={{ width: "auto", minWidth: "200px", marginRight: "3px" }}
+            options={data?.productList?.map((p, index) => ({
+              key: index + 1,
+              label: p.content,
+              value: p.content,
+            }))}
+          />
+        </div>
 
-        <S.Title>창고별</S.Title>
-        <H.HSelect
-          showSearch
-          placeholder="창고를 선택해주세요"
-          onChange={(value) => setStorageName(value)}
-          value={storageName}
-          options={data?.storageDTOList?.map((s, index) => ({
-            key: index + 1,
-            label: s.storageName,
-            value: s.storageName,
-          }))}
-        />
+        <div>
+          <S.Title>창고별</S.Title>
+          <H.HSelect
+            showSearch
+            placeholder="창고를 선택해주세요"
+            onChange={(value) => setStorageName(value)}
+            value={storageName || undefined}
+            style={{ width: "auto", minWidth: "150px", marginRight: "6px" }}
+            options={data?.storageDTOList?.map((s, index) => ({
+              key: index + 1,
+              label: s.storageName,
+              value: s.storageName,
+            }))}
+          />
+        </div>
+
+        <div style={{ display: 'flex', gap: '3px' }}>
+          <H.HButtonWrapper style={{marginRight: "3px"}}>
+            <H.HButtonDefault type="primary" icon={<SearchOutlined />} onClick={handleSearch}>
+              검색
+            </H.HButtonDefault>
+          </H.HButtonWrapper>
+
+          <H.HButtonWrapper>
+            <H.HButtonDefault type="default" icon={<ReloadOutlined />} onClick={handleReset}>
+              초기화
+            </H.HButtonDefault>
+          </H.HButtonWrapper>
+        </div>
       </H.HSelectWrapper>
 
-      <div style={{ display: 'flex', gap: '10px' }}>
-        <H.HButtonWrapper>
-          <H.HButtonDefault type="primary" icon={<SearchOutlined />} onClick={handleSearch}>
-            검색
-          </H.HButtonDefault>
-        </H.HButtonWrapper>
 
-        <H.HButtonWrapper>
-          <H.HButtonDefault type="default" icon={<SearchOutlined />} onClick={handleReset}>
-            초기화
-          </H.HButtonDefault>
-        </H.HButtonWrapper>
-      </div>
 
       <Divider />
 

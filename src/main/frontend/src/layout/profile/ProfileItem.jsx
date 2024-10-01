@@ -5,7 +5,12 @@ import * as P from "./ProfileStyle";
 import { HomeOutlined, UserOutlined } from "@ant-design/icons";
 
 export default function ProfileItem(props) {
-  console.log("qewrqr: " + props.id);
+  const onClickMyPage = () => {
+    props.setProfileOpen(false);
+    props.setPage(props.pageMap["/wms/mypage"][0]);
+    props.setDetail(props.pageMap["/wms/mypage"][1]);
+    props.router.push("/wms/mypage");
+  };
   return (
     <P.ProfileCard>
       <P.ProfileHeader>{props.profile.id}</P.ProfileHeader>
@@ -20,7 +25,7 @@ export default function ProfileItem(props) {
             <HomeOutlined />
           </P.Icon>
           <P.Icon>
-            <UserOutlined />
+            <UserOutlined onClick={onClickMyPage} />
           </P.Icon>
         </P.ProfileIcons>
       </P.ProfileBody>
