@@ -7,6 +7,7 @@ import lcw.lcw2_back.domain.user.User;
 import lcw.lcw2_back.dto.user.UserDTO;
 import lcw.lcw2_back.dto.user.page.PageUserRequestDTO;
 import lcw.lcw2_back.dto.user.page.PageUserResponseDTO;
+import lcw.lcw2_back.global.Utils.PasswordEncoder;
 import lcw.lcw2_back.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -29,6 +30,7 @@ public class UserServiceImpl implements UserService {
 
     private final ModelMapper modelMapper;
     private final UserMapper userMapper;
+    private final PasswordEncoder passwordEncoder;
     private final Storage storage;
     @Value("${spring.cloud.gcp.storage.bucket}")
     private String bucketName;
@@ -62,6 +64,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean insertNewUser(UserDTO userDTO) {
         System.out.println("잘들어옴");
+        String encodePassword = passwordEncoder.getSHA256EncryptedPassword(userDTO.getUserPw());
+        userDTO.setUserPw(encodePassword);
         return userMapper.insertNewUser(modelMapper.map(userDTO, User.class)) > 0;
     }
 
