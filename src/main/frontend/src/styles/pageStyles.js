@@ -100,16 +100,28 @@ export const HButtonSuccess = styled(Button)`
 `;
 
 export const HMemberModalWrapper = styled.div`
-display: flex;
-aligen-items: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh; /* 세로 중앙 정렬을 위한 높이 설정 */
 `;
-
-
-
 
 export const HModal = styled(Modal)`
+   justify-content: center; /* 모달을 수평 중앙 정렬 */
+   align-items: center; /* 모달을 수직 중앙 정렬 */
+    justify-content: center;
+    align-items: center;
+    top: 35%; /* 모달이 화면의 중간에서 시작하도록 설정 */
+    left: 40%;
 
+    .ant-modal-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* 모달 내부 콘텐츠를 수직 중앙 정렬 */
+    align-items: center; /* 모달 내부 콘텐츠를 수평 중앙 정렬 */
+  }
 `;
+
 
 export const HMembermodal = styled(Modal)`
 .ant-modal-content {
@@ -120,8 +132,7 @@ export const HMembermodal = styled(Modal)`
   }
 
   .ant-modal-header {
-    background-color: #f0f0f0;
-    border-bottom: 1px solid #e8e8e8;
+    background-color: white;
   }
 
   .ant-modal-footer {
@@ -135,9 +146,19 @@ export const HMembermodal = styled(Modal)`
 `;
 
 export const HalertWrapper = styled.div`
+  display: flex;
+  justify-content: center; /* 가로 중앙 정렬 */
+  align-items: center; /* 세로 중앙 정렬 */
+  height: 100vh; /* 부모 div의 높이를 100%로 설정하여 세로 중앙 정렬이 가능하도록 함 */
+  border: ${theme.borders.greyBorder}; /* 보더 스타일 */
 
 `;
 
 export const Halert = styled(Alert)`
+position: absolute;
+  top: 50px;
+  right: 10px;
+  width: 400px; /* 너비를 설정 */
+  z-index: 1000; /* 다른 요소 위에 위치하도록 설정 */
 
 `;
