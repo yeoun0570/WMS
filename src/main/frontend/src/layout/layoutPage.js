@@ -1,5 +1,6 @@
 import { useAPI } from "../axios/useAPI";
 import { useRouter } from "next/router";
+import { useContext } from "react";
 import LayoutHeader from "./header/header";
 import LayoutNavigation from "./navigation/navigation";
 import LayoutFooter from "./footer/footer";
@@ -22,6 +23,8 @@ import * as P from "./profile/ProfileStyle";
 import ProfileItem from "./profile/ProfileItem";
 import Notifications from "../sse/sseAPI";
 import { SSEContext } from "../sse/sseAPI";
+import ProfileInfo from "../info/info";
+import { TokenContext } from "../axios/TokenContext";
 const { Content } = Layout;
 const LOGIN_PAGE = [
   "/login",
@@ -30,6 +33,7 @@ const LOGIN_PAGE = [
   //여기다가 로그인 페이지만 넣고 네비 안뜨게 설정하자구~
 ];
 export default function LayoutPage(props) {
+  const { state } = useContext(TokenContext);
   const { get } = useAPI();
   const router = useRouter();
   const isLoginPage = LOGIN_PAGE.includes(router.asPath);
@@ -43,6 +47,7 @@ export default function LayoutPage(props) {
 
   const [noticeOpen, setNoticeOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
+  const [noticeFlag, setNoticeFlag] = useState(false);
   const [profileFlag, setProfileFlag] = useState(false);
   const modalRef = useRef();
 
@@ -105,7 +110,6 @@ export default function LayoutPage(props) {
     ]),
     getItem("운송장관리", "sub6", <DesktopOutlined />, [
       getItem("운송장조회", "/wms/waybill"),
-      getItem("운송장수정", "/wms/modifywaybill"),
     ]),
   ];
   /////////////////////////////여기 위에 지저분한거 나중에 다른파일로 뺍시다.리팩토링필요
@@ -115,9 +119,25 @@ export default function LayoutPage(props) {
   const onClickNav = ({ item, key, keyPath, domEvent }) => {
     setPage(pageMap[key][0]);
     setDetail(pageMap[key][1]);
-    router.push(key);
+    console.log(profile.role);
+    if (
+      /*profile.role === "GENERAL_MANAGER" &&*/
+      pageMap[key][0] === "회원관리" ||
+      pageMap[key][0] === "창고관리"
+    ) {
+      if (profile.role !== "GENERAL_MANAGER") {
+        router.push("/wms");
+      } else {
+        router.push(key);
+      }
+    } else {
+      router.push(key);
+    }
   };
 
+  const handleNewNotification = (newNotice) => {
+    setNotices((prevNotices) => [...prevNotices, newNotice]);
+  };
   // 알림 창 띄우기
   const showNotice = () => {
     setNoticeOpen(true);
@@ -128,19 +148,20 @@ export default function LayoutPage(props) {
   const showProfile = async () => {
     setProfileOpen(true);
     setLoading(true);
-    if (!profileFlag) getUserInfo();
+    //if (!profileFlag) getUserInfo();
     setProfileFlag(true);
   };
   //내 프로필 정보 받아오기
   const getUserInfo = async () => {
     try {
       const response = await get("user/info");
-      console.log(response.data);
+      console.log(response.data.userPosition);
       setProfile({
         id: response.data.userId,
         url: response.data.userProfile,
         name: response.data.userName,
         email: response.data.userEmail,
+        role: response.data.userPosition,
       });
     } catch (error) {
       setProfile({
@@ -170,8 +191,12 @@ export default function LayoutPage(props) {
     };
   }, []);
 
+  useEffect(() => {
+    if (!state.AccessToken) router.push("/login");
+  }, [state.AccessToken]);
   return (
     <>
+      {!isLoginPage && <ProfileInfo getUserInfo={getUserInfo} />}
       <Layout
         style={{
           minHeight: "100vh",
@@ -188,7 +213,12 @@ export default function LayoutPage(props) {
         >
           {!isLoginPage && (
             <>
-              <Notifications setNotices={setNotices} notices={notices} />
+              <Notifications
+                handleNewNotification={handleNewNotification}
+                notices={notices}
+                noticeFlag={noticeFlag}
+                setNoticeFlag={setNoticeFlag}
+              />
               <LayoutHeader
                 router={router}
                 setPage={setPage}
@@ -223,7 +253,8 @@ export default function LayoutPage(props) {
                 {notices.map((el) => {
                   // JSON 문자열을 파싱해서 실제 객체로 변환
 
-                  const parsedData = JSON.parse(el.data);
+                  console.log("ddddd", el);
+                  const parsedData = JSON.parse(el);
 
                   console.log("통지값이 대체 뭔지", parsedData);
 
@@ -242,9 +273,11 @@ export default function LayoutPage(props) {
 
           {/* 프로필 창 */}
           {profileOpen && (
-            <P.ProfileModal ref={modalRef}>
-              <ProfileItem profile={profile} />
-            </P.ProfileModal>
+            <>
+              <P.ProfileModal ref={modalRef}>
+                <ProfileItem profile={profile} />
+              </P.ProfileModal>
+            </>
           )}
 
           <Content

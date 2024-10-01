@@ -18,7 +18,7 @@
 //           <p>수량: {item.quantity}</p>
 //         </div>
 //       ))}
-      
+
 //       <h3>출고 아이템 목록</h3>
 //       {waybill.outboundItemList && waybill.outboundItemList.map((item, idx) => (
 //         <div key={idx}>
@@ -32,9 +32,8 @@
 //   );
 // }
 
-
 import React, { useState } from "react";
-import ModifyWaybillContainer from "./modifywaybill/modifywaybill.container";
+import ModifyWaybillContainer from "./modifywaybill.container";
 
 export default function RequestWaybillPresenter({ data }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -52,12 +51,13 @@ export default function RequestWaybillPresenter({ data }) {
 
   return (
     <div>
-      {data && data.dtoList.map((waybill) => (
-        <div key={waybill.waybillId}>
-          <h3>운송장 번호: {waybill.waybillId}</h3>
-          <button onClick={() => openModal(waybill)}>수정</button>
-        </div>
-      ))}
+      {data &&
+        data.dtoList.map((waybill) => (
+          <div key={waybill.waybillId}>
+            <h3>운송장 번호: {waybill.waybillId}</h3>
+            <button onClick={() => openModal(waybill)}>수정</button>
+          </div>
+        ))}
 
       {isModalOpen && selectedWaybill && (
         <ModifyWaybillContainer
