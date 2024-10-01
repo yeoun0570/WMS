@@ -1,262 +1,215 @@
 import * as S from "./requestwaybill.styles";
+import * as H from "../../styles/pageStyles";
 import { useState } from 'react';
-//import ModifyWaybillContainer from "../waybill/modifywaybill/modifywaybill.container";
+import { Button, Modal } from 'antd';
 
+const columns = ({ showModal }) => [
+  {
+    title: '운송장번호',
+    dataIndex: 'waybillId',
+  },
+  {
+    title: '발신지',
+    dataIndex: 'departStorageName',
+  },
+  {
+    title: '주소',
+    dataIndex: 'departAddress',
+  },
+  {
+    title: '상세주소',
+    dataIndex: 'departAddressDetail',
+  },
+  {
+    title: '우편번호',
+    dataIndex: 'departZipcode',
+  },
+  {
+    title: '수신지',
+    dataIndex: 'arriveStorageName',
+  },
+  {
+    title: '주소',
+    dataIndex: 'arriveAddress',
+  },
+  {
+    title: '상세주소',
+    dataIndex: 'arriveAddressDetail',
+  },
+  {
+    title: '우편번호',
+    dataIndex: 'arriveZipcode',
+  },
+  {
+    title: '상세보기',
+    render: (_, record) => (
+      <Button onClick={() => showModal(record)}>상세보기</Button>
+    ),
+  },
+];
 
+export default function WaybillUI({ data, fetchData, modifyWaybill }) {
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [selectedRecord, setSelectedRecord] = useState(null);
+  const [modifiedData, setModifiedData] = useState({}); // 수정된 데이터를 저장할 상태
 
-import axios from "axios";
+  const showModal = (record) => {
+    setSelectedRecord(record);
+    setModifiedData({
+      waybillId: record.waybillId,
+      departAddress: record.departAddress,
+      departAddressDetail: record.departAddressDetail,
+      departZipcode: record.departZipcode,
+      arriveAddress: record.arriveAddress,
+      arriveAddressDetail: record.arriveAddressDetail,
+      arriveZipcode: record.arriveZipcode,
+    });
+    setIsModalVisible(true);
+  };
 
-export default function WaybillUI(
-  { data,
+  const handleModalCancel = () => {
+    setIsModalVisible(false);
+    setSelectedRecord(null);
+  };
 
-  startDate,
-  setStartDate,
-  endDate,
-  setEndDate,
-  arriveStorageName,
-  setArriveStorageName,
-  departStorageName,
-  setDepartStorageName,
-  waybillId,
-  setWaybillId,
-  departAddress,
-  setDepartAddress,
-  arriveAddress,
-  setArriveAddress,
-  departAddressDetail,
-  setDepartAddressDetail,
-  arriveAddressDetail,
-  setArriveAddressDetail,
-  departZipcode,
-  setDepartZipcode,
-  arriveZipcode,
-  setArriveZipcode,
-  modifyWaybill,
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setModifiedData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
 
-  fetchData
+  const handleSubmit = async () => {
+    const success = await modifyWaybill(modifiedData); // 수정된 데이터로 수정 요청
 
-  }) {
+    if (success) {
+      fetchData(); // 데이터를 갱신하여 테이블 업데이트
+    }
 
-    const [isPopupOpen, setIsPopupOpen] = useState(false);
-    const [selectedWaybill, setSelectedWaybill] = useState(null);
-  
-    const handleDetailClick = (waybill) => {
-        setSelectedWaybill(waybill);
-        setIsPopupOpen(true);
-    };
+    setIsModalVisible(false); // 모달 닫기
+  };
 
-    const handleClosePopup = () => {
-        setIsPopupOpen(false);
-    };
+  const tableData = data?.dtoList?.map((item, index) => ({
+    key: index + 1,
+    waybillId: item.waybillId,
+    departStorageName: item.departStorageName,
+    departAddress: item.departAddress,
+    departAddressDetail: item.departAddressDetail,
+    departZipcode: item.departZipcode,
+    arriveStorageName: item.arriveStorageName,
+    arriveAddress: item.arriveAddress,
+    arriveAddressDetail: item.arriveAddressDetail,
+    arriveZipcode: item.arriveZipcode,
+    inboundItemList: item.inboundItemList || [], // 추가된 부분
+    outboundItemList: item.outboundItemList || [], // 추가된 부분
+  }));
 
-
-
-    // handleSearch: 버튼 클릭 시 fetchData 호출
-    const handleSearch = () => {
-      fetchData(); // 버튼 클릭으로 데이터 검색
-    };
   return (
-    <S.Wrapper>
-      <h2>운송장 조회 페이지</h2>
+    <div>
+      <H.Htable
+        columns={columns({ showModal })}
+        dataSource={tableData}
+      />
 
-     {/* 날짜 검색 필터 추가 */}
-     <div>
-        <label>시작 날짜:</label>
-        <input
-          type="date"
-          value={startDate}
-          onChange={(e) => setStartDate(e.target.value)}
-        />
-        <label>종료 날짜:</label>
-        <input
-          type="date"
-          value={endDate}
-          onChange={(e) => setEndDate(e.target.value)}
-        />
-      <br></br>
-      {/* 창고 선택 필터 추가 */}
-      <label>출발 창고:</label>
-        <select
-          value={departStorageName}
-          onChange={(e) => setDepartStorageName(e.target.value)}
-        >
-          <option value="">선택하세요</option> 
-          {data.storageDTOList && data.storageDTOList.map((storage, index) => (
-            <option key={index} value={storage.storageName}>{storage.storageName}</option>
-          ))}
-        </select>
+      <Modal
+        title="상세정보 수정"
+        visible={isModalVisible}
+        onCancel={handleModalCancel}
+        footer={null}
+      >
+        {selectedRecord && (
+          <div>
+            <p>운송장번호: {selectedRecord.waybillId}</p>
 
-        {/* 창고 선택 필터 추가 */}
-      <label>도착 창고:</label>
-        <select
-          value={arriveStorageName}
-          onChange={(e) => setArriveStorageName(e.target.value)}
-        >
-          <option value="">선택하세요</option> 
-          {data.storageDTOList && data.storageDTOList.map((storage, index) => (
-            <option key={index} value={storage.storageName}>{storage.storageName}</option>
-          ))}
-        </select>
-
-<br></br>
-
-{/* 운송장 번호 입력 필터 추가 */}
-<div>
-        <label>운송장 번호:</label>
-        <input
-          type="text"
-          value={waybillId} // 운송장 번호 상태로 연결
-          onChange={(e) => setWaybillId(e.target.value)} // 상태 업데이트
-        />
-      </div>
-<br></br>
-
-        <button onClick={handleSearch}>검색</button>
-      </div>
-
-
-
-      {data && data.dtoList.length > 0 ? (
-        data.dtoList.map((waybill, index) => (
-          <div key={index} style={{ marginBottom: "20px", border: "1px solid #ddd", padding: "10px" }}>
-            <h3>운송장 번호: {waybill.waybillId}</h3>
-            {/* <p>출발 주소: {waybill.departAddress} {waybill.departAddressDetail}</p>
-            <p>출발 우편번호: {waybill.departZipcode}</p> */}
-            <p>출발 창고: {waybill.departStorageName}</p>
-            {/* <p>도착 주소: {waybill.arriveAddress} {waybill.arriveAddressDetail}</p>
-            <p>도착 우편번호: {waybill.arriveZipcode}</p> */}
-            <p>도착 창고: {waybill.arriveStorageName}</p>
-            <p>생성일: {new Date(waybill.createdDate).toLocaleDateString()}</p>
-
-
-            {/* 상세보기 버튼 추가 */}
-            <button onClick={() => handleDetailClick(waybill)}>상세보기</button>
-
-
-
-
-            {/* Inbound Items */}
-            {/* {waybill.inboundItemList && waybill.inboundItemList.length > 0 && (
-              <div>
-                <h4>입고 아이템 목록</h4>
-                {waybill.inboundItemList.map((item, idx) => (
-                  <div key={idx}>
-                    <p>상품 ID: {item.productId}</p>
-                    <p>수량: {item.quantity}</p>
-                  </div>
-                ))}
-              </div>
-            )} */}
-
-            {/* Outbound Items */}
-            {/* {waybill.outboundItemList && waybill.outboundItemList.length > 0 && (
-              <div>
-                <h4>출고 아이템 목록</h4>
-                {waybill.outboundItemList.map((item, idx) => (
-                  <div key={idx}>
-                    <p>상품 ID: {item.productId}</p>
-                    <p>수량: {item.quantity}</p>
-                  </div>
-                ))}
-              </div>
-            )} */}
-
-<br></br>
-<br></br>
             <div>
-      <h2>운송장 수정</h2>
-      
-      {/* 수정할 창고 정보 입력 폼 */}
-      <div>
-        <label>운송장번호</label>
-      <input
-          type="text"
-          value={waybillId}
-          onChange={(e) => setWaybillId(e.target.value)}
-        />
-        <br></br>
-        <label>발신지</label>
-      <input
-          type="text"
-          value={departStorageName}
-          onChange={(e) => setDepartStorageName(e.target.value)}
-        />
-        <br></br>
-<label>발신지주소</label>
-      <input
-          type="text"
-          value={departAddress}
-          onChange={(e) => setDepartAddress(e.target.value)}
-        />
-        <br></br>
-        <label>발신지주소상세</label>
-      <input
-          type="text"
-          value={departAddressDetail}
-          onChange={(e) => setDepartAddressDetail(e.target.value)}
-        />
-        
-        <br></br>
-        <label>발신지 우편번호</label>
-        <input
-          type="text"
-          value={departZipcode}
-          onChange={(e) => setDepartZipcode(e.target.value)}
-        />
-<br></br>
-<label>수신지</label>
-      <input
-          type="text"
-          value={arriveStorageName}
-          onChange={(e) => setArriveStorageName(e.target.value)}
-        />
-        <br></br>
-<label>수신지주소</label>
-      <input
-          type="text"
-          value={arriveAddress}
-          onChange={(e) => setArriveAddress(e.target.value)}
-        />
-        <br></br>
-        <label>수신지주소상세</label>
-      <input
-          type="text"
-          value={arriveAddressDetail}
-          onChange={(e) => setArriveAddressDetail(e.target.value)}
-        />
-        <br></br>
+              <label>발신지 주소:</label>
+              <input
+                type="text"
+                name="departAddress"
+                value={modifiedData.departAddress}
+                onChange={handleInputChange}
+              />
+            </div>
+            <div>
+              <label>상세주소:</label>
+              <input
+                type="text"
+                name="departAddressDetail"
+                value={modifiedData.departAddressDetail}
+                onChange={handleInputChange}
+              />
+            </div>
+            <div>
+              <label>우편번호:</label>
+              <input
+                type="text"
+                name="departZipcode"
+                value={modifiedData.departZipcode}
+                onChange={handleInputChange}
+              />
+            </div>
+            <div>
+              <label>수신지 주소:</label>
+              <input
+                type="text"
+                name="arriveAddress"
+                value={modifiedData.arriveAddress}
+                onChange={handleInputChange}
+              />
+            </div>
+            <div>
+              <label>상세주소:</label>
+              <input
+                type="text"
+                name="arriveAddressDetail"
+                value={modifiedData.arriveAddressDetail}
+                onChange={handleInputChange}
+              />
+            </div>
+            <div>
+              <label>우편번호:</label>
+              <input
+                type="text"
+                name="arriveZipcode"
+                value={modifiedData.arriveZipcode}
+                onChange={handleInputChange}
+              />
+            </div>
 
-        <label>수신지 우편번호</label>
-        <input
-          type="text"
-          value={arriveZipcode}
-          onChange={(e) => setArriveZipcode(e.target.value)}
-        />
-<br></br>
+            {/* 입고 품목 목록 */}
+            {selectedRecord.inboundItemList && selectedRecord.inboundItemList.length > 0 && (
+              <div>
+                <h4>입고 품목</h4>
+                {selectedRecord.inboundItemList.map((item, idx) => (
+                  <div key={idx}>
+                    <p>상품 ID: {item.productId}</p>
+                    <p>수량: {item.quantity}</p>
+                  </div>
+                ))}
+              </div>
+            )}
 
-        <button onClick={modifyWaybill}>수정하기</button>
-      </div>
-    </div>
+            {/* 출고 품목 목록 */}
+            {selectedRecord.outboundItemList && selectedRecord.outboundItemList.length > 0 && (
+              <div>
+                <h4>출고 품목</h4>
+                {selectedRecord.outboundItemList.map((item, idx) => (
+                  <div key={idx}>
+                    <p>상품 ID: {item.productId}</p>
+                    <p>수량: {item.quantity}</p>
+                  </div>
+                ))}
+              </div>
+            )}
 
-
-
+            <div style={{ marginTop: '16px' }}>
+              <Button onClick={handleSubmit}>수정</Button>
+              <Button onClick={handleModalCancel} style={{ marginLeft: '8px' }}>취소</Button>
+            </div>
           </div>
-
-
-
-
-        ))
-      ) : (
-        <p>조회된 운송장이 없습니다.</p>
-      )}
-{/* 팝업창 */}
-{isPopupOpen && (
-        <ModifyWaybillContainer
-          waybill={selectedWaybill}
-          onClose={handleClosePopup}
-        />
-      )}
-
-    </S.Wrapper>
+        )}
+      </Modal>
+    </div>
   );
 }
