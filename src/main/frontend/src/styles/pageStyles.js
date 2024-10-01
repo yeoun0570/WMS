@@ -115,3 +115,46 @@ export const HButtonSuccess = styled(Button)`
     background-color: rgb(230, 70, 20)};
     }    // hover 시 배경색을 진한 오렌지로 변경
 `;
+
+export const HMemberModalWrapper = styled.div`
+display: flex;
+aligen-items: center;
+`;
+
+
+
+
+export const HModal = styled(Modal)`
+
+`;
+
+export const HMembermodal = styled(Modal)`
+.ant-modal-content {
+    width: 1000px;
+    max-width: 100%;
+    padding: 20px
+    background-color: white;
+  }
+
+  .ant-modal-header {
+    background-color: #f0f0f0;
+    border-bottom: 1px solid #e8e8e8;
+  }
+
+  .ant-modal-footer {
+    display: flex;
+    justify-content: flex-end;
+
+    button {
+    margin-left: 8px;
+    }
+  }
+`;
+
+export const HalertWrapper = styled.div`
+
+`;
+
+export const Halert = styled(Alert)`
+
+`;

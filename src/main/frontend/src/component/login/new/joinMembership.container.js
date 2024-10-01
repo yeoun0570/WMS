@@ -25,6 +25,8 @@ export default function JoinMembership() {
     },
     mode: "onChange",
   });
+
+
   const joinMembership = async (signInData) => {
     try {
       const auth = axios.create({
@@ -38,6 +40,8 @@ export default function JoinMembership() {
       throw error;
     }
   };
+
+
   const onSubmitRegister = async (data) => {
     try {
       console.log("register: " + data.userId);
@@ -51,6 +55,8 @@ export default function JoinMembership() {
       if (error instanceof Error) errorModal("fail", error.message);
     }
   };
+
+
   const onError = (data) => {
     errorModal("fail", "다시한번 입력해주세요");
   };
@@ -60,6 +66,16 @@ export default function JoinMembership() {
   const onClickCancel = () => {
     router.push(`/login`);
   };
+
+  const togglePasswordVisibility = () => {
+    setShowPassword((prev) => !prev);
+  };
+
+  const togglePasswordConfirmVisibility = () => {
+    setShowPasswordConfirm((prev) => !prev);
+  };
+
+
   return (
     <JoinMembershipUI
       register={register}
@@ -69,6 +85,8 @@ export default function JoinMembership() {
       onError={onError}
       onClickCancel={onClickCancel}
       isValid={isValid}
+      togglePasswordVisibility={togglePasswordVisibility}
+      togglePasswordConfirmVisibility={togglePasswordConfirmVisibility}
       isModalOpen={isModalOpen}
       SwitchModal={SwitchModal}
     />
