@@ -4,7 +4,6 @@
   import PrintData from "./Tabcontents/PrintNotDoneData";
 
 
-
   // OutboundUI 컴포넌트는 검색 조건 입력 UI와 데이터 리스트를 화면에 렌더링합니다.
   export default function OutboundUI({
     data,

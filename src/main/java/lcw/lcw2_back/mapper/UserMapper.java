@@ -25,4 +25,6 @@ public interface UserMapper {
     String getUserProfileUuid(String userId);
 
     int deleteUserProfileUuid(String userId);
+
+    int deleteNewUser(String userId);
 }

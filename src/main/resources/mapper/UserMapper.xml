@@ -5,6 +5,11 @@
 
 <mapper namespace="lcw.lcw2_back.mapper.UserMapper">
 
+    <delete id="deleteNewUser" parameterType="String">
+        DELETE FROM user
+        WHERE user_status = '0' AND user_id = #{userId}
+    </delete>
+
 
     <resultMap id="UserResultMap" type="lcw.lcw2_back.domain.user.User">
 
