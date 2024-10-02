@@ -33,12 +33,14 @@ export default function LossChart(props) {
 
   const fetchDataset = async () => {
     try {
-      const response = await get("/lossData");
+      const response = await get("/chart/loss_history", { userId : 'U002' });
+
+      console.log("qweqwe" + response.data[0].lossCost);
       
       const fetchedData = response.data;
 
-      const labels = fetchedData.map((item) => item.dateTime);
-      const data = fetchedData.map((item) => item.data);
+      const labels = fetchedData.map((item) => item.lossDate);
+      const data = fetchedData.map((item) => item.lossCost);
 
       setLabelsArray(labels);
       setDataArray(data);

@@ -4,7 +4,7 @@ import { Modal, Button } from "antd";
 import theme from "../../../styles/theme";
 
 const AddressInput = (props) => {
-  const { setZonecode, setAddress } = props.addressAction;
+  const { setZipcode, setAddress } = props.addressAction;
 
   const [isModalVisible, setIsModalVisible] = useState(false);
 
@@ -22,7 +22,7 @@ const AddressInput = (props) => {
 
   const completeHandler = (data) => {
     const { address, zonecode } = data;
-    setZonecode(zonecode);
+    setZipcode(zonecode);
     setAddress(address);
     setIsModalVisible(false); // 주소 선택 후 모달 닫기
   };

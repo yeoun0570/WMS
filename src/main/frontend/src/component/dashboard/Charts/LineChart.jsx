@@ -55,13 +55,13 @@ export default function LineChart() {
 
       switch (selectedOption) {
         case "입고":
-          response = await get("/invInTrend");
+          response = await get("/chart/stock_tend", {userId: 'U002'});
           break;
         case "출고":
-          response = await get("/invOutTrend");
+          response = await get("/chart/stock_tend", {userId: 'U002'});
           break;
         default:
-          response = await get("/invTotalTrend");
+          response = await get("/chart/stock_tend", {userId: 'U002'});
           break;
       }
 

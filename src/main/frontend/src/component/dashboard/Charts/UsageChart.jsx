@@ -21,16 +21,17 @@ export default function UsageChart(props) {
   // 창고 사용률 그래프 데이터셋 초기화
   const fetchUsageDataset = async () => {
     try {
-      const response = await get("/usageData");
+      const response = await get("/chart/storage_used", {userId: 'U002'});
 
-      const fetchedData = response.data.products;
-      const maxCapacity = response.data.storageArea;
+      console.log("0: ", response.data);
 
-      const labels = fetchedData.map((item) => item.label);
-      const data = fetchedData.map((item) => item.data);
+      const fetchedData = response.data;
+      const maxCapacity = response.data[0].storageArea;
+
+      const labels = fetchedData.map((item) => item.productName);
+      const data = fetchedData.map((item) => item.totalAreaUsed);
       const totalUsage = data.reduce((acc, item) => acc + item, 0);
 
-      labels.push("남는 공간");
       data.push(maxCapacity - totalUsage);
 
       percentage = ((totalUsage / maxCapacity) * 100).toFixed(2);

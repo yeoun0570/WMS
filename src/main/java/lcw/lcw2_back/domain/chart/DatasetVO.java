@@ -44,7 +44,7 @@ public class DatasetVO {
   private int totalAreaUsed;
 
   //재고 추이 (productName은 위에서 끌어옴)
-  private LocalDate monthOfStock;
+  private String month;
   private int totalInbound;
   private int totalOutbound;
   private int stockChange;

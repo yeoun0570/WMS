@@ -19,6 +19,7 @@ public class StorageController {
 
     @PostMapping("/register_storage")
     public void registerStorage(@RequestBody StorageDTO storageDTO) {
+        System.out.println("Storage: " + storageDTO);
         storageService.plusStorage(storageDTO);
     }
 
