@@ -8,10 +8,12 @@ import {
   Legend,
   Title
 } from "chart.js";
+import { useAPI } from "../../../axios/useAPI";
 
 ChartJS.register(ArcElement, Tooltip, Legend, Title);
 
 export default function UsageChart(props) {
+  const { get } = useAPI();
   const [labelsArray, setLabelsArray] = useState([]);
   const [dataArray, setDataArray] = useState([]);
   let percentage;
@@ -19,7 +21,7 @@ export default function UsageChart(props) {
   // 창고 사용률 그래프 데이터셋 초기화
   const fetchUsageDataset = async () => {
     try {
-      const response = await axios.get("http://localhost:8080/api/usageData");
+      const response = await get("/usageData");
 
       const fetchedData = response.data.products;
       const maxCapacity = response.data.storageArea;

@@ -12,6 +12,7 @@ import {
   Legend,
   Filler,
 } from "chart.js";
+import { useAPI } from "../../../axios/useAPI";
 
 // Chart.js 구성 요소 등록
 ChartJS.register(
@@ -26,12 +27,13 @@ ChartJS.register(
 );
 
 export default function LossChart(props) {
+  const { get } = useAPI();
   const [labelsArray, setLabelsArray] = useState([]);
   const [dataArray, setDataArray] = useState([]);
 
   const fetchDataset = async () => {
     try {
-      const response = await axios.get("http://localhost:8080/api/lossData");
+      const response = await get("/lossData");
       
       const fetchedData = response.data;
 

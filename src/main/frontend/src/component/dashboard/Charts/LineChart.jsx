@@ -12,6 +12,7 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
+import { useAPI } from "../../../axios/useAPI";
 
 // Chart.js 구성 요소 등록
 ChartJS.register(
@@ -21,7 +22,7 @@ ChartJS.register(
   LineElement,
   Title,
   Tooltip,
-  Legend,
+  Legend
 );
 
 const backgroundColor = [
@@ -43,23 +44,24 @@ const borderColor = [
 ];
 
 export default function LineChart() {
+  const { get } = useAPI();
   // 선택된 옵션을 관리하는 state
   const [selectedOption, setSelectedOption] = useState("전체");
   const [inDataset, setInDataset] = useState();
 
   const fetchDataset = async () => {
-    try{
+    try {
       let response;
 
-      switch(selectedOption){
+      switch (selectedOption) {
         case "입고":
-          response = await axios.get("http://localhost:8080/api/invInTrend");
+          response = await get("/invInTrend");
           break;
         case "출고":
-          response = await axios.get("http://localhost:8080/api/invOutTrend");
+          response = await get("/invOutTrend");
           break;
         default:
-          response = await axios.get("http://localhost:8080/api/invTotalTrend");
+          response = await get("/invTotalTrend");
           break;
       }
 
@@ -68,25 +70,39 @@ export default function LineChart() {
       console.log("라벨: " + labels);
 
       const data = {
-        labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+        labels: [
+          "Jan",
+          "Feb",
+          "Mar",
+          "Apr",
+          "May",
+          "Jun",
+          "Jul",
+          "Aug",
+          "Sep",
+          "Oct",
+          "Nov",
+          "Dec",
+        ],
         datasets: [],
       };
 
-      labels.map((key, index) => (data.datasets.push({
-        label: key,
-        data: response.data[key],
-        borderColor: borderColor[index],
-        backgroundColor: backgroundColor[index],
-        tension: 0
-      })));
+      labels.map((key, index) =>
+        data.datasets.push({
+          label: key,
+          data: response.data[key],
+          borderColor: borderColor[index],
+          backgroundColor: backgroundColor[index],
+          tension: 0,
+        })
+      );
 
       console.log(data);
 
       setInDataset(data);
       console.log(inDataset);
-      
-    } catch(error) {
-      console.log("재고 추이 에러...")
+    } catch (error) {
+      console.log("재고 추이 에러...");
     }
   };
 
@@ -94,18 +110,16 @@ export default function LineChart() {
     fetchDataset();
   }, selectedOption);
 
-  
-
   const options = {
     responsive: true,
     maintainAspectRatio: false,
     plugins: {
       legend: {
-        position: 'top',
+        position: "top",
       },
       title: {
         display: false,
-        position: 'top',
+        position: "top",
         text: selectedOption + " 재고 추이", // 선택된 옵션에 따라 제목 변경
       },
     },
@@ -118,7 +132,8 @@ export default function LineChart() {
 
   // 버튼 클릭 시 색상 변경을 위한 CSS 클래스
   const leftButtonStyle = (option) => ({
-    backgroundColor: selectedOption === option ? theme.colors.glbOrange : theme.colors.glbGrey,
+    backgroundColor:
+      selectedOption === option ? theme.colors.glbOrange : theme.colors.glbGrey,
     color: selectedOption === option ? "#fff" : "#000",
     padding: "8px 16px",
     margin: "10px 0px 0px 10px",
@@ -129,7 +144,8 @@ export default function LineChart() {
   });
 
   const middleButtonStyle = (option) => ({
-    backgroundColor: selectedOption === option ? theme.colors.glbOrange : theme.colors.glbGrey,
+    backgroundColor:
+      selectedOption === option ? theme.colors.glbOrange : theme.colors.glbGrey,
     color: selectedOption === option ? "#fff" : "#000",
     padding: "8px 16px",
     cursor: "pointer",
@@ -141,7 +157,8 @@ export default function LineChart() {
   });
 
   const rightButtonStyle = (option) => ({
-    backgroundColor: selectedOption === option ? theme.colors.glbOrange : theme.colors.glbGrey,
+    backgroundColor:
+      selectedOption === option ? theme.colors.glbOrange : theme.colors.glbGrey,
     color: selectedOption === option ? "#fff" : "#000",
     padding: "8px 16px",
     cursor: "pointer",
@@ -151,10 +168,23 @@ export default function LineChart() {
   });
 
   return (
-    <div style={{ width: "100%"}}>
+    <div style={{ width: "100%" }}>
       {/* 입고, 출고, 전체 버튼 */}
-      <div style={{display: "flex", flexDirection: "row", justifyContent: "space-between"}}>
-        <div style={{fontWeight: "bold", fontSize: "18px", alignContent: "center", marginLeft: "12px"}}>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "space-between",
+        }}
+      >
+        <div
+          style={{
+            fontWeight: "bold",
+            fontSize: "18px",
+            alignContent: "center",
+            marginLeft: "12px",
+          }}
+        >
           {selectedOption + " 재고 추이"}
         </div>
         <div>
@@ -181,7 +211,7 @@ export default function LineChart() {
         </div>
       </div>
       {/* 차트 */}
-      <div style={{width: "100%", height: "35vh", padding: "12px"}}>
+      <div style={{ width: "100%", height: "35vh", padding: "12px" }}>
         {inDataset && <Line data={inDataset} options={options} />}
       </div>
     </div>
