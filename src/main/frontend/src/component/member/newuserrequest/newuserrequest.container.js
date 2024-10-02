@@ -105,7 +105,7 @@ export default function Newuserrequest() {
   const handleDeny = async () => {
 
     const userIds = selectedRowKeys; // 선택된 사원번호를 List<String> 형태로 담기
-  
+
     try {
       const response = await post("/user/delete", { userIds }); //선택된 사원번호 데이터베이스에서 삭제
 
@@ -119,18 +119,19 @@ export default function Newuserrequest() {
   };
 
 
-  const rowSelection = {
+  // const rowSelection = {
 
-    selectedRowKeys,
-    onChange: (newSelectedRowKeys) => {
-      setSelectedRowKeys(newSelectedRowKeys); // 선택된 사원번호 업데이트
-    },
+  //   selectedRowKeys,
+  //   onChange: (newSelectedRowKeys) => {
+  //     console.log("이게 어떤 때에 실행되는거니");
+  //     setSelectedRowKeys(newSelectedRowKeys); // 선택된 사원번호 업데이트
+  //   },
 
-    getCheckboxProps: (record) => ({
-      disabled: record.name === 'Disabled User',
-      name: record.name,
-    }),
-  };
+  //   getCheckboxProps: (record) => ({
+  //     disabled: record.name === 'Disabled User',
+  //     name: record.name,
+  //   }),
+  // };
 
 
   /////////////////////////RETURN/////////////////////////
@@ -140,9 +141,10 @@ export default function Newuserrequest() {
         items={items}
         columns={columns}
         selectionType={selectionType}
-        rowSelection={rowSelection}
         onApprove={handleApprove}
         onDeny={handleDeny}
+        selectedRowKeys={selectedRowKeys}
+        setSelectedRowKeys={setSelectedRowKeys}
       />
   );
 
