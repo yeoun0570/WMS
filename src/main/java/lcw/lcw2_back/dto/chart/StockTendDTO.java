@@ -12,7 +12,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Builder
 public class StockTendDTO {
-    private LocalDate monthOfStock;
+    private String month;
     private String productName;
     private int totalInbound;
     private int totalOutbound;

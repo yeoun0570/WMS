@@ -1,5 +1,8 @@
 package lcw.lcw2_back.controller;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import lcw.lcw2_back.dto.chart.InboundSummaryDTO;
 import lcw.lcw2_back.service.chart.ChartService;
 import lcw.lcw2_back.dto.chart.*;
@@ -95,8 +98,24 @@ public class ChartController {
     
     //재고 추이
     @GetMapping("/stock_tend")
-    public ResponseEntity<List<StockTendDTO>> chartStockTend(@RequestParam String userId) {
-        List<StockTendDTO> stockTend = chartService.getStockTend(userId);
-        return ResponseEntity.ok(stockTend);
+//    public ResponseEntity<Map<String, List<StockTendDTO>>> chartStockTend(@RequestParam String userId) {
+    public ResponseEntity<Map<String, List<Long>>> chartStockTend(@RequestParam String userId) {
+//        List<StockTendDTO> stockTend = chartService.getStockTend(userId);
+
+//        return ResponseEntity.ok(stockTend);
+
+        Map<String, List<Long>> map = new HashMap<>();
+    for (int i = 1; i <= 5; i++) {
+      List<Long> list = new ArrayList<>();
+      for (int j = 1; j <= 12; j++) {
+        long x = (long) Math.max(0, 1000.0 + (Math.random() * 1000 - 500));
+        list.add(x);
+      }
+      map.put("상품" + i, list);
+    }
+
+    log.info("입고 : " + map);
+
+        return ResponseEntity.ok(map);
     }
 }

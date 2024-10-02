@@ -25,11 +25,12 @@ export default function BoundChart(props) {
     try {
       const response =
         type === "inboundChart"
-          ? await get("/inboundForWeekData")
-          : await get("/outboundForWeekData");
+          ? await get("/chart/inbound_summary", { userId: 'U002' })
+          : await get("/chart/outbound_summary", { userId: 'U002' });
 
-      const fetchedReqData = response.data.req;
-      const fetchedCompData = response.data.comp;
+
+      const fetchedReqData = response.data.recentInboundRequests || response.data.recentOutboundRequests;
+      const fetchedCompData = response.data.recentInboundCompleted || response.data.recentOutboundCompleted;
 
       const data = [fetchedCompData, fetchedReqData - fetchedCompData];
       percentage = ((fetchedCompData / fetchedReqData) * 100).toFixed(2);

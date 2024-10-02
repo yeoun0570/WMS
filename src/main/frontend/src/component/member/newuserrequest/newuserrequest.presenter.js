@@ -10,12 +10,13 @@ export default function NewUserRequestUI({
   selectionType,
   onApprove,
   onDeny,
+  selectedRowKeys,
+  setSelectedRowKeys
 }) {
-  const [selectedRowKeys, setSelectedRowKeys] = useState([]); 
 
 const rowSelection = {
   onChange: (selectedRowKeys, selectedRows) => {
-    console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+    setSelectedRowKeys(selectedRowKeys);
   },
   getCheckboxProps: (record) => ({
     disabled: record.name === 'Disabled User',
@@ -30,9 +31,10 @@ const rowSelection = {
       <Tabs defaultActiveKey='0' items={items} />
 
       <H.Htable
-        rowSelection={{ type: selectionType, ...rowSelection }}
+        rowSelection={rowSelection}
         columns={columns}
         dataSource={data}
+        rowKey="userId"
       />
 
       <H.HButtonWrapper>
