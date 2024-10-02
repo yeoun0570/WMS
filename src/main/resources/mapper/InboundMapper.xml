@@ -55,42 +55,58 @@
         LEFT JOIN User u_from ON s_from.storage_id = u_from.storage_id <!-- 요청서 조회할 아이디를 얻기 위한 JOIN -->
         JOIN Inbound_Item ii ON ii.inbound_id = i.inbound_id
         JOIN Product p ON ii.product_id = p.product_id
-        WHERE 1=1
-        AND status IN('반려', '미승인', '승인')
+        <where>
+            AND status IN('반려', '미승인', '승인')
 
-        <!-- 상태 필터: APPROVED 또는 NOT APPROVED -->
-        <if test="status != null and status != ''">
-            AND i.status = #{status}
-        </if>
-
-
-        <!-- 요청 날짜 범위 필터 -->
-        <if test="startDate != null and endDate != null">
-            AND DATE(i.request_date) BETWEEN #{startDate} AND #{endDate}
-        </if>
+            <!-- 상태 필터: APPROVED 또는 NOT APPROVED -->
+            <if test="status != null and status != ''">
+                AND i.status = #{status}
+            </if>
 
 
-        <!-- 제품명 필터 (이 부분에서 Product JOIN 조건 추가) -->
-        <if test="item != null and item != ''">
-            AND p.product_name LIKE CONCAT('%', #{item}, '%')
-        </if>
+            <!-- 요청 날짜 범위 필터 -->
+            <if test="startDate != null and endDate != null">
+                AND DATE(i.request_date) BETWEEN #{startDate} AND #{endDate}
+            </if>
 
-        <!-- 수신지 창고명 필터 -->
-        <if test="departStorageName != null and departStorageName != ''">
-            AND s_to.storage_name LIKE CONCAT('%', #{departStorageName}, '%')
-        </if>
 
-        <!-- 입고 창고명 필터 : 총관리자만 사용 -->
-        <if test="arriveName != null and arriveName != ''">
-            AND s_from.storage_name LIKE CONCAT('%', #{arriveName}, '%')
-        </if>
+            <!-- 제품명 필터 (이 부분에서 Product JOIN 조건 추가) -->
+            <if test="item != null and item != ''">
+                AND p.product_name LIKE CONCAT('%', #{item}, '%')
+            </if>
 
+            <!-- 수신지 창고명 필터 -->
+            <if test="departStorageName != null and departStorageName != ''">
+                AND s_to.storage_name LIKE CONCAT('%', #{departStorageName}, '%')
+            </if>
+
+            <!-- 입고 창고명 필터 : 총관리자만 사용 -->
+            <if test="arriveName != null and arriveName != ''">
+                AND s_from.storage_name LIKE CONCAT('%', #{arriveName}, '%')
+            </if>
+        </where>
         <!-- inbound_id로만 그룹화 -->
-        GROUP BY i.inbound_id, departStorageName, arriveName, u_to.user_id, i.status, i.request_date
+        GROUP BY i.inbound_id, departStorageName, arriveName, u_to.user_id, i.status, i.request_date, u_from.user_id
+
 
         ORDER BY i.inbound_id DESC
         LIMIT #{skip}, #{size}
     </select>
+
+
+    <select id="getDepartUserId" resultType="String">
+        select user_id from user
+                       where storage_id = (select depart_storage_id from inbound where inbound_id = #{inboundId})
+    </select>
+
+
+
+
+
+
+
+
+
 
     <!-- 입고요청서 총 개수 -->
     <select id="getCountInboundNotDoneList" resultType="int">

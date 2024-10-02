@@ -42,4 +42,6 @@ public interface OutboundMapper {
     
     //출고요청 배송완료 처리
     void updateOutboundCompleteInbound();
+
+    String getArriveUserId(Long outboundId);
 }
