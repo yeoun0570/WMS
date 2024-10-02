@@ -2,6 +2,7 @@ package lcw.lcw2_back.service.inbound;
 
 import lcw.lcw2_back.domain.inbound.Inbound;
 import lcw.lcw2_back.domain.inbound.InboundItem;
+import lcw.lcw2_back.domain.notification.NotificationType;
 import lcw.lcw2_back.dto.inbound.InboundDTO;
 import lcw.lcw2_back.dto.inbound.InboundDoneListDTO;
 import lcw.lcw2_back.dto.inbound.InboundItemDTO;
@@ -9,6 +10,7 @@ import lcw.lcw2_back.dto.inbound.InboundNotDoneListDTO;
 import lcw.lcw2_back.dto.inbound.page.PageInboundRequestDTO;
 import lcw.lcw2_back.dto.inbound.page.PageInboundResponseDTO;
 import lcw.lcw2_back.mapper.InboundMapper;
+import lcw.lcw2_back.service.notification.NotificationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
@@ -25,13 +27,18 @@ import java.util.stream.Collectors;
 public class InboundServiceImpl implements InboundService{
     private final ModelMapper modelMapper;
     private final InboundMapper inboundMapper;
-
+    private final NotificationService notificationService;
     @Override
     @Transactional
     public void registerInbound(InboundDTO inboundDTO) {
         // Inbound 등록
         Inbound inbound = modelMapper.map(inboundDTO, Inbound.class);
         inboundMapper.insertInbound(inbound);
+
+        //츨고창고 아이디 반환
+        String departUserId = inboundMapper.getDepartUserId(inboundDTO.getInboundId());
+        System.out.println("요청한 상대의 ID : "+departUserId);
+        notificationService.send(departUserId, NotificationType.INBOUND,"출고요청이 왔습니다.");
 
         // 등록된 inboundId를 DTO에 설정
         inboundDTO.setInboundId(inbound.getInboundId());

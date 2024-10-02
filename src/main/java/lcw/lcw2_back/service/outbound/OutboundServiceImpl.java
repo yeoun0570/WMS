@@ -1,5 +1,6 @@
 package lcw.lcw2_back.service.outbound;
 
+import lcw.lcw2_back.domain.notification.NotificationType;
 import lcw.lcw2_back.domain.outbound.Outbound;
 import lcw.lcw2_back.domain.outbound.OutboundItem;
 import lcw.lcw2_back.dto.outbound.OutboundDTO;
@@ -9,6 +10,7 @@ import lcw.lcw2_back.dto.outbound.OutboundNotDoneListDTO;
 import lcw.lcw2_back.dto.outbound.page.PageOutboundRequestDTO;
 import lcw.lcw2_back.dto.outbound.page.PageOutboundResponseDTO;
 import lcw.lcw2_back.mapper.OutboundMapper;
+import lcw.lcw2_back.service.notification.NotificationService;
 import lombok.extern.log4j.Log4j2;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -27,7 +29,7 @@ public class OutboundServiceImpl implements OutboundService {
 
     private final ModelMapper modelMapper;
     private final OutboundMapper outboundMapper;
-
+    private final NotificationService notificationService;
 
     @Override
     @Transactional
@@ -35,6 +37,10 @@ public class OutboundServiceImpl implements OutboundService {
         // Outbound 등록
         Outbound outbound = modelMapper.map(outboundDTO, Outbound.class);
         outboundMapper.insertOutbound(outbound);
+
+        String arriveUserId = outboundMapper.getArriveUserId(outboundDTO.getOutboundId());
+        System.out.println("요청 상대 아이디 : "+arriveUserId);
+        notificationService.send(arriveUserId, NotificationType.OUTBOUND,"입고 요청이 왔습니다.");
 
         // 등록된 outboundId를 DTO에 설정
         outboundDTO.setOutboundId(outbound.getOutboundId());

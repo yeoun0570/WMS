@@ -39,4 +39,7 @@ public interface InboundMapper {
 
     //입고요청 배송완료 처리
     void updateInboundCompleteInbound();
+
+    //출고 창고 회원
+    String getDepartUserId(Long inboundId);
 }
