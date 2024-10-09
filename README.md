@@ -1,4 +1,4 @@
-# <img src="https://github.com/user-attachments/assets/a9726406-91b9-41a6-8843-48e27123a427" width="50" height="50"/> Gulobal
+# <img src="https://github.com/user-attachments/assets/a9726406-91b9-41a6-8843-48e27123a427" width="50" height="50"/> Gyulobal
 
 ![Build Status](https://img.shields.io/badge/-java-brightgreen)
 ![License](https://img.shields.io/badge/-React-blue)
